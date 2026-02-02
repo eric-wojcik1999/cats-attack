@@ -1,0 +1,20 @@
+[gd_scene load_steps=2 format=3 uid="uid://csdvs0h5p6ume"]
+
+[ext_resource type="PackedScene" uid="uid://d4nm5bdaxqhsr" path="res://Entities/Players/PlayerGround/player-ground.tscn" id="1_j5bgn"]
+
+[node name="DemoScene" type="Node3D"]
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(0.34202015, -0.24321035, 0.90767336, 0, 0.9659258, 0.25881904, -0.9396926, -0.08852133, 0.3303661, 4.43, 2.41, 3.35)
+
+[node name="TestFloor" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, -0.125, 0)
+size = Vector3(11, 0.25, 4)
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.77140105, -0.63564557, -0.02991958, -0.24236248, 0.25000006, 0.9374223, -0.5883883, 0.7303799, -0.3469069, 9.5, 6.25, 6.75)
+light_energy = 1.552
+shadow_enabled = true
+
+[node name="PlayerGround" parent="." instance=ExtResource("1_j5bgn")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, 1, 0)

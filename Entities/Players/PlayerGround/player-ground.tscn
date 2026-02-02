@@ -1,0 +1,36 @@
+[gd_scene load_steps=7 format=3 uid="uid://d4nm5bdaxqhsr"]
+
+[ext_resource type="Script" uid="uid://csfkggqcwrgf" path="res://Entities/Players/PlayerGround/PlayerGround.cs" id="1_lw8c3"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_mv8dw"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_phw1g"]
+albedo_color = Color(1, 0, 1, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_mv8dw"]
+size = Vector3(0.25, 0.25, 0.5)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mv8dw"]
+albedo_color = Color(1, 0, 1, 1)
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_mv8dw"]
+radius = 0.75
+height = 2.375
+
+[node name="PlayerGround" type="CharacterBody3D"]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, 0, 0)
+script = ExtResource("1_lw8c3")
+
+[node name="PlayerMeshTemp" type="MeshInstance3D" parent="."]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, 0, 0)
+mesh = SubResource("CapsuleMesh_mv8dw")
+surface_material_override/0 = SubResource("StandardMaterial3D_phw1g")
+
+[node name="PlayerMeshPointer" type="MeshInstance3D" parent="PlayerMeshTemp"]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -0.5, 0.25, 0)
+mesh = SubResource("BoxMesh_mv8dw")
+surface_material_override/0 = SubResource("StandardMaterial3D_mv8dw")
+
+[node name="PlayerCollisionTemp" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0625, 0)
+shape = SubResource("CapsuleShape3D_mv8dw")
