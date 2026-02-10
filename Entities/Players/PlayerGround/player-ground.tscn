@@ -33,3 +33,14 @@ surface_material_override/0 = SubResource("StandardMaterial3D_mv8dw")
 [node name="PlayerCollisionTemp" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0625, 0)
 shape = SubResource("CapsuleShape3D_mv8dw")
+
+[node name="CameraController" type="Node3D" parent="."]
+top_level = true
+
+[node name="CameraTarget" type="Node3D" parent="CameraController"]
+transform = Transform3D(-4.1075264e-08, -0.34202006, 0.93969244, -1.4950173e-08, 0.93969244, 0.34202006, -0.99999994, -8.881784e-16, -4.371138e-08, 4.1175604, 1.971499, 0.078990124)
+rotation_order = 1
+
+[node name="Camera3D" type="Camera3D" parent="CameraController/CameraTarget"]
+transform = Transform3D(-4.13547e-08, -1.4158879e-08, -1, -0.3239174, 0.9460853, 0, 0.9460853, 0.3239174, -4.371139e-08, -4.5, 1.8, -4.25)
+current = true

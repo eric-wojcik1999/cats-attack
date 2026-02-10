@@ -1,13 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://csdvs0h5p6ume"]
 
 [ext_resource type="PackedScene" uid="uid://d4nm5bdaxqhsr" path="res://Entities/Players/PlayerGround/player-ground.tscn" id="1_j5bgn"]
-
-[sub_resource type="Curve3D" id="Curve3D_j5bgn"]
-_data = {
-"points": PackedVector3Array(0, 0, 0, 0, 0, 0, -0.04552412, -0.017015457, 0.036557198, 0.275, 0.1, 0.05, -0.275, -0.1, -0.05, -28, 0, 0.5, -0.375, -0.025, -0.125, 0.375, 0.025, 0.125, -29.5, 0.25, 0.25, 0.25, -0.125, -0.2, -0.25, 0.125, 0.2, -51.0845, -0.016967773, -13.149268, -0.05, -0.15, -0.275, 0.05, 0.15, 0.275, -63.72354, -0.016967773, -13.032241, -0.52500004, 0.22500001, -0.425, 0.52500004, -0.22500001, 0.425, -74.778275, -0.016967773, -3.5159278, 0, 0, 0, 0, 0, 0, -68.7722, -0.016967773, 22.146387, 0, 0, 0, 0, 0, 0, -104.30814, -0.016967773, 30.336487),
-"tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0)
-}
-point_count = 8
+[ext_resource type="PackedScene" uid="uid://b8qoyreqkcblf" path="res://Entities/Markers/direction_marker.tscn" id="2_73khv"]
 
 [node name="DemoScene" type="Node3D"]
 
@@ -15,47 +9,63 @@ point_count = 8
 transform = Transform3D(0.34202015, -0.24321035, 0.90767336, 0, 0.9659258, 0.25881904, -0.9396926, -0.08852133, 0.3303661, 4.43, 2.41, 3.35)
 
 [node name="TestFloor" type="CSGBox3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13, -0.125, 0.5)
+transform = Transform3D(2.9802322e-08, 0, -1, 0, 1, 0, 1, 0, 2.9802322e-08, -0.48051643, -0.125, -12.0669155)
 use_collision = true
 size = Vector3(32, 0.25, 6.5)
 
 [node name="TestFloor5" type="CSGBox3D" parent="."]
-transform = Transform3D(0.25881904, 0, -0.9659258, 0, 1, 0, 0.9659258, 0, 0.25881904, -72.5, -11.625, 9.25)
+transform = Transform3D(-1.0000001, 0, -2.9802322e-08, 0, 1, 0, 2.9802322e-08, 0, -1.0000001, -9.230518, -11.625, -72.56691)
 use_collision = true
 size = Vector3(32, 0.25, 6.5)
 
 [node name="TestFloor6" type="CSGBox3D" parent="."]
-transform = Transform3D(-0.96592593, 0, -0.25881904, 0, 1, 0, 0.25881904, 0, -0.96592593, -90, -14.375, 26)
+transform = Transform3D(-0.5, 0, 0.8660254, 0, 1, 0, -0.8660254, 0, -0.5, -34.230526, -14.375, -90.81691)
 use_collision = true
 size = Vector3(32, 0.25, 6.5)
 
 [node name="TestFloor2" type="CSGBox3D" parent="."]
-transform = Transform3D(0.86602545, 0, -0.50000006, 0, 1, 0, 0.50000006, 0, 0.86602545, -38.125, -6.375, -5.149519)
+transform = Transform3D(-0.49999997, 0, -0.8660254, 0, 1, 0, 0.8660254, 0, -0.49999997, 5.1689997, -6.375, -37.191914)
 use_collision = true
 size = Vector3(32, 0.25, 8)
 
 [node name="TestFloor3" type="CSGBox3D" parent="."]
-transform = Transform3D(0.9659259, 0, 0.2588191, 0, 1, 0, -0.2588191, 0, 0.9659259, -58.264694, -8.125, -13.520109)
+transform = Transform3D(0.25881913, 0, -0.9659258, 0, 1, 0, 0.9659258, 0, 0.25881913, 13.539587, -8.125, -57.331608)
 use_collision = true
 size = Vector3(12, 0.25, 8)
 
 [node name="TestFloor4" type="CSGBox3D" parent="."]
-transform = Transform3D(0.7615383, 0, 0.64811987, 0, 1, 0, -0.64811987, 0, 0.7615383, -70.264694, -9.375, -7.020109)
+transform = Transform3D(0.6481199, 0, -0.7615384, 0, 1, 0, 0.7615384, 0, 0.6481199, 7.039588, -9.375, -69.33161)
 use_collision = true
 size = Vector3(12, 0.25, 8)
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(-0.77140105, -0.63564557, -0.02991958, -0.24236248, 0.25000006, 0.9374223, -0.5883883, 0.7303799, -0.3469069, 9.5, 6.25, 6.75)
+transform = Transform3D(0.5883883, -0.7303799, 0.3469069, -0.24236242, 0.25000006, 0.9374222, -0.7714011, -0.6356455, -0.029919524, -6.7305164, 6.25, 10.433086)
 light_energy = 1.552
 shadow_enabled = true
 
 [node name="PlayerGround" parent="." instance=ExtResource("1_j5bgn")]
-transform = Transform3D(-0.018546062, 0.0042259856, 0.99980897, 0, 0.9999818, -0.004226709, -0.9998163, -7.838978e-05, -0.018545926, -0.041298136, 0.98296636, 0.036478806)
+transform = Transform3D(0.9999883, 0, 0, 0, 0.99999076, 0, 0, 0, 0.9999899, 0, 1, 0)
 
-[node name="Path3D" type="Path3D" parent="."]
-curve = SubResource("Curve3D_j5bgn")
+[node name="DirectionMarker2" parent="." instance=ExtResource("2_73khv")]
+transform = Transform3D(1.0000001, 0, 0, 0, 1, 0, 0, 0, 1.0000001, 12.438241, -3, -48.542686)
+_turnDegPerSecOverride = 50.0
 
-[node name="PathFollow3D" type="PathFollow3D" parent="Path3D"]
-transform = Transform3D(-0.018546062, 0.0042259856, 0.99980885, 0, 0.9999818, -0.0042267083, -0.9998163, -7.8389785e-05, -0.018545924, -0.04552412, -0.017015457, 0.036557198)
-rotation_mode = 2
-loop = false
+[node name="DirectionMarker" parent="." instance=ExtResource("2_73khv")]
+transform = Transform3D(0.8660254, 0, -0.5, 0, 1, 0, 0.5, 0, 0.8660254, -2.7305183, 4.25, -22.066916)
+_turnDegPerSecOverride = 50.0
+
+[node name="DirectionMarker3" parent="." instance=ExtResource("2_73khv")]
+transform = Transform3D(0.86602545, 0, 0.5000001, 0, 1, 0, -0.5000001, 0, 0.86602545, 12.438241, -7.25, -61.792686)
+_turnDegPerSecOverride = 30.0
+
+[node name="DirectionMarker4" parent="." instance=ExtResource("2_73khv")]
+transform = Transform3D(-8.940697e-08, 0, 1, 0, 1, 0, -1, 0, -8.940697e-08, 3.688241, -6, -71.29269)
+_turnDegPerSecOverride = 30.0
+
+[node name="DirectionMarker5" parent="." instance=ExtResource("2_73khv")]
+transform = Transform3D(0.4999999, 0, 0.8660254, 0, 1, 0, -0.8660254, 0, 0.4999999, 9.188241, -5.5, -67.54269)
+_turnDegPerSecOverride = 30.0
+
+[node name="DirectionMarker6" parent="." instance=ExtResource("2_73khv")]
+transform = Transform3D(0.70710677, 0, 0.70710695, 0, 1, 0, -0.70710695, 0, 0.70710677, -21.31176, -10.75, -72.79269)
+_turnDegPerSecOverride = 30.0
