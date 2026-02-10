@@ -10,7 +10,6 @@ public partial class PlayerGround : CharacterBody3D
 	[Export] private float _lateralDeceleration = 2.0f; 
 	[Export] private float _cameraLag = 0.075f;
 	[Export] public float _defaultTurnDegPerSec = 360f;
-	[Export] public float _rotationVelocityDegPerSec = 180f; // Existing RotationVelocity
 	private Vector3 _desiredForward = Vector3.Forward;
 	private bool _hasDesiredForward = false;
 	private float _currentTurnDegPerSec;
@@ -92,6 +91,7 @@ public partial class PlayerGround : CharacterBody3D
 			_currentTurnDegPerSec = turnDegPerSecOverride > 0f ? turnDegPerSecOverride : _defaultTurnDegPerSec;
 
 			float targetYaw = Mathf.Atan2(-_desiredForward.X, -_desiredForward.Z);
+
 			// GD.Print($"[Player] SetDesiredForward -> desiredForward={_desiredForward}, targetYawDeg={Mathf.RadToDeg(targetYaw):F2}, turn={_currentTurnDegPerSec}");
 		}
 	}

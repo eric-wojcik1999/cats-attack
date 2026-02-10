@@ -55,7 +55,8 @@ public partial class DirectionMarker : Area3D
 		// 		return;
         if (body is PlayerGround player)
 		{
-			GD.Print($"[Marker] ENTER: marker={Name} rotDeg={GlobalRotationDegrees}");
+			// GD.Print($"[Marker] ENTER: marker={Name} rotDeg={GlobalRotationDegrees}");
+
 			// // IMPORTANT: direction comes from ROOT Area3D rotation (this node).
 			// // Godot forward is -Z, so marker's forward direction is -GlobalBasis.Z
 			var basis = GlobalTransform.Basis;
@@ -66,6 +67,7 @@ public partial class DirectionMarker : Area3D
 			{
 				player.SetDesiredForward(desiredForward.Normalized(), _turnDegPerSecOverride);
 				float targetYaw = Mathf.Atan2(-desiredForward.X, -desiredForward.Z);
+				
 				// GD.Print($"[Marker] targetYawDeg={Mathf.RadToDeg(targetYaw)}");
 			}
 
