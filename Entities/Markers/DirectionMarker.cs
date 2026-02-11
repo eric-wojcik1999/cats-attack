@@ -14,7 +14,6 @@ public partial class DirectionMarker : Area3D
 
 	public override void _Ready()
 	{
-
 		// Connect to built-in signals
 		BodyEntered += OnPlayerEntered;
 
@@ -76,6 +75,5 @@ public partial class DirectionMarker : Area3D
 				QueueFree();
 			}
 		}
-
 	}
 }

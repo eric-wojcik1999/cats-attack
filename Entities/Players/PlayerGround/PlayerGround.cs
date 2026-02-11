@@ -10,6 +10,7 @@ public partial class PlayerGround : CharacterBody3D
 	[Export] private float _lateralDeceleration = 2.0f; 
 	[Export] private float _cameraLag = 0.075f;
 	[Export] public float _defaultTurnDegPerSec = 360f;
+	[Export] public float _cameraYawFollowSpeed = 8.0f;
 	private Vector3 _desiredForward = Vector3.Forward;
 	private bool _hasDesiredForward = false;
 	private float _currentTurnDegPerSec;
@@ -28,8 +29,7 @@ public partial class PlayerGround : CharacterBody3D
 	{
 
 		// ───── Update Player Rotation ─────
-		float dt = (float)delta;
-		UpdateYawTurning(dt);
+		UpdateYawTurning((float)delta);
 
 		bool onFloor = IsOnFloor();
 		Vector3 newVelocity = Velocity;
@@ -71,8 +71,9 @@ public partial class PlayerGround : CharacterBody3D
 		Velocity = new Vector3(newVelocity.X, newVelocity.Y, newVelocity.Z);
 		MoveAndSlide();
 
-		// ───── Match camera to position of player ─────
-		cameraController.GlobalPosition = cameraController.GlobalPosition.Lerp(GlobalPosition, _cameraLag);
+		// ───── Match camera to position and rotation of the player ─────
+		UpdateCameraYaw((float)delta);
+		
 	}
 
 	public void SetDesiredForward(Vector3 forward, float turnDegPerSecOverride)
@@ -124,6 +125,18 @@ public partial class PlayerGround : CharacterBody3D
 				GlobalRotation = rotation;
 			}
 		}
+	}
+
+	private void UpdateCameraYaw(float delta) 
+	{
+		cameraController.GlobalPosition = cameraController.GlobalPosition.Lerp(GlobalPosition, _cameraLag);
+		Vector3 cameraRotation = cameraController.GlobalRotation;
+		float cameraYaw = cameraRotation.Y;
+		float targetYaw = GlobalRotation.Y; // Player's rotation
+		float diff = Mathf.Wrap(targetYaw - cameraYaw, -Mathf.Pi, Mathf.Pi);
+		float step = _cameraYawFollowSpeed * delta;
+		cameraRotation.Y += diff * Mathf.Clamp(step, 0f, 1f);
+		cameraController.GlobalRotation = cameraRotation;
 	}
 
 }
