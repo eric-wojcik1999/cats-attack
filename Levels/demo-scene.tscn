@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://csdvs0h5p6ume"]
+[gd_scene load_steps=5 format=3 uid="uid://csdvs0h5p6ume"]
 
 [ext_resource type="PackedScene" uid="uid://d4nm5bdaxqhsr" path="res://Entities/Players/PlayerGround/player-ground.tscn" id="1_j5bgn"]
 [ext_resource type="PackedScene" uid="uid://b8qoyreqkcblf" path="res://Entities/Markers/direction_marker.tscn" id="2_73khv"]
 [ext_resource type="PackedScene" uid="uid://cguppm588mcqk" path="res://Entities/Pickups/Coins/coin_pickup.tscn" id="3_cl86r"]
+[ext_resource type="PackedScene" uid="uid://cehky8lel227e" path="res://UI/hud.tscn" id="4_cjwjn"]
 
 [node name="DemoScene" type="Node3D"]
 
@@ -54,7 +55,7 @@ transform = Transform3D(1.0000001, 0, 0, 0, 1, 0, 0, 0, 1.0000001, 12.438241, -3
 _turnDegPerSecOverride = 50.0
 
 [node name="DirectionMarker" parent="DirectionMarkers" instance=ExtResource("2_73khv")]
-transform = Transform3D(0.8660254, 0, -0.5, 0, 1, 0, 0.5, 0, 0.8660254, -2.7305183, 4.25, -22.066916)
+transform = Transform3D(1.0349004, 0, -0.5975, 0, 1.195, 0, 0.5975, 0, 1.0349004, -1.2305183, 3, -22.066916)
 _turnDegPerSecOverride = 50.0
 
 [node name="DirectionMarker3" parent="DirectionMarkers" instance=ExtResource("2_73khv")]
@@ -93,3 +94,5 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.25, 1, -14)
 
 [node name="CoinPickup5" parent="Coins" instance=ExtResource("3_cl86r")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.25, 1, -17)
+
+[node name="HUD" parent="." instance=ExtResource("4_cjwjn")]
