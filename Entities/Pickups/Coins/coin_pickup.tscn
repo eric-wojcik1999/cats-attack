@@ -13,6 +13,7 @@ radius = 0.75
 height = 1.625
 
 [node name="CoinPickup" type="Area3D"]
+collision_layer = 4
 script = ExtResource("1_opw15")
 
 [node name="CoinPickupMeshTemp" type="MeshInstance3D" parent="."]

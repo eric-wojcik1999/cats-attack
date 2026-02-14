@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://csdvs0h5p6ume"]
+[gd_scene load_steps=6 format=3 uid="uid://csdvs0h5p6ume"]
 
 [ext_resource type="PackedScene" uid="uid://d4nm5bdaxqhsr" path="res://Entities/Players/PlayerGround/player-ground.tscn" id="1_j5bgn"]
 [ext_resource type="PackedScene" uid="uid://b8qoyreqkcblf" path="res://Entities/Markers/direction_marker.tscn" id="2_73khv"]
 [ext_resource type="PackedScene" uid="uid://cguppm588mcqk" path="res://Entities/Pickups/Coins/coin_pickup.tscn" id="3_cl86r"]
 [ext_resource type="PackedScene" uid="uid://cehky8lel227e" path="res://UI/hud.tscn" id="4_cjwjn"]
+[ext_resource type="PackedScene" uid="uid://djcdbqorg2qc" path="res://Entities/Enemies/moving_enemy_basic.tscn" id="5_1e8n7"]
 
 [node name="DemoScene" type="Node3D"]
 
@@ -13,31 +14,57 @@ transform = Transform3D(0.34202015, -0.24321035, 0.90767336, 0, 0.9659258, 0.258
 [node name="TestFloor" type="CSGBox3D" parent="."]
 transform = Transform3D(2.9802322e-08, 0, -1, 0, 1, 0, 1, 0, 2.9802322e-08, -0.48051643, -0.125, -12.0669155)
 use_collision = true
+collision_layer = 2
+collision_mask = 13
 size = Vector3(32, 0.25, 6.5)
 
 [node name="TestFloor5" type="CSGBox3D" parent="."]
 transform = Transform3D(-1.0000001, 0, -2.9802322e-08, 0, 1, 0, 2.9802322e-08, 0, -1.0000001, -9.230518, -11.625, -72.56691)
 use_collision = true
+collision_layer = 2
+collision_mask = 13
 size = Vector3(32, 0.25, 6.5)
 
 [node name="TestFloor6" type="CSGBox3D" parent="."]
 transform = Transform3D(-0.5, 0, 0.8660254, 0, 1, 0, -0.8660254, 0, -0.5, -34.230526, -14.375, -90.81691)
 use_collision = true
+collision_layer = 2
+collision_mask = 13
 size = Vector3(32, 0.25, 6.5)
 
 [node name="TestFloor2" type="CSGBox3D" parent="."]
 transform = Transform3D(-0.49999997, 0, -0.8660254, 0, 1, 0, 0.8660254, 0, -0.49999997, 5.1689997, -6.375, -37.191914)
 use_collision = true
+collision_layer = 2
+collision_mask = 13
 size = Vector3(32, 0.25, 8)
+
+[node name="TestWall" type="CSGBox3D" parent="."]
+transform = Transform3D(-0.49999997, 0, -0.8660254, 0, 1, 0, 0.8660254, 0, -0.49999997, 0.6689997, -4.875, -39.691914)
+use_collision = true
+collision_layer = 2
+collision_mask = 13
+size = Vector3(32, 4.34, 2.515)
+
+[node name="TestWall2" type="CSGBox3D" parent="."]
+transform = Transform3D(-0.49999997, 0, -0.8660254, 0, 1, 0, 0.8660254, 0, -0.49999997, 9.669, -4.625, -34.441914)
+use_collision = true
+collision_layer = 2
+collision_mask = 13
+size = Vector3(32, 4.34, 2.515)
 
 [node name="TestFloor3" type="CSGBox3D" parent="."]
 transform = Transform3D(0.25881913, 0, -0.9659258, 0, 1, 0, 0.9659258, 0, 0.25881913, 13.539587, -8.125, -57.331608)
 use_collision = true
+collision_layer = 2
+collision_mask = 13
 size = Vector3(12, 0.25, 8)
 
 [node name="TestFloor4" type="CSGBox3D" parent="."]
 transform = Transform3D(0.6481199, 0, -0.7615384, 0, 1, 0, 0.7615384, 0, 0.6481199, 7.039588, -9.375, -69.33161)
 use_collision = true
+collision_layer = 2
+collision_mask = 13
 size = Vector3(12, 0.25, 8)
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
@@ -47,6 +74,8 @@ shadow_enabled = true
 
 [node name="PlayerGround" parent="." instance=ExtResource("1_j5bgn")]
 transform = Transform3D(0.9999883, 0, 0, 0, 0.99999076, 0, 0, 0, 0.9999899, 0, 1, 0)
+_baseJumpVelocity = 6.0
+_lateralDeceleration = 6.0
 
 [node name="DirectionMarkers" type="Node3D" parent="."]
 
@@ -96,3 +125,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.25, 1, -14)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.25, 1, -17)
 
 [node name="HUD" parent="." instance=ExtResource("4_cjwjn")]
+
+[node name="Enemies" type="Node3D" parent="."]
+
+[node name="MovingEnemyBasic" parent="Enemies" instance=ExtResource("5_1e8n7")]
+transform = Transform3D(0.99999994, 0, 0, 0, 0.99999994, 0, 0, 0, 1, 8.25, -4.75, -41.5)
