@@ -1,10 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://djcdbqorg2qc"]
+[gd_scene load_steps=7 format=3 uid="uid://djcdbqorg2qc"]
 
 [ext_resource type="Script" uid="uid://dw07wh4xo05do" path="res://Entities/Enemies/MovingEnemyBasic.cs" id="1_4hpws"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_bwuso"]
-radius = 0.75
-height = 1.5
+radius = 0.65
+height = 1.4
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4hpws"]
 albedo_color = Color(1, 0.41568628, 0.39215687, 1)
@@ -16,6 +16,10 @@ height = 0.2
 [sub_resource type="SphereShape3D" id="SphereShape3D_bwuso"]
 radius = 0.55
 
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_4hpws"]
+height = 0.671875
+radius = 0.75
+
 [node name="MovingEnemyBasic" type="CharacterBody3D"]
 collision_layer = 8
 collision_mask = 2
@@ -26,9 +30,16 @@ mesh = SubResource("SphereMesh_bwuso")
 surface_material_override/0 = SubResource("StandardMaterial3D_4hpws")
 
 [node name="MeshForwardMarker" type="MeshInstance3D" parent="EnemyMesh"]
-transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, -0.75)
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, -0.6677836)
 mesh = SubResource("SphereMesh_xsk0n")
 
 [node name="EnemyGroundCollision" type="CollisionShape3D" parent="."]
 shape = SubResource("SphereShape3D_bwuso")
 debug_color = Color(0.8135019, 0.002050755, 0.9809212, 0.41960785)
+
+[node name="SideDetection" type="Area3D" parent="."]
+collision_layer = 0
+
+[node name="SideDetectionCollision" type="CollisionShape3D" parent="SideDetection"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1640625, 0)
+shape = SubResource("CylinderShape3D_4hpws")

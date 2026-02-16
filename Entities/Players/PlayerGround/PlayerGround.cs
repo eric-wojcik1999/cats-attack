@@ -3,6 +3,8 @@ using System;
 
 public partial class PlayerGround : CharacterBody3D
 {
+
+	[Signal] public delegate void HealthChangedEventHandler(int amount);
 	[Export] private float _baseMovementSpeed = 5.0f;
 	[Export] private float _autoForwardSpeed = 6.0f;
 	[Export] private float _baseJumpVelocity = 4.5f;
@@ -11,17 +13,18 @@ public partial class PlayerGround : CharacterBody3D
 	[Export] private float _cameraLag = 0.075f;
 	[Export] public float _defaultTurnDegPerSec = 360f;
 	[Export] public float _cameraYawFollowSpeed = 8.0f;
+	[Export] private int _health = 6;
+	[Export] private int _maxHealth = 6;
 	private Vector3 _desiredForward = Vector3.Forward;
 	private bool _hasDesiredForward = false;
 	private float _currentTurnDegPerSec;
-
-
-	private Node3D cameraController;
+	private Node3D _cameraController;
+	private bool _isInvulnerable = false;
 
 	public override void _Ready() 
 	{
 		_currentTurnDegPerSec = _defaultTurnDegPerSec;
-		cameraController = GetNode<Node3D>("CameraController");
+		_cameraController = GetNode<Node3D>("CameraController");
 	}
 
 
@@ -129,14 +132,61 @@ public partial class PlayerGround : CharacterBody3D
 
 	private void UpdateCameraYaw(float delta) 
 	{
-		cameraController.GlobalPosition = cameraController.GlobalPosition.Lerp(GlobalPosition, _cameraLag);
-		Vector3 cameraRotation = cameraController.GlobalRotation;
+		_cameraController.GlobalPosition = _cameraController.GlobalPosition.Lerp(GlobalPosition, _cameraLag);
+		Vector3 cameraRotation = _cameraController.GlobalRotation;
 		float cameraYaw = cameraRotation.Y;
 		float targetYaw = GlobalRotation.Y; // Player's rotation
 		float diff = Mathf.Wrap(targetYaw - cameraYaw, -Mathf.Pi, Mathf.Pi);
 		float step = _cameraYawFollowSpeed * delta;
 		cameraRotation.Y += diff * Mathf.Clamp(step, 0f, 1f);
-		cameraController.GlobalRotation = cameraRotation;
+		_cameraController.GlobalRotation = cameraRotation;
 	}
+
+	public void TakeDamage(int amount)
+	{
+		if (amount < 0)
+		{
+			GD.PushWarning("[PlayerGround] damage amount provided < 0");
+		}
+		else 
+		{
+			// if (isInvulnerable == true || health <= 0 ) -> then don't do the rest
+
+			ApplyHealthDelta(-amount);
+
+			// // i-frame stuff -> for the future
+			// if (_health >= 0)
+			// {
+			// 	_ = StartIframesAsync();
+			// }
+		}
+	}
+
+	private void ApplyHealthDelta(int delta)
+	{
+		int prevHealth = _health;
+		_health = Mathf.Clamp(_health + delta, 0, _maxHealth);
+
+		GD.Print($"[PlayerGround] health is: {_health})");
+
+		if (_health != prevHealth)
+		{
+			// Emit signal to update UI health value
+			EmitSignal(SignalName.HealthChanged, _health);
+		}
+
+		// handling death
+		// if (_health == 0 && prevHealth > 0)
+		// {
+		// 	EmitSignal(SignalName.Died)
+		// }
+	}
+
+    // private async System.Threading.Tasks.Task StartIframesAsync()
+    // {
+    //     _isInvulnerable = true;
+    //     await ToSignal(GetTree().CreateTimer(_invulnSeconds), SceneTreeTimer.SignalName.Timeout);
+    //     _isInvulnerable = false;
+    // }
 
 }
