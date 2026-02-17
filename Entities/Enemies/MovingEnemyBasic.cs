@@ -8,14 +8,19 @@ public partial class MovingEnemyBasic : CharacterBody3D
 	// (1, 0, 0) <- the positive 1 is 'left' on the x-axis
 	[Export] private Vector3 _direction = new Vector3(-1, 0, 0);
 	[Export] public NodePath _sideDetectionPath = "SideDetection";
+	
+	[Export] public NodePath _topDetectionPath = "TopDetection";
 	[Export] public int _damageAmount = 1;
 	private bool _isTurning = false;
 	private Area3D _sideDetection;
+	private Area3D _topDetection;
 
 	public override void _Ready()
 	{
 		_sideDetection = GetNode<Area3D>(_sideDetectionPath);
 		_sideDetection.BodyEntered += OnSideDectionPlayerEntered;
+		_topDetection = GetNode<Area3D>(_topDetectionPath);
+		_topDetection.BodyEntered += OnTopDectionPlayerEntered;
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -62,9 +67,36 @@ public partial class MovingEnemyBasic : CharacterBody3D
 	{
 		if (body != null)
 		{
+			// Disable top collision when side ccollision entered to prevent double collision
+			_topDetection.SetCollisionMaskValue(1, false);
+
 			if (body is PlayerGround player)
 			{
+				GD.Print("side detection");
 				player.TakeDamage(_damageAmount);
+				player.BounceBackFrom(GlobalPosition);
+				QueueFree();
+			}
+		}
+		else 
+		{
+			GD.PushError("[MovingEnemyBasic] player body is null.");
+		}
+	}
+
+	private void OnTopDectionPlayerEntered(Node3D body) 
+	{
+		if (body != null)
+		{
+			// Disable side collision when top ccollision entered to prevent double collision
+			_sideDetection.SetCollisionMaskValue(1, false);
+
+			if (body is PlayerGround player)
+			{
+				GD.Print("top detection");
+				player.BounceUp();
+				// NOW GIVE SOME MONEY
+				QueueFree();
 			}
 		}
 		else 

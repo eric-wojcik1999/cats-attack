@@ -129,4 +129,4 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.25, 1, -17)
 [node name="Enemies" type="Node3D" parent="."]
 
 [node name="MovingEnemyBasic" parent="Enemies" instance=ExtResource("5_1e8n7")]
-transform = Transform3D(0.99999994, 0, 0, 0, 0.99999994, 0, 0, 0, 1, 8.25, -4.75, -41.5)
+transform = Transform3D(0.99999994, 0, 0, 0, 0.99999994, 0, 0, 0, 1, 9, -4.5, -43.25)

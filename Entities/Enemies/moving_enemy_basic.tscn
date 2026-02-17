@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://djcdbqorg2qc"]
+[gd_scene load_steps=8 format=3 uid="uid://djcdbqorg2qc"]
 
 [ext_resource type="Script" uid="uid://dw07wh4xo05do" path="res://Entities/Enemies/MovingEnemyBasic.cs" id="1_4hpws"]
 
@@ -19,6 +19,10 @@ radius = 0.55
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_4hpws"]
 height = 0.671875
 radius = 0.75
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_xsk0n"]
+height = 0.55174637
+radius = 0.5566406
 
 [node name="MovingEnemyBasic" type="CharacterBody3D"]
 collision_layer = 8
@@ -43,3 +47,9 @@ collision_layer = 0
 [node name="SideDetectionCollision" type="CollisionShape3D" parent="SideDetection"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1640625, 0)
 shape = SubResource("CylinderShape3D_4hpws")
+
+[node name="TopDetection" type="Area3D" parent="."]
+
+[node name="TopDetectionCollision" type="CollisionShape3D" parent="TopDetection"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.47330344, 0)
+shape = SubResource("CylinderShape3D_xsk0n")

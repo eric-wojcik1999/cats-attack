@@ -20,6 +20,7 @@ height = 2.375
 [node name="PlayerGround" type="CharacterBody3D"]
 collision_mask = 6
 script = ExtResource("1_lw8c3")
+_baseJumpVelocity = 3.0
 
 [node name="PlayerMeshTemp" type="MeshInstance3D" parent="."]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, 0, 0)

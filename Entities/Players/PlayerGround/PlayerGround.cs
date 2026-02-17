@@ -15,11 +15,14 @@ public partial class PlayerGround : CharacterBody3D
 	[Export] public float _cameraYawFollowSpeed = 8.0f;
 	[Export] private int _health = 6;
 	[Export] private int _maxHealth = 6;
+	[Export] private float _knockbackTime = 0.75f;
 	private Vector3 _desiredForward = Vector3.Forward;
 	private bool _hasDesiredForward = false;
 	private float _currentTurnDegPerSec;
 	private Node3D _cameraController;
 	private bool _isInvulnerable = false;
+	private float _knockbackTimer = 0f;
+	private Vector3 _knockbackHorizontal = Vector3.Zero;
 
 	public override void _Ready() 
 	{
@@ -45,38 +48,59 @@ public partial class PlayerGround : CharacterBody3D
             newVelocity += gravity * (float)delta;
         }
 
-		// ───── Jumping ─────
-		if (Input.IsActionJustPressed("jump") && (onFloor)) 
+		// ───── Lock player if hit ─────
+		if (_knockbackTimer > 0f)
 		{
-			newVelocity.Y = _baseJumpVelocity;
+			_knockbackTimer -= (float)delta;
+			// // keep gravity affecting Y --- remove and optimise
+			// if (!onFloor)
+			// 	Vector3 gravity = GetGravity();
+			// 	newVelocity += gravity * (float)delta;
+
+			// OPTIMISE THIS LATER -- make it half of calculated forward movement
+			Vector3 forward = -Transform.Basis.Z * (_autoForwardSpeed * 0.5f); 
+			// Calculates next knockBackHorizontal value so it has a
+			// smooth decay toward 0 and handoff to normal movement is not abrupt
+			float t = Mathf.Clamp(10f * (float)delta, 0f, 1f);   // 10 = decay speed (tune 6..14)
+			_knockbackHorizontal = _knockbackHorizontal.Lerp(forward, t);
+
+			Velocity = new Vector3(_knockbackHorizontal.X, newVelocity.Y, _knockbackHorizontal.Z);
 		} 
-
-		// ───── Auto-forward movement ─────
-		Vector3 forward = -Transform.Basis.Z * _autoForwardSpeed;
-		newVelocity.X = forward.X;
-    	newVelocity.Z = forward.Z;
-
-		// ───── Lateral (left/right) movement ─────
-		// If: player is not laterlly moving, slow to a stop
-		// Else: move the player left/right
-		if (Mathf.Abs(horizontalInput) < 0.01f)
+		else 
 		{
-			newVelocity.X = Mathf.Lerp(newVelocity.X, forward.X, 1f - Mathf.Exp(-_lateralDeceleration * (float)delta));
-			newVelocity.Z = Mathf.Lerp(newVelocity.Z, forward.Z, 1f - Mathf.Exp(-_lateralDeceleration * (float)delta));
-		}
-		else
-		{
-			Vector3 lateral = Transform.Basis.X * horizontalInput * _baseMovementSpeed;
-			newVelocity.X = forward.X + lateral.X;
-			newVelocity.Z = forward.Z + lateral.Z;
-		}
+			// ───── Jumping ─────
+			if (Input.IsActionJustPressed("jump") && (onFloor)) 
+			{
+				newVelocity.Y = _baseJumpVelocity;
+			} 
 
-		Velocity = new Vector3(newVelocity.X, newVelocity.Y, newVelocity.Z);
+			// ───── Auto-forward movement ─────
+			Vector3 forward = -Transform.Basis.Z * _autoForwardSpeed;
+			newVelocity.X = forward.X;
+			newVelocity.Z = forward.Z;
+
+			// ───── Lateral (left/right) movement ─────
+			// If: player is not laterlly moving, slow to a stop
+			// Else: move the player left/right
+			if (Mathf.Abs(horizontalInput) < 0.01f)
+			{
+				newVelocity.X = Mathf.Lerp(newVelocity.X, forward.X, 1f - Mathf.Exp(-_lateralDeceleration * (float)delta));
+				newVelocity.Z = Mathf.Lerp(newVelocity.Z, forward.Z, 1f - Mathf.Exp(-_lateralDeceleration * (float)delta));
+			}
+			else
+			{
+				Vector3 lateral = Transform.Basis.X * horizontalInput * _baseMovementSpeed;
+				newVelocity.X = forward.X + lateral.X;
+				newVelocity.Z = forward.Z + lateral.Z;
+			}
+
+			Velocity = new Vector3(newVelocity.X, newVelocity.Y, newVelocity.Z);
+		}
+		
 		MoveAndSlide();
 
 		// ───── Match camera to position and rotation of the player ─────
 		UpdateCameraYaw((float)delta);
-		
 	}
 
 	public void SetDesiredForward(Vector3 forward, float turnDegPerSecOverride)
@@ -188,5 +212,34 @@ public partial class PlayerGround : CharacterBody3D
     //     await ToSignal(GetTree().CreateTimer(_invulnSeconds), SceneTreeTimer.SignalName.Timeout);
     //     _isInvulnerable = false;
     // }
+
+	public void BounceUp()
+	{
+		// Vector3 newVelocity = Velocity;
+		// newVelocity.Y = _baseJumpVelocity * 0.7f;
+		Velocity = new Vector3(Velocity.X, _baseJumpVelocity * 0.7f, Velocity.Z);
+	}
+
+	public void BounceBackFrom(Vector3 enemyPos)
+	{
+		Vector3 away = GlobalPosition - enemyPos;
+		away.Y = 0f;
+
+		if (away.LengthSquared() < 0.0001f)
+		{
+			away = -Transform.Basis.Z;
+		}
+
+		away = away.Normalized();
+
+		// Horizontal push
+		_knockbackHorizontal = away * 6.0f;
+
+		// Upwards push
+		Velocity = new Vector3(Velocity.X, _baseJumpVelocity * 0.4f, Velocity.Z);
+
+		// Lock player briefly
+		_knockbackTimer = _knockbackTime;
+	}
 
 }
