@@ -10,10 +10,12 @@ public partial class MovingEnemyBasic : CharacterBody3D
 	[Export] public NodePath _sideDetectionPath = "SideDetection";
 	
 	[Export] public NodePath _topDetectionPath = "TopDetection";
+	[Export] public NodePath _detectFloorRayCastPath = "DetectFloorRayCast";
 	[Export] public int _damageAmount = 1;
 	private bool _isTurning = false;
 	private Area3D _sideDetection;
 	private Area3D _topDetection;
+	private RayCast3D _detectFloorRayCast;
 
 	public override void _Ready()
 	{
@@ -21,13 +23,23 @@ public partial class MovingEnemyBasic : CharacterBody3D
 		_sideDetection.BodyEntered += OnSideDectionPlayerEntered;
 		_topDetection = GetNode<Area3D>(_topDetectionPath);
 		_topDetection.BodyEntered += OnTopDectionPlayerEntered;
+		_detectFloorRayCast = GetNode<RayCast3D>(_detectFloorRayCastPath);
 	}
 
 	public override void _PhysicsProcess(double delta)
 	{
+		// Vector3 newVelocity = Velocity;
+		// newVelocity.X = _baseMovementSpeed * _direction.X;
+		// newVelocity.Z = _baseMovementSpeed * _direction.Z;
+	
 		Vector3 newVelocity = Velocity;
-		newVelocity.X = _baseMovementSpeed * _direction.X;
-		newVelocity.Z = _baseMovementSpeed * _direction.Z;
+
+		// ───── Horizontal movement based on current facing direction ─────
+		// In Godot, -Z is forward
+		Vector3 forward = -GlobalTransform.Basis.Z;
+		newVelocity.X = forward.X * _baseMovementSpeed;
+		newVelocity.Z = forward.Z * _baseMovementSpeed;
+
 
 		// Might need to disable temporarily
 		if (!IsOnFloor())
@@ -43,6 +55,11 @@ public partial class MovingEnemyBasic : CharacterBody3D
 		{
 			_ = TurnAroundAsync();
 		}
+
+		if (!_detectFloorRayCast.IsColliding() && IsOnFloor() && !_isTurning)
+		{
+			_ = TurnAroundAsync();
+		}
 	}
 
     private async Task TurnAroundAsync()
@@ -53,9 +70,12 @@ public partial class MovingEnemyBasic : CharacterBody3D
         _direction = Vector3.Zero;
 
 		// Rotate the enemy to direction they are heading
+		// Tween turnTween = CreateTween();
+		// turnTween.TweenProperty(this, "rotation_degrees", new Vector3(0f, 180f, 0f), 0.6f).AsRelative();
+		// await ToSignal(GetTree().CreateTimer(0.1f), SceneTreeTimer.SignalName.Timeout);
 		Tween turnTween = CreateTween();
-		turnTween.TweenProperty(this, "rotation_degrees", new Vector3(0f, 180f, 0f), 0.6f).AsRelative();
-		await ToSignal(GetTree().CreateTimer(0.05f), SceneTreeTimer.SignalName.Timeout);
+		turnTween.TweenProperty(this, "rotation_degrees", new Vector3(0f, 180f, 0f), 0.3f).AsRelative();
+		await ToSignal(turnTween, Tween.SignalName.Finished);
 
         _direction = currentDirection;
         _direction.X *= -1f;

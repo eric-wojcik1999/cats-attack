@@ -53,3 +53,8 @@ shape = SubResource("CylinderShape3D_4hpws")
 [node name="TopDetectionCollision" type="CollisionShape3D" parent="TopDetection"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.47330344, 0)
 shape = SubResource("CylinderShape3D_xsk0n")
+
+[node name="DetectFloorRayCast" type="RayCast3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, -0.82377476)
+target_position = Vector3(0, -0.8, 0)
+collision_mask = 2
