@@ -1,10 +1,12 @@
 using Godot;
 using System;
+using System.Threading.Tasks;
 
 public partial class PlayerGround : CharacterBody3D
 {
 
 	[Signal] public delegate void HealthChangedEventHandler(int amount);
+	[Signal] public delegate void DiedEventHandler();
 	[Export] private float _baseMovementSpeed = 5.0f;
 	[Export] private float _autoForwardSpeed = 6.0f;
 	[Export] private float _baseJumpVelocity = 4.5f;
@@ -23,84 +25,117 @@ public partial class PlayerGround : CharacterBody3D
 	private bool _isInvulnerable = false;
 	private float _knockbackTimer = 0f;
 	private Vector3 _knockbackHorizontal = Vector3.Zero;
+	[Export] public int _collideDamageAmount = 1;
+	[Export] public NodePath _playerMeshNodePath = "PlayerMeshTemp";
+	private bool _hasDied = false;
+	
+	[Export] private Node3D _playerAirPositionMarker;
+
+	// Getters 
+	public int Health => _health;
+	public int MaxHealth => _maxHealth;
+	public Vector3 ForwardDir => -GlobalTransform.Basis.Z;
+	public Vector3 RightDir => GlobalTransform.Basis.X;
+	public bool IsKnockbackActive => _knockbackTimer > 0f;
+	public Vector3 AirAnchorPosition => _playerAirPositionMarker != null ? _playerAirPositionMarker.GlobalPosition : GlobalPosition;
 
 	public override void _Ready() 
 	{
 		_currentTurnDegPerSec = _defaultTurnDegPerSec;
 		_cameraController = GetNode<Node3D>("CameraController");
 	}
-
-
+    
 	public override void _PhysicsProcess(double delta)
 	{
 
+		if (_hasDied)
+		{
+			return;
+		}
+
+		float dt = (float)delta;
+
 		// ───── Update Player Rotation ─────
-		UpdateYawTurning((float)delta);
+		UpdateYawTurning(dt);
 
 		bool onFloor = IsOnFloor();
-		Vector3 newVelocity = Velocity;
 		float horizontalInput = Input.GetActionStrength("move_ground_right") - Input.GetActionStrength("move_ground_left");
 
-		// ───── Falling when in air ─────
-        if (!onFloor)
-        {
-            Vector3 gravity = GetGravity();
-            newVelocity += gravity * (float)delta;
-        }
+		// Start from current velocity and build next frame's velocity
+		Vector3 newVelocity = Velocity;
 
-		// ───── Lock player if hit ─────
+		// ───── Apply gravity ─────
+		if (!onFloor)
+		{
+			newVelocity += GetGravity() * dt;
+		}
+
+		// ───── Shared horizontal basis vectors ─────
+		Vector3 forwardDir = -Transform.Basis.Z;
+		Vector3 rightDir = Transform.Basis.X;
+
+		// Lateral input vector
+		Vector3 lateralInputVelocity = Vector3.Zero;
+		if (Mathf.Abs(horizontalInput) >= 0.01f)
+		{
+			lateralInputVelocity = rightDir * horizontalInput * _baseMovementSpeed;
+		}
+
+		// if: knowckback timer > 0, then KNOCKBACK STUN
+		// else: NORMAL MOVEMENT
 		if (_knockbackTimer > 0f)
 		{
-			_knockbackTimer -= (float)delta;
-			// // keep gravity affecting Y --- remove and optimise
-			// if (!onFloor)
-			// 	Vector3 gravity = GetGravity();
-			// 	newVelocity += gravity * (float)delta;
+			_knockbackTimer -= dt;
+			if (_knockbackTimer < 0f)
+				_knockbackTimer = 0f;
 
-			// OPTIMISE THIS LATER -- make it half of calculated forward movement
-			Vector3 forward = -Transform.Basis.Z * (_autoForwardSpeed * 0.5f); 
-			// Calculates next knockBackHorizontal value so it has a
-			// smooth decay toward 0 and handoff to normal movement is not abrupt
-			float t = Mathf.Clamp(10f * (float)delta, 0f, 1f);   // 10 = decay speed (tune 6..14)
-			_knockbackHorizontal = _knockbackHorizontal.Lerp(forward, t);
+			// During knockback:
+			// - allow lateral steering
+			// - block normal auto-forward progression
+			// - smoothly hand off from knockback -> player lateral control
+			float decayT = Mathf.Clamp(10f * dt, 0f, 1f); // tune 6..14
+			_knockbackHorizontal = _knockbackHorizontal.Lerp(lateralInputVelocity, decayT);
 
-			Velocity = new Vector3(_knockbackHorizontal.X, newVelocity.Y, _knockbackHorizontal.Z);
-		} 
-		else 
+			newVelocity.X = _knockbackHorizontal.X;
+			newVelocity.Z = _knockbackHorizontal.Z;
+		}
+		else
 		{
 			// ───── Jumping ─────
-			if (Input.IsActionJustPressed("jump") && (onFloor)) 
+			if (Input.IsActionJustPressed("jump") && onFloor)
 			{
 				newVelocity.Y = _baseJumpVelocity;
-			} 
+			}
 
 			// ───── Auto-forward movement ─────
-			Vector3 forward = -Transform.Basis.Z * _autoForwardSpeed;
-			newVelocity.X = forward.X;
-			newVelocity.Z = forward.Z;
+			Vector3 forwardVelocity = forwardDir * _autoForwardSpeed;
 
 			// ───── Lateral (left/right) movement ─────
 			// If: player is not laterlly moving, slow to a stop
 			// Else: move the player left/right
 			if (Mathf.Abs(horizontalInput) < 0.01f)
 			{
-				newVelocity.X = Mathf.Lerp(newVelocity.X, forward.X, 1f - Mathf.Exp(-_lateralDeceleration * (float)delta));
-				newVelocity.Z = Mathf.Lerp(newVelocity.Z, forward.Z, 1f - Mathf.Exp(-_lateralDeceleration * (float)delta));
+				// Smoothly converge back to auto-forward when no lateral input
+				float blend = 1f - Mathf.Exp(-_lateralDeceleration * dt);
+				newVelocity.X = Mathf.Lerp(newVelocity.X, forwardVelocity.X, blend);
+				newVelocity.Z = Mathf.Lerp(newVelocity.Z, forwardVelocity.Z, blend);
 			}
 			else
 			{
-				Vector3 lateral = Transform.Basis.X * horizontalInput * _baseMovementSpeed;
-				newVelocity.X = forward.X + lateral.X;
-				newVelocity.Z = forward.Z + lateral.Z;
+				newVelocity.X = forwardVelocity.X + lateralInputVelocity.X;
+				newVelocity.Z = forwardVelocity.Z + lateralInputVelocity.Z;
 			}
-
-			Velocity = new Vector3(newVelocity.X, newVelocity.Y, newVelocity.Z);
 		}
-		
+
+		// ───── Commit movement once ─────
+		Velocity = newVelocity;
 		MoveAndSlide();
 
+		// ───── Post-move collision reactions ─────
+		TryApplyWallKnockback();
+
 		// ───── Match camera to position and rotation of the player ─────
-		UpdateCameraYaw((float)delta);
+		UpdateCameraYaw(dt);
 	}
 
 	public void SetDesiredForward(Vector3 forward, float turnDegPerSecOverride)
@@ -119,8 +154,6 @@ public partial class PlayerGround : CharacterBody3D
 			_currentTurnDegPerSec = turnDegPerSecOverride > 0f ? turnDegPerSecOverride : _defaultTurnDegPerSec;
 
 			float targetYaw = Mathf.Atan2(-_desiredForward.X, -_desiredForward.Z);
-
-			// GD.Print($"[Player] SetDesiredForward -> desiredForward={_desiredForward}, targetYawDeg={Mathf.RadToDeg(targetYaw):F2}, turn={_currentTurnDegPerSec}");
 		}
 	}
 
@@ -134,8 +167,6 @@ public partial class PlayerGround : CharacterBody3D
 
 			// Normalize shortest angle
 			float diff = Mathf.Wrap(targetYaw - currentYaw, -Mathf.Pi, Mathf.Pi);
-
-			// GD.Print($"[Player] currentYaw={Mathf.RadToDeg(currentYaw):F2}, targetYaw={Mathf.RadToDeg(targetYaw):F2}, diff={Mathf.RadToDeg(diff):F2}");
 
 			// Player has reached target yaw set by direction marker
 			if (Mathf.Abs(diff) <= maxStep)
@@ -176,7 +207,7 @@ public partial class PlayerGround : CharacterBody3D
 		{
 			// if (isInvulnerable == true || health <= 0 ) -> then don't do the rest
 
-			ApplyHealthDelta(-amount);
+			_ = ApplyHealthDeltaAsync(-amount);
 
 			// // i-frame stuff -> for the future
 			// if (_health >= 0)
@@ -185,8 +216,7 @@ public partial class PlayerGround : CharacterBody3D
 			// }
 		}
 	}
-
-	private void ApplyHealthDelta(int delta)
+	private async Task ApplyHealthDeltaAsync(int delta)
 	{
 		int prevHealth = _health;
 		_health = Mathf.Clamp(_health + delta, 0, _maxHealth);
@@ -199,11 +229,17 @@ public partial class PlayerGround : CharacterBody3D
 			EmitSignal(SignalName.HealthChanged, _health);
 		}
 
-		// handling death
-		// if (_health == 0 && prevHealth > 0)
-		// {
-		// 	EmitSignal(SignalName.Died)
-		// }
+		// Handling death
+		if (_health == 0 && prevHealth > 0)
+		{
+			_hasDied = true;
+			EmitSignal(SignalName.Died);
+			MeshInstance3D playerMesh = GetNode<MeshInstance3D>(_playerMeshNodePath);
+			playerMesh.Visible = false;
+			await ToSignal(GetTree().CreateTimer(3), SceneTreeTimer.SignalName.Timeout);
+			GD.Print("[PlayerGround] reload level!");
+			// TO DO: Reload level which would be stored in Global
+		}
 	}
 
     // private async System.Threading.Tasks.Task StartIframesAsync()
@@ -215,31 +251,83 @@ public partial class PlayerGround : CharacterBody3D
 
 	public void BounceUp()
 	{
-		// Vector3 newVelocity = Velocity;
-		// newVelocity.Y = _baseJumpVelocity * 0.7f;
 		Velocity = new Vector3(Velocity.X, _baseJumpVelocity * 0.7f, Velocity.Z);
 	}
 
-	public void BounceBackFrom(Vector3 enemyPos)
+	public void BounceBackFromPosition(Vector3 entityPos, float knockbackMultp = 1f)
 	{
-		Vector3 away = GlobalPosition - enemyPos;
+		Vector3 away = GlobalPosition - entityPos;
 		away.Y = 0f;
+		BounceBackFrom(away, knockbackMultp);
+	}
 
-		if (away.LengthSquared() < 0.0001f)
+	public void BounceBackFromNormal(Vector3 wallNormal, float knockbackMultp = 1f)
+	{
+		// Wall normal points away from wall face - push player in this direction
+		Vector3 away = wallNormal;
+		BounceBackFrom(wallNormal, knockbackMultp);
+	}
+
+	private void BounceBackFrom(Vector3 vector, float knockbackMultp = 1f)
+	{
+		// Fallback if source vector is too vertical or degenerate
+		if (vector.LengthSquared() < 0.0001f)
 		{
-			away = -Transform.Basis.Z;
+			vector = -Transform.Basis.Z;
 		}
 
-		away = away.Normalized();
+		vector = vector.Normalized();
 
 		// Horizontal push
-		_knockbackHorizontal = away * 6.0f;
+		_knockbackHorizontal = vector * 6.0f * knockbackMultp;
 
 		// Upwards push
 		Velocity = new Vector3(Velocity.X, _baseJumpVelocity * 0.4f, Velocity.Z);
 
 		// Lock player briefly
 		_knockbackTimer = _knockbackTime;
+	}
+
+	public void TryApplyWallKnockback()
+	{
+		if (_knockbackTimer <= 0f)
+		{
+			Vector3 forward = -GlobalTransform.Basis.Z; 
+			forward.Y = 0f;
+
+			if (forward.LengthSquared() >= 0.000f)
+			{
+				int collisionCount = GetSlideCollisionCount();
+				for (int i = 0; i < collisionCount; i++)
+				{
+					KinematicCollision3D wallHit = GetSlideCollision(i);
+
+					if (wallHit != null) 
+					{
+						Vector3 normal = wallHit.GetNormal().Normalized();
+
+						// Ignore floor/ceiling-ish surfaces
+						// (walls should have small Y in their normal)
+						if (Mathf.Abs(normal.Y) > 0.4f)
+						{
+							continue;
+						}
+
+						// Check if wall is facing the player
+						// A front-facing wall should face opposite player's forward dir
+						float facingDot = (-forward).Dot(normal);
+
+						if (facingDot >= 0.7f)
+						{
+							BounceBackFromNormal(normal, 6.0f);
+							TakeDamage(_collideDamageAmount);
+							break; 
+						}
+					}
+
+				}
+			}
+		}
 	}
 
 }

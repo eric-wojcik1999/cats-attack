@@ -17,10 +17,11 @@ albedo_color = Color(1, 0, 1, 1)
 radius = 0.75
 height = 2.375
 
-[node name="PlayerGround" type="CharacterBody3D"]
+[node name="PlayerGround" type="CharacterBody3D" node_paths=PackedStringArray("_playerAirPositionMarker")]
 collision_mask = 6
 script = ExtResource("1_lw8c3")
 _baseJumpVelocity = 3.0
+_playerAirPositionMarker = NodePath("PlayerAirPositionMarker")
 
 [node name="PlayerMeshTemp" type="MeshInstance3D" parent="."]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, 0, 0)
@@ -46,3 +47,6 @@ rotation_order = 1
 [node name="Camera3D" type="Camera3D" parent="CameraController/CameraTarget"]
 transform = Transform3D(-4.13547e-08, -1.4158879e-08, -1, -0.3239174, 0.9460853, 0, 0.9460853, 0.3239174, -4.371139e-08, -4.5, 1.8, -4.25)
 current = true
+
+[node name="PlayerAirPositionMarker" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.25, 2.25, 0.5)

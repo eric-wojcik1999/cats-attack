@@ -12,6 +12,7 @@ public partial class MovingEnemyBasic : CharacterBody3D
 	[Export] public NodePath _topDetectionPath = "TopDetection";
 	[Export] public NodePath _detectFloorRayCastPath = "DetectFloorRayCast";
 	[Export] public int _damageAmount = 1;
+	[Export] public int _currencyAmount = 1;
 	private bool _isTurning = false;
 	private Area3D _sideDetection;
 	private Area3D _topDetection;
@@ -27,11 +28,7 @@ public partial class MovingEnemyBasic : CharacterBody3D
 	}
 
 	public override void _PhysicsProcess(double delta)
-	{
-		// Vector3 newVelocity = Velocity;
-		// newVelocity.X = _baseMovementSpeed * _direction.X;
-		// newVelocity.Z = _baseMovementSpeed * _direction.Z;
-	
+	{	
 		Vector3 newVelocity = Velocity;
 
 		// ───── Horizontal movement based on current facing direction ─────
@@ -70,9 +67,6 @@ public partial class MovingEnemyBasic : CharacterBody3D
         _direction = Vector3.Zero;
 
 		// Rotate the enemy to direction they are heading
-		// Tween turnTween = CreateTween();
-		// turnTween.TweenProperty(this, "rotation_degrees", new Vector3(0f, 180f, 0f), 0.6f).AsRelative();
-		// await ToSignal(GetTree().CreateTimer(0.1f), SceneTreeTimer.SignalName.Timeout);
 		Tween turnTween = CreateTween();
 		turnTween.TweenProperty(this, "rotation_degrees", new Vector3(0f, 180f, 0f), 0.3f).AsRelative();
 		await ToSignal(turnTween, Tween.SignalName.Finished);
@@ -92,9 +86,8 @@ public partial class MovingEnemyBasic : CharacterBody3D
 
 			if (body is PlayerGround player)
 			{
-				GD.Print("side detection");
 				player.TakeDamage(_damageAmount);
-				player.BounceBackFrom(GlobalPosition);
+				player.BounceBackFromPosition(GlobalPosition, 4f);
 				QueueFree();
 			}
 		}
@@ -113,9 +106,8 @@ public partial class MovingEnemyBasic : CharacterBody3D
 
 			if (body is PlayerGround player)
 			{
-				GD.Print("top detection");
 				player.BounceUp();
-				// NOW GIVE SOME MONEY
+				Global.Instance.AddCurrency(_currencyAmount);
 				QueueFree();
 			}
 		}

@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=3 uid="uid://csdvs0h5p6ume"]
+[gd_scene load_steps=7 format=3 uid="uid://csdvs0h5p6ume"]
 
 [ext_resource type="PackedScene" uid="uid://d4nm5bdaxqhsr" path="res://Entities/Players/PlayerGround/player-ground.tscn" id="1_j5bgn"]
 [ext_resource type="PackedScene" uid="uid://b8qoyreqkcblf" path="res://Entities/Markers/direction_marker.tscn" id="2_73khv"]
 [ext_resource type="PackedScene" uid="uid://cguppm588mcqk" path="res://Entities/Pickups/Coins/coin_pickup.tscn" id="3_cl86r"]
 [ext_resource type="PackedScene" uid="uid://cehky8lel227e" path="res://UI/hud.tscn" id="4_cjwjn"]
 [ext_resource type="PackedScene" uid="uid://djcdbqorg2qc" path="res://Entities/Enemies/moving_enemy_basic.tscn" id="5_1e8n7"]
+[ext_resource type="PackedScene" uid="uid://ck3n3piykfu2o" path="res://Entities/Players/PlayerAir/player_air.tscn" id="6_uap1t"]
 
 [node name="DemoScene" type="Node3D"]
 
@@ -124,7 +125,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.25, 1, -14)
 [node name="CoinPickup5" parent="Coins" instance=ExtResource("3_cl86r")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.25, 1, -17)
 
-[node name="HUD" parent="." instance=ExtResource("4_cjwjn")]
+[node name="HUD" parent="." node_paths=PackedStringArray("player") instance=ExtResource("4_cjwjn")]
+player = NodePath("../PlayerGround")
 
 [node name="Enemies" type="Node3D" parent="."]
 
@@ -133,3 +135,49 @@ transform = Transform3D(-0.49999997, 0, -0.8660253, 0, 0.9999999, 0, 0.8660253, 
 
 [node name="MovingEnemyBasic2" parent="Enemies" instance=ExtResource("5_1e8n7")]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -12.25, -10.25, -72.75)
+
+[node name="Wall1" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.75, 2.375, -24)
+use_collision = true
+collision_layer = 2
+collision_mask = 13
+size = Vector3(2, 5.25, 1)
+
+[node name="Wall5" type="CSGBox3D" parent="."]
+transform = Transform3D(0.6427875, 0, 0.7660445, 0, 1, 0, -0.7660445, 0, 0.6427875, 4, -6.5, -68.25)
+use_collision = true
+collision_layer = 2
+collision_mask = 13
+size = Vector3(2, 5.5, 1)
+
+[node name="Wall6" type="CSGBox3D" parent="."]
+transform = Transform3D(0.6427875, 0, 0.7660445, 0, 1, 0, -0.7660445, 0, 0.6427875, 10.5, -6.5, -69.75)
+use_collision = true
+collision_layer = 2
+collision_mask = 13
+size = Vector3(2, 5.5, 1)
+
+[node name="Wall2" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.75, 2.375, -17.25)
+use_collision = true
+collision_layer = 2
+collision_mask = 13
+size = Vector3(2, 5.25, 1)
+
+[node name="Wall3" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.75, 2.375, -8.75)
+use_collision = true
+collision_layer = 2
+collision_mask = 13
+size = Vector3(2, 5.25, 1)
+
+[node name="Wall4" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.75, 2.375, -3)
+use_collision = true
+collision_layer = 2
+collision_mask = 13
+size = Vector3(2, 5.25, 1)
+
+[node name="PlayerAir" parent="." node_paths=PackedStringArray("_playerGround") instance=ExtResource("6_uap1t")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 2, 0.25)
+_playerGround = NodePath("../PlayerGround")
