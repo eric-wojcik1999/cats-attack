@@ -3,13 +3,18 @@ using System;
 
 public partial class PlayerAir : CharacterBody3D
 {
+	[Export] private PlayerGround _playerGround;
+	[ExportGroup("Follow")]
 	[Export] private float _followBackDistance = 0.0f;
 	[Export] private float _positionSmoothSpeed = 14.0f;
 	[Export] private float _yawFollowSpeed = 16.0f;
-	[Export] private float _maxLateralOffset = 4.5f; // what does this do?
+	[ExportGroup("Screen space lateral control")]
+	[Export] private float _maxLateralOffsetLeft = 8.0f;   // Need to be larger due do asymmetrical player placement skewing towards the right
+	[Export] private float _maxLateralOffsetRight = 4.5f;
 	[Export] private float _lateralSmoothSpeed = 15.0f;
 	[Export] private float _mouseSensitivity = 0.015f;
- 	[Export] private PlayerGround _playerGround;
+	[Export(PropertyHint.Range, "0.0,0.49,0.01")] private float _screenEdgePadding = 0.08f;
+	[Export] private bool _invertMouseX = false;
 	private float _currentLateralOffset = 0f;
 	private float _targetLateralOffset = 0f;
 
@@ -27,22 +32,13 @@ public partial class PlayerAir : CharacterBody3D
 		}
 	}
 
-	public override void _UnhandledInput(InputEvent @event)
-	{
-		// event is a reserved keyword
-		// can use event by prefixing with @
-		if (@event is InputEventMouseMotion mouseMotion)
-		{
-			_targetLateralOffset += mouseMotion.Relative.X * _mouseSensitivity;
-			_targetLateralOffset = Mathf.Clamp(_targetLateralOffset, -_maxLateralOffset, _maxLateralOffset);
-		}
-	}
-
 	public override void _PhysicsProcess(double delta)
 	{
 		if (_playerGround != null)
 		{
 			float dt = (float)delta;
+
+			UpdateTargetLateralFromMouseScreenX();
 
 			// ───── Calculate independant lateral movement ─────
 			float lateralBlend = 1f - Mathf.Exp(-_lateralSmoothSpeed * dt);
@@ -72,6 +68,46 @@ public partial class PlayerAir : CharacterBody3D
 		}
 	}
 
+	private void UpdateTargetLateralFromMouseScreenX()
+	{
+		Vector2 viewportSize = GetViewport().GetVisibleRect().Size;
+
+		if (viewportSize.X > 1f)
+		{
+			float mouseX = GetViewport().GetMousePosition().X;
+
+			// Normalise mouse X to between 0 and 1
+			float normalisedMouseX = mouseX / viewportSize.X; 
+
+			// Apply screen edge padding
+			float minX = _screenEdgePadding;
+			float maxX = 1f - _screenEdgePadding;
+
+			// Clamp and remap from [minX..maxX] -> [0..1]
+			float t = Mathf.InverseLerp(minX, maxX, Mathf.Clamp(normalisedMouseX, minX, maxX));
+
+			if (_invertMouseX)
+			{
+				t = 1f - t;
+			}
+
+			// Convert [0..1] to [-1..1]
+			float signed = (t * 2f) - 1f;
+
+			// Asymmetric world-space range:
+			// left side uses _maxLateralOffsetLeft
+			// right side uses _maxLateralOffsetRight
+			if (signed < 0f)
+			{
+				_targetLateralOffset = signed * _maxLateralOffsetLeft;   // signed is negative
+			}
+			else
+			{
+				_targetLateralOffset = signed * _maxLateralOffsetRight;
+			}
+		}
+	}
+
 	private Vector3 GetTargetFollowPosition()
 	{
 		// Uses PlayerGround orientation so the lateral movement stays relative to the other player's route
@@ -82,8 +118,12 @@ public partial class PlayerAir : CharacterBody3D
 		Vector3 basePos = _playerGround.AirAnchorPosition;
 		basePos -= forward * _followBackDistance;
 
+		// Safety clamp to asymmetric limits
+		float clampedOffset = _currentLateralOffset;
+		clampedOffset = Mathf.Clamp(clampedOffset, -_maxLateralOffsetLeft, _maxLateralOffsetRight);
+
 		// Apply independent lateral movement
-		basePos += right * _currentLateralOffset;
+		basePos += right * clampedOffset;
 
 		return basePos;
 	}
