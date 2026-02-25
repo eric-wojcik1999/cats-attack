@@ -5,12 +5,19 @@ public partial class PlayerAir : CharacterBody3D
 {
 	[Export] private float _followBackDistance = 0.0f;
 	[Export] private float _positionSmoothSpeed = 14.0f;
-	[Export] private PlayerGround _playerGround;
+	[Export] private float _yawFollowSpeed = 16.0f;
+	[Export] private float _maxLateralOffset = 4.5f; // what does this do?
+	[Export] private float _lateralSmoothSpeed = 15.0f;
+	[Export] private float _mouseSensitivity = 0.015f;
+ 	[Export] private PlayerGround _playerGround;
+	private float _currentLateralOffset = 0f;
+	private float _targetLateralOffset = 0f;
 
 	public override void _Ready()
 	{
 		if (_playerGround != null)
 		{
+			// Match the position and rotation of the Player Air marker
 			GlobalPosition = GetTargetFollowPosition();
 			GlobalRotation = new Vector3(GlobalRotation.X, _playerGround.GlobalRotation.Y, GlobalRotation.Z);
 		}
@@ -20,51 +27,49 @@ public partial class PlayerAir : CharacterBody3D
 		}
 	}
 
+	public override void _UnhandledInput(InputEvent @event)
+	{
+		// event is a reserved keyword
+		// can use event by prefixing with @
+		if (@event is InputEventMouseMotion mouseMotion)
+		{
+			_targetLateralOffset += mouseMotion.Relative.X * _mouseSensitivity;
+			_targetLateralOffset = Mathf.Clamp(_targetLateralOffset, -_maxLateralOffset, _maxLateralOffset);
+		}
+	}
+
 	public override void _PhysicsProcess(double delta)
 	{
 		if (_playerGround != null)
 		{
 			float dt = (float)delta;
 
+			// ───── Calculate independant lateral movement ─────
+			float lateralBlend = 1f - Mathf.Exp(-_lateralSmoothSpeed * dt);
+			_currentLateralOffset = Mathf.Lerp(_currentLateralOffset, _targetLateralOffset, lateralBlend);
+
+			// ───── Auto-forward movement, shadowing Player Ground ─────
 			Vector3 targetPos = GetTargetFollowPosition();
 			float posBlend = 1f - Mathf.Exp(-_positionSmoothSpeed * dt);
 			GlobalPosition = GlobalPosition.Lerp(targetPos, posBlend);
+
+			// ───── Auto-rotation, shadowing Player Ground ─────
+			Vector3 rotation = GlobalRotation;
+			float targetYaw = _playerGround.GlobalRotation.Y;
+			// Calculates the diff between Player Ground's rotation, the current rotation, and locks it to PI, -PI range
+			// Important so when the angle loops, the object doesn't rotate the long way around
+			float diff = Mathf.Wrap(targetYaw - rotation.Y, -Mathf.Pi, Mathf.Pi);
+			// Converts the speed into a frame-scaled blend factor
+			// The clamp keeps it betwee 0 and 1
+			float yawStep = Mathf.Clamp(_yawFollowSpeed * dt, 0f, 1f);
+			// Moves current yaw towards the target yaw
+			rotation.Y +=  diff * yawStep;
+			GlobalRotation = rotation;
 		}
 		else 
 		{
 			GD.Print("[Player Air] Player Ground not found");
 		}
-		// Vector3 velocity = Velocity;
-
-		// // Add the gravity.
-		// if (!IsOnFloor())
-		// {
-		// 	velocity += GetGravity() * (float)delta;
-		// }
-
-		// // Handle Jump.
-		// if (Input.IsActionJustPressed("ui_accept") && IsOnFloor())
-		// {
-		// 	velocity.Y = JumpVelocity;
-		// }
-
-		// // Get the input direction and handle the movement/deceleration.
-		// // As good practice, you should replace UI actions with custom gameplay actions.
-		// Vector2 inputDir = Input.GetVector("ui_left", "ui_right", "ui_up", "ui_down");
-		// Vector3 direction = (Transform.Basis * new Vector3(inputDir.X, 0, inputDir.Y)).Normalized();
-		// if (direction != Vector3.Zero)
-		// {
-		// 	velocity.X = direction.X * Speed;
-		// 	velocity.Z = direction.Z * Speed;
-		// }
-		// else
-		// {
-		// 	velocity.X = Mathf.MoveToward(Velocity.X, 0, Speed);
-		// 	velocity.Z = Mathf.MoveToward(Velocity.Z, 0, Speed);
-		// }
-
-		// Velocity = velocity;
-		// MoveAndSlide();
 	}
 
 	private Vector3 GetTargetFollowPosition()
@@ -76,6 +81,9 @@ public partial class PlayerAir : CharacterBody3D
 		// Base position derrived from Node3D anchor in PlayerGround for PlayerAir position
 		Vector3 basePos = _playerGround.AirAnchorPosition;
 		basePos -= forward * _followBackDistance;
+
+		// Apply independent lateral movement
+		basePos += right * _currentLateralOffset;
 
 		return basePos;
 	}

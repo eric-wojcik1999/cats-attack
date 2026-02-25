@@ -49,4 +49,4 @@ transform = Transform3D(-4.13547e-08, -1.4158879e-08, -1, -0.3239174, 0.9460853,
 current = true
 
 [node name="PlayerAirPositionMarker" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.25, 2.25, 0.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.25, 3, 0.5)
