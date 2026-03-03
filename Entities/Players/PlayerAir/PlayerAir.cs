@@ -17,6 +17,14 @@ public partial class PlayerAir : CharacterBody3D
 	[Export] private bool _invertMouseX = false;
 	private float _currentLateralOffset = 0f;
 	private float _targetLateralOffset = 0f;
+	[Export] public NodePath _detectWallRayCastPath = "DetectWallRayCast";
+	private RayCast3D _detectWallRayCast;
+	[ExportGroup("Auto vertical avoidance")]
+	[Export] private float _maxExtraHeight = 6.0f; 
+    [Export] private float _riseSpeed = 8.0f;
+    [Export] private float _fallSpeed = 10.0f;
+	private float _baseOffsetYFromAnchor = 0f;  
+	private float _currentExtraHeight = 0f;
 
 	public override void _Ready()
 	{
@@ -30,6 +38,9 @@ public partial class PlayerAir : CharacterBody3D
 		{
 			GD.Print("[Player Air] Player Ground not found");
 		}
+
+		_detectWallRayCast = GetNode<RayCast3D>(_detectWallRayCastPath);
+		_baseOffsetYFromAnchor = GlobalPosition.Y - _playerGround.AirAnchorPosition.Y;
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -44,8 +55,18 @@ public partial class PlayerAir : CharacterBody3D
 			float lateralBlend = 1f - Mathf.Exp(-_lateralSmoothSpeed * dt);
 			_currentLateralOffset = Mathf.Lerp(_currentLateralOffset, _targetLateralOffset, lateralBlend);
 
-			// ───── Auto-forward movement, shadowing Player Ground ─────
+			// // ───── Auto-forward movement, shadowing Player Ground + auto vertical adjustment ─────
+			// Vector3 targetPos = GetTargetFollowPosition();
+			// float posBlend = 1f - Mathf.Exp(-_positionSmoothSpeed * dt);
+			// GlobalPosition = GlobalPosition.Lerp(targetPos, posBlend);
+
+			// Compute X/Z follow target
 			Vector3 targetPos = GetTargetFollowPosition();
+
+			// Apply vertical avoidance (edits targetPos.Y)
+			ApplyVerticalAvoidance(ref targetPos, dt);
+
+			// Smooth position
 			float posBlend = 1f - Mathf.Exp(-_positionSmoothSpeed * dt);
 			GlobalPosition = GlobalPosition.Lerp(targetPos, posBlend);
 
@@ -126,5 +147,35 @@ public partial class PlayerAir : CharacterBody3D
 		basePos += right * clampedOffset;
 
 		return basePos;
+	}
+
+	// Passes in targetPos by reference
+	private void ApplyVerticalAvoidance(ref Vector3 targetPos, float dt) 
+	{
+		float baseY = _playerGround.AirAnchorPosition.Y + _baseOffsetYFromAnchor;
+
+		if (_detectWallRayCast == null) 
+		{
+			// If no raycast detected, use OG height
+			targetPos.Y = baseY;
+		} 
+		else 
+		{
+			_detectWallRayCast.ForceRaycastUpdate();
+			bool isBlocked = _detectWallRayCast.IsColliding();
+
+			if (isBlocked == true)
+			{
+				// Climb towards max
+				_currentExtraHeight = Mathf.MoveToward(_currentExtraHeight, _maxExtraHeight, _riseSpeed * dt);
+			}
+			else 
+			{
+				// Descend towards base
+				_currentExtraHeight = Mathf.MoveToward(_currentExtraHeight, 0f, _fallSpeed * dt);
+			}
+
+			targetPos.Y = baseY + _currentExtraHeight;
+		}
 	}
 }
