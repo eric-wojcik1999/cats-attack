@@ -1,0 +1,183 @@
+[gd_scene load_steps=7 format=3 uid="uid://csdvs0h5p6ume"]
+
+[ext_resource type="PackedScene" uid="uid://d4nm5bdaxqhsr" path="res://Entities/Players/PlayerGround/player-ground.tscn" id="1_j5bgn"]
+[ext_resource type="PackedScene" uid="uid://b8qoyreqkcblf" path="res://Entities/Markers/direction_marker.tscn" id="2_73khv"]
+[ext_resource type="PackedScene" uid="uid://cguppm588mcqk" path="res://Entities/Pickups/Coins/coin_pickup.tscn" id="3_cl86r"]
+[ext_resource type="PackedScene" uid="uid://cehky8lel227e" path="res://UI/hud.tscn" id="4_cjwjn"]
+[ext_resource type="PackedScene" uid="uid://djcdbqorg2qc" path="res://Entities/Enemies/moving_enemy_basic.tscn" id="5_1e8n7"]
+[ext_resource type="PackedScene" uid="uid://ck3n3piykfu2o" path="res://Entities/Players/PlayerAir/player_air.tscn" id="6_uap1t"]
+
+[node name="DemoScene" type="Node3D"]
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(0.34202015, -0.24321035, 0.90767336, 0, 0.9659258, 0.25881904, -0.9396926, -0.08852133, 0.3303661, 4.43, 2.41, 3.35)
+
+[node name="TestFloor" type="CSGBox3D" parent="."]
+transform = Transform3D(2.9802322e-08, 0, -1, 0, 1, 0, 1, 0, 2.9802322e-08, -0.48051643, -0.125, -12.0669155)
+use_collision = true
+collision_layer = 2
+collision_mask = 13
+size = Vector3(32, 0.25, 6.5)
+
+[node name="TestFloor5" type="CSGBox3D" parent="."]
+transform = Transform3D(-1.0000001, 0, -2.9802322e-08, 0, 1, 0, 2.9802322e-08, 0, -1.0000001, -9.230518, -11.625, -72.56691)
+use_collision = true
+collision_layer = 2
+collision_mask = 13
+size = Vector3(32, 0.25, 6.5)
+
+[node name="TestFloor6" type="CSGBox3D" parent="."]
+transform = Transform3D(-0.5, 0, 0.8660254, 0, 1, 0, -0.8660254, 0, -0.5, -34.230526, -14.375, -90.81691)
+use_collision = true
+collision_layer = 2
+collision_mask = 13
+size = Vector3(32, 0.25, 6.5)
+
+[node name="TestFloor2" type="CSGBox3D" parent="."]
+transform = Transform3D(-0.49999997, 0, -0.8660254, 0, 1, 0, 0.8660254, 0, -0.49999997, 5.1689997, -6.375, -37.191914)
+use_collision = true
+collision_layer = 2
+collision_mask = 13
+size = Vector3(32, 0.25, 8)
+
+[node name="TestWall" type="CSGBox3D" parent="."]
+transform = Transform3D(-0.49999997, 0, -0.8660254, 0, 1, 0, 0.8660254, 0, -0.49999997, 0.6689997, -4.875, -39.691914)
+use_collision = true
+collision_layer = 2
+collision_mask = 13
+size = Vector3(32, 4.34, 2.515)
+
+[node name="TestWall2" type="CSGBox3D" parent="."]
+transform = Transform3D(-0.49999997, 0, -0.8660254, 0, 1, 0, 0.8660254, 0, -0.49999997, 9.669, -4.625, -34.441914)
+use_collision = true
+collision_layer = 2
+collision_mask = 13
+size = Vector3(32, 4.34, 2.515)
+
+[node name="TestFloor3" type="CSGBox3D" parent="."]
+transform = Transform3D(0.25881913, 0, -0.9659258, 0, 1, 0, 0.9659258, 0, 0.25881913, 13.539587, -8.125, -57.331608)
+use_collision = true
+collision_layer = 2
+collision_mask = 13
+size = Vector3(12, 0.25, 8)
+
+[node name="TestFloor4" type="CSGBox3D" parent="."]
+transform = Transform3D(0.6481199, 0, -0.7615384, 0, 1, 0, 0.7615384, 0, 0.6481199, 7.039588, -9.375, -69.33161)
+use_collision = true
+collision_layer = 2
+collision_mask = 13
+size = Vector3(12, 0.25, 8)
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.5883883, -0.7303799, 0.3469069, -0.24236242, 0.25000006, 0.9374222, -0.7714011, -0.6356455, -0.029919524, -6.7305164, 6.25, 10.433086)
+light_energy = 1.552
+shadow_enabled = true
+
+[node name="PlayerGround" parent="." instance=ExtResource("1_j5bgn")]
+transform = Transform3D(0.9999883, 0, 0, 0, 0.99999076, 0, 0, 0, 0.9999899, 0, 1, 0)
+_baseJumpVelocity = 6.0
+_lateralDeceleration = 6.0
+
+[node name="DirectionMarkers" type="Node3D" parent="."]
+
+[node name="DirectionMarker2" parent="DirectionMarkers" instance=ExtResource("2_73khv")]
+transform = Transform3D(1.0000001, 0, 0, 0, 1, 0, 0, 0, 1.0000001, 12.438241, -3, -48.542686)
+_turnDegPerSecOverride = 50.0
+
+[node name="DirectionMarker" parent="DirectionMarkers" instance=ExtResource("2_73khv")]
+transform = Transform3D(1.0349004, 0, -0.5975, 0, 1.195, 0, 0.5975, 0, 1.0349004, -1.2305183, 3, -22.066916)
+_turnDegPerSecOverride = 50.0
+
+[node name="DirectionMarker3" parent="DirectionMarkers" instance=ExtResource("2_73khv")]
+transform = Transform3D(0.86602545, 0, 0.5000001, 0, 1, 0, -0.5000001, 0, 0.86602545, 12.438241, -7.25, -61.792686)
+_turnDegPerSecOverride = 30.0
+
+[node name="DirectionMarker4" parent="DirectionMarkers" instance=ExtResource("2_73khv")]
+transform = Transform3D(-8.940697e-08, 0, 1, 0, 1, 0, -1, 0, -8.940697e-08, 3.688241, -6, -71.29269)
+_turnDegPerSecOverride = 30.0
+
+[node name="DirectionMarker5" parent="DirectionMarkers" instance=ExtResource("2_73khv")]
+transform = Transform3D(0.4999999, 0, 0.8660254, 0, 1, 0, -0.8660254, 0, 0.4999999, 9.188241, -5.5, -67.54269)
+_turnDegPerSecOverride = 30.0
+
+[node name="DirectionMarker6" parent="DirectionMarkers" instance=ExtResource("2_73khv")]
+transform = Transform3D(1.3965358, 0, 1.3965361, 0, 1.975, 0, -1.3965361, 0, 1.3965358, -21.31176, -10.75, -72.79269)
+_turnDegPerSecOverride = 30.0
+
+[node name="DirectionMarker7" parent="DirectionMarkers" instance=ExtResource("2_73khv")]
+transform = Transform3D(1.7104001, 0, 0.9875002, 0, 1.9749998, 0, -0.9875002, 0, 1.7104001, -26.81176, -10.75, -79.04269)
+_turnDegPerSecOverride = 30.0
+
+[node name="Coins" type="Node3D" parent="."]
+
+[node name="CoinPickup" parent="Coins" instance=ExtResource("3_cl86r")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.25, 1, -11)
+
+[node name="CoinPickup2" parent="Coins" instance=ExtResource("3_cl86r")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.25, 1, -8.25)
+
+[node name="CoinPickup3" parent="Coins" instance=ExtResource("3_cl86r")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.25, 1, -5.25)
+
+[node name="CoinPickup4" parent="Coins" instance=ExtResource("3_cl86r")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.25, 1, -14)
+
+[node name="CoinPickup5" parent="Coins" instance=ExtResource("3_cl86r")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.25, 1, -17)
+
+[node name="HUD" parent="." node_paths=PackedStringArray("player") instance=ExtResource("4_cjwjn")]
+player = NodePath("../PlayerGround")
+
+[node name="Enemies" type="Node3D" parent="."]
+
+[node name="MovingEnemyBasic" parent="Enemies" instance=ExtResource("5_1e8n7")]
+transform = Transform3D(-0.49999997, 0, -0.8660253, 0, 0.9999999, 0, 0.8660253, 0, -0.50000006, 9, -4.5, -43.25)
+
+[node name="MovingEnemyBasic2" parent="Enemies" instance=ExtResource("5_1e8n7")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -12.25, -10.25, -72.75)
+
+[node name="Wall1" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.75, 2.375, -24)
+use_collision = true
+collision_layer = 2
+collision_mask = 13
+size = Vector3(2, 5.25, 1)
+
+[node name="Wall5" type="CSGBox3D" parent="."]
+transform = Transform3D(0.6427875, 0, 0.7660445, 0, 1, 0, -0.7660445, 0, 0.6427875, 4, -6.5, -68.25)
+use_collision = true
+collision_layer = 2
+collision_mask = 13
+size = Vector3(2, 5.5, 1)
+
+[node name="Wall6" type="CSGBox3D" parent="."]
+transform = Transform3D(0.6427875, 0, 0.7660445, 0, 1, 0, -0.7660445, 0, 0.6427875, 10.5, -6.5, -69.75)
+use_collision = true
+collision_layer = 2
+collision_mask = 13
+size = Vector3(2, 5.5, 1)
+
+[node name="Wall2" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.75, 2.375, -17.25)
+use_collision = true
+collision_layer = 2
+collision_mask = 13
+size = Vector3(2, 5.25, 1)
+
+[node name="Wall3" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.75, 2.375, -8.75)
+use_collision = true
+collision_layer = 2
+collision_mask = 13
+size = Vector3(2, 5.25, 1)
+
+[node name="Wall4" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.75, 2.375, -3)
+use_collision = true
+collision_layer = 2
+collision_mask = 13
+size = Vector3(2, 5.25, 1)
+
+[node name="PlayerAir" parent="." node_paths=PackedStringArray("_playerGround") instance=ExtResource("6_uap1t")]
+transform = Transform3D(1, 0, 0, 0, 0.9659258, 0.25881904, 0, -0.25881904, 0.9659258, 1.5, 3, 0.25)
+_playerGround = NodePath("../PlayerGround")

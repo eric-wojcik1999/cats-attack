@@ -1,3 +1,33 @@
 {
-    "dotnet.defaultSolution": "Cats Attack.sln"
-}
+    "dotnet.defaultSolution": "Cats Attack.sln",
+    "better-comments.multilineComments": true,
+    "better-comments.tags": [
+      {
+        "tag": "!",
+        "color": "#FF2D00",
+        "strikethrough": false,
+        "underline": false,
+        "backgroundColor": "transparent",
+        "bold": true
+      },
+      {
+        "tag": "?",
+        "color": "#3498DB",
+        "bold": true
+      },
+      {
+        "tag": "TODO",
+        "color": "#FF8C00",
+        "bold": true
+      },
+      {
+        "tag": "*",
+        "color": "#98C379"
+      },
+      {
+        "tag": "@",
+        "color": "#3498DB",
+        "italic": true
+      }
+    ]
+  }

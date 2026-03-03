@@ -1,0 +1,58 @@
+using Godot;
+using System;
+
+public partial class PlayerGround : CharacterBody3D
+{
+	[Export] private float _baseMovementSpeed = 5.0f;
+	[Export] private float _autoForwardSpeed = 6.0f;
+	[Export] private float _baseJumpVelocity = 4.5f;
+	[Export] private float _lateralDeceleration = 2.0f; // higher = faster deceleration
+
+	public override void _PhysicsProcess(double delta)
+	{
+		bool onFloor = IsOnFloor();
+		Vector3 newVelocity = Velocity;
+		float horizontalInput = Input.GetActionStrength("move_ground_right") - Input.GetActionStrength("move_ground_left");
+
+		// ───── Falling when in air ─────
+        if (!onFloor)
+        {
+            Vector3 gravity = GetGravity();
+            newVelocity += gravity * (float)delta; //newVelocity.y?
+        }
+
+		// ───── Jumping ─────
+		if (Input.IsActionJustPressed("jump") && (onFloor)) 
+		{
+			newVelocity.Y = _baseJumpVelocity;
+		} 
+
+		// ───── Auto-forward movement ─────
+		Vector3 forward = -Transform.Basis.Z * _autoForwardSpeed;
+		newVelocity.X = forward.X;
+    	newVelocity.Z = forward.Z;
+
+		// ───── Lateral (left/right) movement ─────
+		// If: player is not laterlly moving, slow to a stop
+		// Else: move the player left/right
+		if (Mathf.Abs(horizontalInput) < 0.01f)
+		{
+			newVelocity.X = Mathf.Lerp(newVelocity.X, forward.X, 1f - Mathf.Exp(-_lateralDeceleration * (float)delta));
+			newVelocity.Z = Mathf.Lerp(newVelocity.Z, forward.Z, 1f - Mathf.Exp(-_lateralDeceleration * (float)delta));
+			// newVelocity.X = Mathf.Lerp(newVelocity.X, 0, 1f - Mathf.Exp(-_lateralDeceleration * (float)delta));
+			// newVelocity.Z = Mathf.Lerp(newVelocity.Z, 0, 1f - Mathf.Exp(-_lateralDeceleration * (float)delta));
+		}
+		else
+		{
+			Vector3 lateral = Transform.Basis.X * horizontalInput * _baseMovementSpeed;
+			newVelocity.X = forward.X + lateral.X;
+			newVelocity.Z = forward.Z + lateral.Z;
+			// newVelocity.X = lateral.X;
+			// newVelocity.Z = lateral.Z;
+		}
+
+		Velocity = new Vector3(newVelocity.X, newVelocity.Y, newVelocity.Z);
+		// Velocity = new Vector3(newVelocity.X, 0, newVelocity.Z);
+		MoveAndSlide();
+	}
+}

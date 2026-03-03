@@ -1,0 +1,63 @@
+[gd_scene load_steps=3 format=3 uid="uid://cehky8lel227e"]
+
+[ext_resource type="Script" uid="uid://vw7qtkwqr8jr" path="res://UI/Hud.cs" id="1_ne75i"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_levl0"]
+bg_color = Color(0.174646, 0.174646, 0.174646, 0.45882353)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[node name="HUD" type="CanvasLayer"]
+script = ExtResource("1_ne75i")
+
+[node name="ScorePanel" type="Panel" parent="."]
+offset_left = 60.0
+offset_top = 60.0
+offset_right = 301.0
+offset_bottom = 120.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_levl0")
+
+[node name="ScoreName" type="Label" parent="ScorePanel"]
+layout_mode = 0
+offset_left = 17.0
+offset_top = 7.0
+offset_right = 142.0
+offset_bottom = 51.0
+theme_override_font_sizes/font_size = 31
+text = "SCORE: "
+
+[node name="ScoreValue" type="Label" parent="ScorePanel"]
+layout_mode = 0
+offset_left = 130.0
+offset_top = 7.0
+offset_right = 234.0
+offset_bottom = 51.0
+theme_override_font_sizes/font_size = 31
+text = "0"
+
+[node name="HealthPanel" type="Panel" parent="."]
+offset_left = 60.0
+offset_top = 137.0
+offset_right = 301.0
+offset_bottom = 197.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_levl0")
+
+[node name="HealthName" type="Label" parent="HealthPanel"]
+layout_mode = 0
+offset_left = 17.0
+offset_top = 7.0
+offset_right = 142.0
+offset_bottom = 51.0
+theme_override_font_sizes/font_size = 31
+text = "HEALTH: "
+
+[node name="HealthValue" type="Label" parent="HealthPanel"]
+layout_mode = 0
+offset_left = 152.0
+offset_top = 7.0
+offset_right = 256.0
+offset_bottom = 51.0
+theme_override_font_sizes/font_size = 31
+text = "0"

@@ -1,0 +1,52 @@
+[gd_scene load_steps=7 format=3 uid="uid://d4nm5bdaxqhsr"]
+
+[ext_resource type="Script" uid="uid://csfkggqcwrgf" path="res://Entities/Players/PlayerGround/PlayerGround.cs" id="1_lw8c3"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_mv8dw"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_phw1g"]
+albedo_color = Color(1, 0, 1, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_mv8dw"]
+size = Vector3(0.25, 0.25, 0.5)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mv8dw"]
+albedo_color = Color(1, 0, 1, 1)
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_mv8dw"]
+radius = 0.75
+height = 2.375
+
+[node name="PlayerGround" type="CharacterBody3D" node_paths=PackedStringArray("_playerAirPositionMarker")]
+collision_mask = 6
+script = ExtResource("1_lw8c3")
+_baseJumpVelocity = 3.0
+_playerAirPositionMarker = NodePath("PlayerAirPositionMarker")
+
+[node name="PlayerMeshTemp" type="MeshInstance3D" parent="."]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, 0, 0)
+mesh = SubResource("CapsuleMesh_mv8dw")
+surface_material_override/0 = SubResource("StandardMaterial3D_phw1g")
+
+[node name="PlayerMeshPointer" type="MeshInstance3D" parent="PlayerMeshTemp"]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -0.5, 0.25, 0)
+mesh = SubResource("BoxMesh_mv8dw")
+surface_material_override/0 = SubResource("StandardMaterial3D_mv8dw")
+
+[node name="PlayerCollisionTemp" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0625, 0)
+shape = SubResource("CapsuleShape3D_mv8dw")
+
+[node name="CameraController" type="Node3D" parent="."]
+top_level = true
+
+[node name="CameraTarget" type="Node3D" parent="CameraController"]
+transform = Transform3D(-4.1075264e-08, -0.34202006, 0.93969244, -1.4950173e-08, 0.93969244, 0.34202006, -0.99999994, -8.881784e-16, -4.371138e-08, 4.1175604, 1.971499, 0.078990124)
+rotation_order = 1
+
+[node name="Camera3D" type="Camera3D" parent="CameraController/CameraTarget"]
+transform = Transform3D(-4.13547e-08, -1.4158879e-08, -1, -0.3239174, 0.9460853, 0, 0.9460853, 0.3239174, -4.371139e-08, -4.5, 1.8, -4.25)
+current = true
+
+[node name="PlayerAirPositionMarker" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.75, 3, 0.5)

@@ -1,0 +1,40 @@
+[gd_scene load_steps=7 format=3 uid="uid://b8qoyreqkcblf"]
+
+[ext_resource type="Script" uid="uid://cod7oke75ml8e" path="res://Entities/Markers/DirectionMarker.cs" id="1_h0gmv"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_e7j0g"]
+size = Vector3(1.5, 8, 12.5)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_e7j0g"]
+albedo_color = Color(1, 0, 0, 1)
+
+[sub_resource type="PrismMesh" id="PrismMesh_h0gmv"]
+size = Vector3(0.6, 1.23, 0.4)
+
+[sub_resource type="BoxMesh" id="BoxMesh_e7j0g"]
+size = Vector3(1.5, 8, 12.5)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_h0gmv"]
+transparency = 1
+albedo_color = Color(1, 0.7019608, 0.9607843, 0.28235295)
+
+[node name="DirectionMarker" type="Area3D"]
+script = ExtResource("1_h0gmv")
+EditorOnlyVectorPath = NodePath("EditorOnlyMeshContainer/EditorOnlyVector")
+EditorOnlyFieldPath = NodePath("EditorOnlyMeshContainer/EditorOnlyField")
+
+[node name="DirectionMakerCollision" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_e7j0g")
+debug_color = Color(0.44291177, 0.5567431, 0.6019095, 1)
+
+[node name="EditorOnlyMeshContainer" type="Node3D" parent="."]
+
+[node name="EditorOnlyVector" type="MeshInstance3D" parent="EditorOnlyMeshContainer"]
+transform = Transform3D(-1, 8.742278e-08, -3.821371e-15, 0, -4.371139e-08, -1, -8.742278e-08, -1, 4.371139e-08, -3.278354e-08, 0, 1.4330142e-15)
+material_override = SubResource("StandardMaterial3D_e7j0g")
+mesh = SubResource("PrismMesh_h0gmv")
+
+[node name="EditorOnlyField" type="MeshInstance3D" parent="EditorOnlyMeshContainer"]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 0, 0, 0)
+mesh = SubResource("BoxMesh_e7j0g")
+surface_material_override/0 = SubResource("StandardMaterial3D_h0gmv")
