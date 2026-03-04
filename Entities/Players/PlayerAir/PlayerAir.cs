@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 
 public partial class PlayerAir : CharacterBody3D
 {
@@ -17,14 +18,16 @@ public partial class PlayerAir : CharacterBody3D
 	[Export] private bool _invertMouseX = false;
 	private float _currentLateralOffset = 0f;
 	private float _targetLateralOffset = 0f;
-	[Export] public NodePath _detectWallRayCastPath = "DetectWallRayCast";
-	private RayCast3D _detectWallRayCast;
 	[ExportGroup("Auto vertical avoidance")]
+
 	[Export] private float _maxExtraHeight = 6.0f; 
     [Export] private float _riseSpeed = 8.0f;
     [Export] private float _fallSpeed = 10.0f;
 	private float _baseOffsetYFromAnchor = 0f;  
 	private float _currentExtraHeight = 0f;
+	private float _hangTime = 0.25f;
+	private float _hangTimer = 0f;
+	private readonly List<RayCast3D> _wallRays = new();
 
 	public override void _Ready()
 	{
@@ -39,8 +42,35 @@ public partial class PlayerAir : CharacterBody3D
 			GD.Print("[Player Air] Player Ground not found");
 		}
 
-		_detectWallRayCast = GetNode<RayCast3D>(_detectWallRayCastPath);
+		initialiseWallRays();
 		_baseOffsetYFromAnchor = GlobalPosition.Y - _playerGround.AirAnchorPosition.Y;
+	}
+
+	private void initialiseWallRays()
+	{
+		Node root = GetNodeOrNull(".") ?? this;
+
+		foreach (Node child in root.GetChildren()) 
+		{
+			if (child is RayCast3D ray)
+			{
+				_wallRays.Add(ray);
+				
+			}
+		}
+
+		if (_wallRays.Count == 0)
+		{
+			GD.Print($"[PlayerAir] No RayCast3D nodes found.");
+		} 
+		else 
+		{
+			GD.Print($"[PlayerAir] {_wallRays.Count} RayCast3D nodes have been initialised.");
+			foreach (var ray in _wallRays)
+			{
+				ray.Enabled = true;
+			}
+		}
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -154,17 +184,27 @@ public partial class PlayerAir : CharacterBody3D
 	{
 		float baseY = _playerGround.AirAnchorPosition.Y + _baseOffsetYFromAnchor;
 
-		if (_detectWallRayCast == null) 
+		if (_wallRays.Count == 0) 
 		{
-			// If no raycast detected, use OG height
+			// If no raycasts detected, use OG height
 			targetPos.Y = baseY;
-		} 
+		}
 		else 
 		{
-			_detectWallRayCast.ForceRaycastUpdate();
-			bool isBlocked = _detectWallRayCast.IsColliding();
+			bool anyBlockedThisFrame = CheckAnyRaysBlocked();
 
-			if (isBlocked == true)
+			if (anyBlockedThisFrame)
+			{
+				_hangTimer = _hangTime;
+			}
+			else 
+			{
+				_hangTimer = Mathf.Max(0f, _hangTimer - dt);
+			}
+
+			bool blockedWithHang = anyBlockedThisFrame || _hangTimer > 0f;
+
+			if (blockedWithHang)
 			{
 				// Climb towards max
 				_currentExtraHeight = Mathf.MoveToward(_currentExtraHeight, _maxExtraHeight, _riseSpeed * dt);
@@ -176,6 +216,23 @@ public partial class PlayerAir : CharacterBody3D
 			}
 
 			targetPos.Y = baseY + _currentExtraHeight;
+
 		}
+	}
+
+	private bool CheckAnyRaysBlocked()
+	{
+		bool result = false;
+
+		for (int i = 0; i < _wallRays.Count; i++)
+		{
+			RayCast3D ray = _wallRays[i];
+			if (ray.IsColliding())
+			{
+				result = true;
+			}
+		}
+
+		return result;
 	}
 }
