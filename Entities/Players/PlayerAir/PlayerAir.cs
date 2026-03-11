@@ -29,8 +29,26 @@ public partial class PlayerAir : CharacterBody3D
 	private float _hangTimer = 0f;
 	private readonly List<RayCast3D> _wallRays = new();
 
+	[ExportGroup("Shooting")]
+	[Export] public NodePath _muzzleMarkerPath;
+	[Export] public PackedScene _bulletScene;
+	[Export] public float _rateOfFire = 0.1f;
+	private float _fireTimer = 0f;
+	private Node3D _muzzleMarker;
+
 	public override void _Ready()
 	{
+		_muzzleMarker = GetNode<Node3D>(_muzzleMarkerPath);
+
+		if (_muzzleMarker == null )
+		{
+			GD.Print("[PlayerAir] Muzzle marker not found");
+		}
+		else
+		{
+			GD.Print("[PlayerAir] Muzzle marker initialised");
+		}
+
 		if (_playerGround != null)
 		{
 			// Match the position and rotation of the Player Air marker
@@ -112,6 +130,9 @@ public partial class PlayerAir : CharacterBody3D
 			// Moves current yaw towards the target yaw
 			rotation.Y +=  diff * yawStep;
 			GlobalRotation = rotation;
+
+			// Fire bullets
+			AutoShoot(dt);
 		}
 		else 
 		{
@@ -234,5 +255,43 @@ public partial class PlayerAir : CharacterBody3D
 		}
 
 		return result;
+	}
+
+	private void AutoShoot(float dt)
+	{
+		// Decrease timer towards 0
+		_fireTimer -= dt;
+
+		// If timer still has time left, ignore rest of function
+		if (_fireTimer > 0f) 
+		{
+			return;
+		}
+
+		// Reset timer if ROF
+		_fireTimer = _rateOfFire;
+		SpawnBullet();
+	}
+
+	private void SpawnBullet()
+	{
+        if (_bulletScene == null)
+        {
+            GD.PrintErr("Bullet scene not assigned to player!");
+            return;
+        }
+
+		// Find Player's forward vector to be direction for bullets
+		Vector3 shootDirection = -_muzzleMarker.GlobalTransform.Basis.Z;
+		shootDirection = shootDirection.Normalized();
+
+		PlayerAirBullet bulletNode = _bulletScene.Instantiate<PlayerAirBullet>();
+		
+		// Add bullet to scene (use current scene root)
+    	GetTree().CurrentScene.AddChild(bulletNode);
+
+		bulletNode.GlobalPosition = _muzzleMarker.GlobalPosition;
+		bulletNode.GlobalRotation = _muzzleMarker.GlobalRotation;
+		bulletNode.Direction = shootDirection;
 	}
 }

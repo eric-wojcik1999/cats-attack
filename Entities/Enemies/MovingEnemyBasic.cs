@@ -117,4 +117,10 @@ public partial class MovingEnemyBasic : CharacterBody3D
 		}
 	}
 
+	public void Die()
+	{
+		GD.Print("Killed enemy!");
+		QueueFree();
+	}
+
 }

@@ -1,6 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://ck3n3piykfu2o"]
+[gd_scene load_steps=6 format=3 uid="uid://ck3n3piykfu2o"]
 
 [ext_resource type="Script" uid="uid://bx66h3i54nj1t" path="res://Entities/Players/PlayerAir/PlayerAir.cs" id="1_ee2jk"]
+[ext_resource type="PackedScene" uid="uid://dd2txh130vuww" path="res://Entities/Players/PlayerAir/player-air-bullet.tscn" id="2_bllsx"]
 
 [sub_resource type="PrismMesh" id="PrismMesh_doxca"]
 size = Vector3(0.7, 0.9, 0.2)
@@ -13,6 +14,8 @@ radius = 0.75
 
 [node name="PlayerAir" type="CharacterBody3D"]
 script = ExtResource("1_ee2jk")
+_muzzleMarkerPath = NodePath("MuzzleMarker")
+_bulletScene = ExtResource("2_bllsx")
 
 [node name="PlayerMeshTemp" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0)
@@ -52,3 +55,6 @@ collision_mask = 2
 [node name="DetectWallRayCast6" type="RayCast3D" parent="."]
 transform = Transform3D(0.9659258, -0.25881904, 0, 0.25881904, 0.9659258, 0, 0, 0, 1, 0.25, 0, 0)
 collision_mask = 2
+
+[node name="MuzzleMarker" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)

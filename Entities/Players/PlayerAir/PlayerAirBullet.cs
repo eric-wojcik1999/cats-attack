@@ -3,8 +3,8 @@ using System;
 
 public partial class PlayerAirBullet : Area3D
 {
-	[Export] private float _speed = 20f;
-	[Export] private float _lifeTime = 2.0f;
+	[Export] private float _speed = 100f;
+	[Export] private float _lifeTime = 1.5f;
 	public Vector3 Direction { get; set; } = Vector3.Forward;
 	private float _lifeTimer;
 
@@ -13,7 +13,6 @@ public partial class PlayerAirBullet : Area3D
 		_lifeTimer = _lifeTime;
 		BodyEntered += OnBodyEntered;
 	}
-
 
 	public override void _Process(double delta)
 	{
@@ -33,7 +32,8 @@ public partial class PlayerAirBullet : Area3D
 	{
 		if (body is MovingEnemyBasic enemy)
 		{
-			// enemy.Die();
+			// Make it make the enemy lose health!
+			enemy.Die();
 		}
 
 		QueueFree();
