@@ -5,6 +5,7 @@ public partial class PlayerAirBullet : Area3D
 {
 	[Export] private float _speed = 100f;
 	[Export] private float _lifeTime = 1.5f;
+	[Export] private int _bulletDamage = 1;
 	public Vector3 Direction { get; set; } = Vector3.Forward;
 	private float _lifeTimer;
 
@@ -34,6 +35,16 @@ public partial class PlayerAirBullet : Area3D
 		{
 			// Make it make the enemy lose health!
 			enemy.Die();
+		}
+		else if (body is TotemEnemyBasic totem)
+		{
+			// Make it make the enemy lose health!
+			totem.Hurt(_bulletDamage);
+		}
+		else if (body is StaticEnemyBasic staticEnemy)
+		{
+			// Make it make the enemy lose health!
+			staticEnemy.Die();
 		}
 
 		QueueFree();

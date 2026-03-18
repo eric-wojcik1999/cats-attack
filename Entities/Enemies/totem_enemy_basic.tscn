@@ -1,0 +1,134 @@
+[gd_scene load_steps=12 format=3 uid="uid://dvpytmgu5naqg"]
+
+[ext_resource type="Script" uid="uid://4ipnx61k8i1i" path="res://Entities/Enemies/TotemEnemyBasic.cs" id="1_nmi7y"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_4jb5w"]
+height = 0.5
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_nmi7y"]
+albedo_color = Color(0.9237385, 0.00071541546, 0.92788565, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_nel45"]
+top_radius = 0.45
+bottom_radius = 0.45
+height = 0.15
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_xyrsj"]
+albedo_color = Color(0.6784314, 0.5764706, 0.8862745, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_205kj"]
+height = 0.5
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1qjro"]
+albedo_color = Color(0.9254902, 0, 0.92941177, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_nmi7y"]
+top_radius = 0.05
+bottom_radius = 0.05
+height = 1.5
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_nel45"]
+albedo_color = Color(0.9254902, 0, 0.92941177, 1)
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_nmi7y"]
+radius = 3.0234375
+height = 6.046875
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_4jb5w"]
+radius = 2.8613281
+height = 5.7226563
+
+[node name="TotemEnemyBasic" type="CharacterBody3D"]
+collision_layer = 8
+collision_mask = 2
+script = ExtResource("1_nmi7y")
+
+[node name="TempMeshes" type="Node3D" parent="."]
+transform = Transform3D(1.5, 0, 0, 0, 2, 0, 0, 0, 1.5, 0, 0, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="TempMeshes"]
+mesh = SubResource("CylinderMesh_4jb5w")
+skeleton = NodePath("../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_nmi7y")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="TempMeshes"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.31710076, 0)
+mesh = SubResource("CylinderMesh_nel45")
+skeleton = NodePath("../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_xyrsj")
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="TempMeshes"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9393187, 0)
+mesh = SubResource("CylinderMesh_nel45")
+skeleton = NodePath("../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_xyrsj")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="TempMeshes"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.63915, 0)
+mesh = SubResource("CylinderMesh_205kj")
+skeleton = NodePath("../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_1qjro")
+
+[node name="MeshInstance3D5" type="MeshInstance3D" parent="TempMeshes"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2510744, 0)
+mesh = SubResource("CylinderMesh_205kj")
+skeleton = NodePath("../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_1qjro")
+
+[node name="MeshInstance3D6" type="MeshInstance3D" parent="TempMeshes"]
+transform = Transform3D(-4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0, 1, 1.1865127, 0.31468737, 0)
+mesh = SubResource("CylinderMesh_nmi7y")
+skeleton = NodePath("../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_nel45")
+
+[node name="MeshInstance3D7" type="MeshInstance3D" parent="TempMeshes"]
+transform = Transform3D(-4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0, 1, -1.1198832, 0.31468737, 0)
+mesh = SubResource("CylinderMesh_nmi7y")
+skeleton = NodePath("../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_nel45")
+
+[node name="MeshInstance3D8" type="MeshInstance3D" parent="TempMeshes"]
+transform = Transform3D(1.9106857e-15, -4.371139e-08, 1, -1, -4.371139e-08, 0, 4.371139e-08, -1, -4.371139e-08, 0, 0.315, 1.1793103)
+mesh = SubResource("CylinderMesh_nmi7y")
+skeleton = NodePath("../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_nel45")
+
+[node name="MeshInstance3D9" type="MeshInstance3D" parent="TempMeshes"]
+transform = Transform3D(1.9106857e-15, -4.371139e-08, 1, -1, -4.371139e-08, 0, 4.371139e-08, -1, -4.371139e-08, 0, 0.315, -1.1668915)
+mesh = SubResource("CylinderMesh_nmi7y")
+skeleton = NodePath("../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_nel45")
+
+[node name="MeshInstance3D10" type="MeshInstance3D" parent="TempMeshes"]
+transform = Transform3D(-3.078538e-08, 0.7042874, -0.70991504, -1, -4.371139e-08, 0, -3.103137e-08, 0.70991504, 0.7042874, 0.84277576, 0.9462687, 0.831416)
+mesh = SubResource("CylinderMesh_nmi7y")
+skeleton = NodePath("../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_nel45")
+
+[node name="MeshInstance3D11" type="MeshInstance3D" parent="TempMeshes"]
+transform = Transform3D(-3.078538e-08, 0.7042874, -0.70991504, -1, -4.371139e-08, 0, -3.103137e-08, 0.70991504, 0.7042874, -0.78158975, 0.9462687, -0.8059292)
+mesh = SubResource("CylinderMesh_nmi7y")
+skeleton = NodePath("../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_nel45")
+
+[node name="MeshInstance3D12" type="MeshInstance3D" parent="TempMeshes"]
+transform = Transform3D(-3.103137e-08, 0.70991504, 0.7042874, -1, -4.371139e-08, 2.1175824e-22, 3.0785383e-08, -0.7042874, 0.70991504, -0.8300802, 0.9462687, 0.81966627)
+mesh = SubResource("CylinderMesh_nmi7y")
+skeleton = NodePath("../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_nel45")
+
+[node name="MeshInstance3D13" type="MeshInstance3D" parent="TempMeshes"]
+transform = Transform3D(-3.103137e-08, 0.70991504, 0.7042874, -1, -4.371139e-08, 2.1175824e-22, 3.0785383e-08, -0.7042874, 0.70991504, 0.8355236, 0.9462687, -0.8327341)
+mesh = SubResource("CylinderMesh_nmi7y")
+skeleton = NodePath("../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_nel45")
+
+[node name="SideDetection" type="Area3D" parent="."]
+
+[node name="SideDetectionCollision" type="CollisionShape3D" parent="SideDetection"]
+transform = Transform3D(0.999982, -0.0060038967, 0, 0.0060038967, 0.999982, 0, 0, 0, 1, -0.0065418435, 1.1833299, 0)
+shape = SubResource("CapsuleShape3D_nmi7y")
+
+[node name="EnemyTotemCollision" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.171967, 0)
+shape = SubResource("CapsuleShape3D_4jb5w")

@@ -21,9 +21,9 @@ public partial class MovingEnemyBasic : CharacterBody3D
 	public override void _Ready()
 	{
 		_sideDetection = GetNode<Area3D>(_sideDetectionPath);
-		_sideDetection.BodyEntered += OnSideDectionPlayerEntered;
+		_sideDetection.BodyEntered += OnSideDetectionPlayerEntered;
 		_topDetection = GetNode<Area3D>(_topDetectionPath);
-		_topDetection.BodyEntered += OnTopDectionPlayerEntered;
+		_topDetection.BodyEntered += OnTopDetectionPlayerEntered;
 		_detectFloorRayCast = GetNode<RayCast3D>(_detectFloorRayCastPath);
 	}
 
@@ -77,7 +77,7 @@ public partial class MovingEnemyBasic : CharacterBody3D
         _isTurning = false;
     }
 
-	private void OnSideDectionPlayerEntered(Node3D body) 
+	private void OnSideDetectionPlayerEntered(Node3D body) 
 	{
 		if (body != null)
 		{
@@ -97,7 +97,7 @@ public partial class MovingEnemyBasic : CharacterBody3D
 		}
 	}
 
-	private void OnTopDectionPlayerEntered(Node3D body) 
+	private void OnTopDetectionPlayerEntered(Node3D body) 
 	{
 		if (body != null)
 		{
@@ -120,6 +120,7 @@ public partial class MovingEnemyBasic : CharacterBody3D
 	public void Die()
 	{
 		GD.Print("Killed enemy!");
+		Global.Instance.AddCurrency(_currencyAmount);
 		QueueFree();
 	}
 
