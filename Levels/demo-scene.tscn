@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://csdvs0h5p6ume"]
+[gd_scene load_steps=10 format=3 uid="uid://csdvs0h5p6ume"]
 
 [ext_resource type="PackedScene" uid="uid://d4nm5bdaxqhsr" path="res://Entities/Players/PlayerGround/player-ground.tscn" id="1_j5bgn"]
 [ext_resource type="PackedScene" uid="uid://b8qoyreqkcblf" path="res://Entities/Markers/direction_marker.tscn" id="2_73khv"]
@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://djcdbqorg2qc" path="res://Entities/Enemies/moving_enemy_basic.tscn" id="5_1e8n7"]
 [ext_resource type="PackedScene" uid="uid://ck3n3piykfu2o" path="res://Entities/Players/PlayerAir/player_air.tscn" id="6_uap1t"]
 [ext_resource type="PackedScene" uid="uid://dvpytmgu5naqg" path="res://Entities/Enemies/totem_enemy_basic.tscn" id="7_72b4k"]
+[ext_resource type="PackedScene" uid="uid://dpkjb22ajxbvd" path="res://Entities/Enemies/turret-enemy-basic.tscn" id="9_etmm2"]
 
 [node name="DemoScene" type="Node3D"]
 
@@ -42,6 +43,20 @@ collision_layer = 2
 collision_mask = 13
 size = Vector3(34, 0.25, 13.75)
 
+[node name="TestFloor8" type="CSGBox3D" parent="."]
+transform = Transform3D(0, 0, 1.0000001, 0, 1, 0, -1.0000001, 0, 0, -45.93675, -16.875, -175.83282)
+use_collision = true
+collision_layer = 2
+collision_mask = 13
+size = Vector3(70.5, 0.25, 13.75)
+
+[node name="TestFloor9" type="CSGBox3D" parent="."]
+transform = Transform3D(0, 0, 1.0000001, 0, 1, 0, -1.0000001, 0, 0, -46.18675, -5.625, -191.83282)
+use_collision = true
+collision_layer = 2
+collision_mask = 13
+size = Vector3(7.5, 0.25, 13.25)
+
 [node name="TestFloor2" type="CSGBox3D" parent="."]
 transform = Transform3D(-0.49999997, 0, -0.8660254, 0, 1, 0, 0.8660254, 0, -0.49999997, 5.1689997, -6.375, -37.191914)
 use_collision = true
@@ -69,6 +84,13 @@ use_collision = true
 collision_layer = 2
 collision_mask = 13
 size = Vector3(12, 0.25, 8)
+
+[node name="TestFloor3" type="CSGBox3D" parent="TestFloor3"]
+transform = Transform3D(0.25881922, 0, -0.9659258, 0, 1, 0, 0.9659258, 0, 0.25881922, -18.711384, 11.875, 6.959589)
+use_collision = true
+collision_layer = 2
+collision_mask = 13
+size = Vector3(3.25, 2.25, 3.75)
 
 [node name="TestFloor4" type="CSGBox3D" parent="."]
 transform = Transform3D(0.6481199, 0, -0.7615384, 0, 1, 0, 0.7615384, 0, 0.6481199, 7.039588, -9.375, -69.33161)
@@ -121,6 +143,10 @@ _turnDegPerSecOverride = 30.0
 transform = Transform3D(1.9077035, 0, 0.5111678, 0, 1.9749998, 0, -0.5111678, 0, 1.9077035, -40.31176, -10.75, -103.04269)
 _turnDegPerSecOverride = 30.0
 
+[node name="DirectionMarker9" parent="DirectionMarkers" instance=ExtResource("2_73khv")]
+transform = Transform3D(1.9750003, 0, 2.3841858e-07, 0, 1.9749998, 0, -2.3841858e-07, 0, 1.9750003, -47.31176, -10.75, -131.2927)
+_turnDegPerSecOverride = 30.0
+
 [node name="Coins" type="Node3D" parent="."]
 
 [node name="CoinPickup" parent="Coins" instance=ExtResource("3_cl86r")]
@@ -137,6 +163,42 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.25, 1, -14)
 
 [node name="CoinPickup5" parent="Coins" instance=ExtResource("3_cl86r")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.25, 1, -17)
+
+[node name="CoinPickup6" parent="Coins" instance=ExtResource("3_cl86r")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -45.5, -15.5, -199.25)
+
+[node name="CoinPickup7" parent="Coins" instance=ExtResource("3_cl86r")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -45.5, -15.5, -195)
+
+[node name="CoinPickup8" parent="Coins" instance=ExtResource("3_cl86r")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -45.5, -15.5, -191.25)
+
+[node name="CoinPickup9" parent="Coins" instance=ExtResource("3_cl86r")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -45.5, -15.5, -186.75)
+
+[node name="CoinPickup10" parent="Coins" instance=ExtResource("3_cl86r")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -45.5, -15.5, -181.75)
+
+[node name="CoinPickup11" parent="Coins" instance=ExtResource("3_cl86r")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -45.5, -15.5, -176.25)
+
+[node name="CoinPickup12" parent="Coins" instance=ExtResource("3_cl86r")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -45.5, -15.5, -171.5)
+
+[node name="CoinPickup13" parent="Coins" instance=ExtResource("3_cl86r")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -45.5, -15.5, -167.25)
+
+[node name="CoinPickup14" parent="Coins" instance=ExtResource("3_cl86r")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -45.5, -15.5, -163.5)
+
+[node name="CoinPickup15" parent="Coins" instance=ExtResource("3_cl86r")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -45.5, -15.5, -159)
+
+[node name="CoinPickup16" parent="Coins" instance=ExtResource("3_cl86r")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -45.5, -15.5, -154)
+
+[node name="CoinPickup17" parent="Coins" instance=ExtResource("3_cl86r")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -45.5, -15.5, -148.5)
 
 [node name="HUD" parent="." node_paths=PackedStringArray("player") instance=ExtResource("4_cjwjn")]
 player = NodePath("../PlayerGround")
@@ -237,3 +299,36 @@ transform = Transform3D(0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, -36, -13.75, -91.5)
 
 [node name="StaticEnemyBasic8" parent="." instance=ExtResource("3_otfp5")]
 transform = Transform3D(0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, -33.75, -13.75, -92.75)
+
+[node name="TurretEnemyBasic2" parent="." instance=ExtResource("9_etmm2")]
+transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, -47.75, -5.25, -190)
+
+[node name="TurretEnemyBasic3" parent="." instance=ExtResource("9_etmm2")]
+transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, -45, -5.25, -189.75)
+
+[node name="TurretEnemyBasic4" parent="." instance=ExtResource("9_etmm2")]
+transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, -41.75, -5.25, -189.75)
+
+[node name="MovingEnemyBasic" parent="." instance=ExtResource("5_1e8n7")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -48.25, -16, -166)
+
+[node name="MovingEnemyBasic2" parent="." instance=ExtResource("5_1e8n7")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -50.25, -16, -156.75)
+
+[node name="MovingEnemyBasic4" parent="." instance=ExtResource("5_1e8n7")]
+transform = Transform3D(-5.9604645e-08, 0, 1, 0, 1, 0, -1, 0, -5.9604645e-08, -40.75, -16, -161.25)
+
+[node name="MovingEnemyBasic5" parent="." instance=ExtResource("5_1e8n7")]
+transform = Transform3D(-5.9604645e-08, 0, 1, 0, 1, 0, -1, 0, -5.9604645e-08, -42.75, -16, -169.5)
+
+[node name="MovingEnemyBasic6" parent="." instance=ExtResource("5_1e8n7")]
+transform = Transform3D(-5.9604645e-08, 0, 1, 0, 1, 0, -1, 0, -5.9604645e-08, -44.5, -16, -179.5)
+
+[node name="MovingEnemyBasic3" parent="." instance=ExtResource("5_1e8n7")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -45.25, -16, -174.5)
+
+[node name="TurretEnemyBasic" parent="." instance=ExtResource("9_etmm2")]
+transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, -50.75, -5.25, -190)
+
+[node name="TurretEnemyBasic5" parent="." instance=ExtResource("9_etmm2")]
+transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, 2, 5.25, -73.5)
