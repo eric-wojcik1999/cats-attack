@@ -1,6 +1,7 @@
-[gd_scene load_steps=10 format=3 uid="uid://dpkjb22ajxbvd"]
+[gd_scene load_steps=11 format=3 uid="uid://dpkjb22ajxbvd"]
 
 [ext_resource type="Script" uid="uid://1b5j6ibhvtd8" path="res://Entities/Enemies/TurretEnemyBasic.cs" id="1_tvetj"]
+[ext_resource type="PackedScene" uid="uid://bmr1estw8xi1t" path="res://Entities/Enemies/turret-enemy-plasma-ball.tscn" id="2_ho62n"]
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_3y7yv"]
 top_radius = 0.4
@@ -35,7 +36,7 @@ albedo_color = Color(0.38039216, 0.23529412, 0.3647059, 1)
 [node name="TurretEnemyBasic" type="CharacterBody3D"]
 transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, 0, 0, 0)
 script = ExtResource("1_tvetj")
-_muzzlePath = NodePath("YawPivot/PitchPivot/MuzzleMarker")
+_plasmaBallScene = ExtResource("2_ho62n")
 
 [node name="TurretBaseMesh" type="MeshInstance3D" parent="."]
 mesh = SubResource("CylinderMesh_3y7yv")
