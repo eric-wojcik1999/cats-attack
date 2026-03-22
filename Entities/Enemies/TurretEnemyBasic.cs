@@ -113,7 +113,8 @@ public partial class TurretEnemyBasic : CharacterBody3D
         // PITCH: Rotate barrel around X only (for aiming up and down)
         Vector3 localTarget = _pitchPivot.ToLocal(target.GlobalPosition);
 
-        float desiredPitch = Mathf.Atan2(localTarget.Y, -localTarget.Z);
+        // float desiredPitch = Mathf.Atan2(localTarget.Y, -localTarget.Z);
+        float desiredPitch = Mathf.Atan2(localTarget.Y, localTarget.Z);
         float desiredPitchDeg = Mathf.Clamp(Mathf.RadToDeg(desiredPitch), _minPitchDeg, _maxPitchDeg);
         desiredPitch = Mathf.DegToRad(desiredPitchDeg);
 
