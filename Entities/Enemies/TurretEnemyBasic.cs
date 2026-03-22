@@ -4,11 +4,11 @@ using System.Collections.Generic;
 
 public partial class TurretEnemyBasic : CharacterBody3D
 {
-	[ExportGroup("NodePaths")]
-    [Export] private NodePath _corePath = "TurretBaseMesh/TurrentCoreMesh"; // Yaw rotates here
-    [Export] private NodePath _barrelPath = "TurretBaseMesh/TurrentCoreMesh/TurretBarrelMesh"; // Pitch rotates here
-    [Export] private NodePath _muzzlePath = "TurretBaseMesh/TurrentCoreMesh/TurretBarrelMesh/MuzzleMarker";
-    [Export] private NodePath _losPath = "TurretBaseMesh/TurrentCoreMesh/TurretBarrelMesh/MuzzleMarker/LineOfSightRayCast";
+	[ExportGroup("Node Paths")]
+    [Export] private NodePath _yawPivotPath = "YawPivot"; // Yaw rotates here
+    [Export] private NodePath _pivotPitchPath = "YawPivot/PitchPivot"; // Pitch rotates here
+    [Export] private NodePath _muzzlePath = "yawPivot/PitchPivot/MuzzleMarker";
+    [Export] private NodePath _losPath = "YawPivot/PitchPivot/MuzzleMarker/LineOfSightRayCast";
     [Export] private NodePath _aggroRangePath = "AggroRange";
 
     [ExportGroup("Targeting")]
@@ -27,8 +27,8 @@ public partial class TurretEnemyBasic : CharacterBody3D
     // Don't neeeed to type as MeshInstance3D here (even though they are nearly all MeshInstance3D nodes)
     // because Node3D can be better in this case as it has everything we need for what we want to accomplish
     // If need to change mesh specific things like mesh colour, then yes type it as a MeshInstance3D
-    private Node3D _core;
-    private Node3D _barrel;
+    private Node3D _yawPivot;
+    private Node3D _pitchPivot;
     private Node3D _muzzle;
     private RayCast3D _losRay;
     private Area3D _aggroRange;
@@ -40,14 +40,14 @@ public partial class TurretEnemyBasic : CharacterBody3D
 
     public override void _Ready()
     {
-        _core = GetNodeOrNull<Node3D>(_corePath);
-        _barrel = GetNodeOrNull<Node3D>(_barrelPath);
+        _yawPivot = GetNodeOrNull<Node3D>(_yawPivotPath);
+        _pitchPivot = GetNodeOrNull<Node3D>(_pivotPitchPath);
         _muzzle = GetNodeOrNull<Node3D>(_muzzlePath);
         _losRay = GetNodeOrNull<RayCast3D>(_losPath);
         _aggroRange = GetNodeOrNull<Area3D>(_aggroRangePath);
 
-        if (_core == null) GD.PushError("[TurretEnemyBasic] Core path is invalid");
-        if (_barrel == null) GD.PushError("[TurretEnemyBasic] Barrel path is invalid");
+        if (_yawPivot == null) GD.PushError("[TurretEnemyBasic] Core path is invalid");
+        if (_pitchPivot == null) GD.PushError("[TurretEnemyBasic] Barrel path is invalid");
         if (_muzzle == null) GD.PushError("[TurretEnemyBasic] Muzzle path is invalid");
         if (_losRay == null) GD.PushError("[TurretEnemyBasic] LineOfSight path is invalid");
         if (_aggroRange == null) GD.PushError("[TurretEnemyBasic] Core path is invalid");
@@ -83,48 +83,45 @@ public partial class TurretEnemyBasic : CharacterBody3D
 
     private void AimAtTarget(Node3D target, float dt)
     {
-        if (_core == null || _muzzle == null) return;
+        if (_yawPivot == null || _pitchPivot == null || _muzzle == null) return;
 
         Vector3 muzzlePos = _muzzle.GlobalPosition;
         Vector3 toTarget = (target.GlobalPosition - muzzlePos);
 
         // Is there enough horizontal distance between the turrent and the target to compute yaw
-        if (toTarget.LengthSquared() < 0.00001f) return;
+        if (toTarget.LengthSquared() < 0.0001f) return;
 
         // YAW ROTATION: Rotate core around Y only
         Vector3 flat = toTarget;
-        flat.Y = 0f;
+        flat.Y = 0.0f;
 
         // Is there enough horizontal distance between the turrent and the target to compute yaw
-        if (flat.LengthSquared() > 0.00001f)
+        if (flat.LengthSquared() > 0.0001f)
         {
             float desiredYaw = Mathf.Atan2(-flat.X, -flat.Z);
-            // // Convert yaw that makes the -Z point to a target
-            // desiredYaw += Mathf.Pi;
 
-            Vector3 coreRot = _core.GlobalRotation;
-            float diff = Mathf.Wrap(desiredYaw - coreRot.Y, -Mathf.Pi, Mathf.Pi);
-            float step = Mathf.Clamp(_turnSpeedYaw * dt, 0f, 1f);
-            coreRot.Y += diff * step;
-            _core.GlobalRotation = coreRot;
+            Vector3 yawRot = _yawPivot.GlobalRotation;
+            float yawDiff = Mathf.Wrap(desiredYaw - yawRot.Y, -Mathf.Pi, Mathf.Pi);
+            float yawStep = Mathf.Clamp(_turnSpeedYaw * dt, 0.0f, 1.0f);
+            yawRot.Y += yawDiff * yawStep;
+            _yawPivot.GlobalRotation = yawRot;
         }
 
-        // ai wants use pitch to be checked if false here but always true lol
-        if (_barrel == null) return;
+
+        if (!_usePitch) return;
 
         // PITCH: Rotate barrel around X only (for aiming up and down)
-        Vector3 localTarget = _barrel.ToLocal(target.GlobalPosition);
+        Vector3 localTarget = _pitchPivot.ToLocal(target.GlobalPosition);
 
         float desiredPitch = Mathf.Atan2(localTarget.Y, -localTarget.Z);
-        float desiredPitchDeg = Mathf.RadToDeg(desiredPitch);
-        desiredPitchDeg = Mathf.Clamp(desiredPitchDeg, _minPitchDeg, _maxPitchDeg);
+        float desiredPitchDeg = Mathf.Clamp(Mathf.RadToDeg(desiredPitch), _minPitchDeg, _maxPitchDeg);
         desiredPitch = Mathf.DegToRad(desiredPitchDeg);
 
-        Vector3 barrelRot = _barrel.Rotation; // Local rotation is fine for pitch
-        float pitchDiff = Mathf.Wrap(desiredPitch - barrelRot.X, -Mathf.Pi, Mathf.Pi);
-        float pitchStep = Mathf.Clamp(_turnSpeedPitch * dt, 0f, 1f);
-        barrelRot.X += pitchDiff * pitchStep;
-        _barrel.Rotation = barrelRot;
+        Vector3 pitchRot = _pitchPivot.Rotation; // Local rotation is fine for pitch
+        float pitchDiff = Mathf.Wrap(desiredPitch - pitchRot.X, -Mathf.Pi, Mathf.Pi);
+        float pitchStep = Mathf.Clamp(_turnSpeedPitch * dt, 0.0f, 1.0f);
+        pitchRot.X += pitchDiff * pitchStep;
+        _pitchPivot.Rotation = pitchRot;
     }
 
     private void OnAggroBodyEntered(Node3D body)

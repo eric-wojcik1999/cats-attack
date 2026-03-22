@@ -331,4 +331,4 @@ transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -45.
 transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, -50.75, -5.25, -190)
 
 [node name="TurretEnemyBasic5" parent="." instance=ExtResource("9_etmm2")]
-transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, 2, 5.25, -73.5)
+transform = Transform3D(-2.1650634, 0, 1.2499999, 0, 2.5, 0, -1.2499999, 0, -2.1650634, 2, 5.25, -73.5)
