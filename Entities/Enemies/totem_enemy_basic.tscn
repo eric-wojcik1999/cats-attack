@@ -1,6 +1,7 @@
-[gd_scene load_steps=12 format=3 uid="uid://dvpytmgu5naqg"]
+[gd_scene load_steps=13 format=3 uid="uid://dvpytmgu5naqg"]
 
 [ext_resource type="Script" uid="uid://4ipnx61k8i1i" path="res://Entities/Enemies/TotemEnemyBasic.cs" id="1_nmi7y"]
+[ext_resource type="PackedScene" uid="uid://byqoehorkv5wq" path="res://Entities/Effects/explosion_effect.tscn" id="2_nel45"]
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_4jb5w"]
 height = 0.5
@@ -42,6 +43,7 @@ height = 5.7226563
 collision_layer = 8
 collision_mask = 2
 script = ExtResource("1_nmi7y")
+_explosionScene = ExtResource("2_nel45")
 
 [node name="TempMeshes" type="Node3D" parent="."]
 transform = Transform3D(1.5, 0, 0, 0, 2, 0, 0, 0, 1.5, 0, 0, 0)

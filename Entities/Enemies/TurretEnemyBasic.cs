@@ -26,9 +26,16 @@ public partial class TurretEnemyBasic : CharacterBody3D
     [Export] private float _rateOfFire = 1.0f;
     [Export] private float _maxFireDistance = 999f;
 
+
+	[ExportGroup("Death")]
+	[Export] public PackedScene _explosionScene;
+
+
     [ExportGroup("Properties")]
     [Export] public int _damageAmount = 1;
-	[Export] public int _currencyAmount = 1;
+	[Export] public int _currencyAmount = 2;
+	private int _currentHealth = 6;
+    
 
     // Don't neeeed to type as MeshInstance3D here (even though they are nearly all MeshInstance3D nodes)
     // because Node3D can be better in this case as it has everything we need for what we want to accomplish
@@ -210,6 +217,7 @@ public partial class TurretEnemyBasic : CharacterBody3D
 			{
 				player.TakeDamage(_damageAmount);
 				player.BounceBackFromPosition(GlobalPosition, 4f);
+                ExplodeSelf();
 				QueueFree();
 			}
 		}
@@ -230,6 +238,7 @@ public partial class TurretEnemyBasic : CharacterBody3D
 			{
 				player.BounceUp();
 				Global.Instance.AddCurrency(_currencyAmount);
+                ExplodeSelf();
 				QueueFree();
 			}
 		}
@@ -238,4 +247,31 @@ public partial class TurretEnemyBasic : CharacterBody3D
 			GD.PushError("[TurretEnemyBasic] player body is null.");
 		}
 	}
+	public void Hurt(int bulletDamage)
+	{
+		_currentHealth = Math.Max(_currentHealth - bulletDamage, 0);
+
+		if (_currentHealth <= 0) {
+			GD.Print("Killed enemy!");
+			Global.Instance.AddCurrency(_currencyAmount);
+            ExplodeSelf();
+			QueueFree();
+		}
+	}
+
+    private void ExplodeSelf()
+    {
+        if (_explosionScene == null)
+        {
+            GD.PrintErr("Explosion scene not assigned to enemy!");
+            return;
+        }
+
+        ExplosionEffect explosionNode = _explosionScene.Instantiate<ExplosionEffect>();
+        GetTree().CurrentScene.AddChild(explosionNode);
+        explosionNode.GlobalPosition = GlobalPosition;
+        _ = explosionNode.Explode();
+    }
+
+
 }

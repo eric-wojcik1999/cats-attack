@@ -8,7 +8,6 @@ public partial class MovingEnemyBasic : CharacterBody3D
 	// (1, 0, 0) <- the positive 1 is 'left' on the x-axis
 	[Export] private Vector3 _direction = new Vector3(-1, 0, 0);
 	[Export] public NodePath _sideDetectionPath = "SideDetection";
-	
 	[Export] public NodePath _topDetectionPath = "TopDetection";
 	[Export] public NodePath _detectFloorRayCastPath = "DetectFloorRayCast";
 	[Export] public int _damageAmount = 1;
@@ -17,6 +16,8 @@ public partial class MovingEnemyBasic : CharacterBody3D
 	private Area3D _sideDetection;
 	private Area3D _topDetection;
 	private RayCast3D _detectFloorRayCast;
+	[ExportGroup("Death")]
+	[Export] public PackedScene _explosionScene;
 
 	public override void _Ready()
 	{
@@ -88,6 +89,7 @@ public partial class MovingEnemyBasic : CharacterBody3D
 			{
 				player.TakeDamage(_damageAmount);
 				player.BounceBackFromPosition(GlobalPosition, 4f);
+				ExplodeSelf();
 				QueueFree();
 			}
 		}
@@ -108,6 +110,7 @@ public partial class MovingEnemyBasic : CharacterBody3D
 			{
 				player.BounceUp();
 				Global.Instance.AddCurrency(_currencyAmount);
+				ExplodeSelf();
 				QueueFree();
 			}
 		}
@@ -121,7 +124,22 @@ public partial class MovingEnemyBasic : CharacterBody3D
 	{
 		GD.Print("Killed enemy!");
 		Global.Instance.AddCurrency(_currencyAmount);
+		ExplodeSelf();
 		QueueFree();
 	}
+
+    private void ExplodeSelf()
+    {
+        if (_explosionScene == null)
+        {
+            GD.PrintErr("Explosion scene not assigned to enemy!");
+            return;
+        }
+
+        ExplosionEffect explosionNode = _explosionScene.Instantiate<ExplosionEffect>();
+        GetTree().CurrentScene.AddChild(explosionNode);
+        explosionNode.GlobalPosition = GlobalPosition;
+        _ = explosionNode.Explode();
+    }
 
 }

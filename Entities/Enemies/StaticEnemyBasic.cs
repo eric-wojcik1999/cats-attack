@@ -10,6 +10,8 @@ public partial class StaticEnemyBasic : CharacterBody3D
 	[Export] public int _currencyAmount = 1;
 	private Area3D _sideDetection;
 	private Area3D _topDetection;
+	[ExportGroup("Death")]
+	[Export] public PackedScene _explosionScene;
 
 
 	public override void _Ready()
@@ -31,6 +33,7 @@ public partial class StaticEnemyBasic : CharacterBody3D
 			{
 				player.TakeDamage(_damageAmount);
 				player.BounceBackFromPosition(GlobalPosition, 3f);
+				ExplodeSelf();
 				QueueFree();
 			}
 		}
@@ -51,6 +54,7 @@ public partial class StaticEnemyBasic : CharacterBody3D
 			{
 				player.BounceUp();
 				Global.Instance.AddCurrency(_currencyAmount);
+				ExplodeSelf();
 				QueueFree();
 			}
 		}
@@ -64,6 +68,21 @@ public partial class StaticEnemyBasic : CharacterBody3D
 	{
 		GD.Print("Killed enemy!");
 		Global.Instance.AddCurrency(_currencyAmount);
+		ExplodeSelf();
 		QueueFree();
 	}
+
+    private void ExplodeSelf()
+    {
+        if (_explosionScene == null)
+        {
+            GD.PrintErr("Explosion scene not assigned to enemy!");
+            return;
+        }
+
+        ExplosionEffect explosionNode = _explosionScene.Instantiate<ExplosionEffect>();
+        GetTree().CurrentScene.AddChild(explosionNode);
+        explosionNode.GlobalPosition = GlobalPosition;
+        _ = explosionNode.Explode();
+    }
 }

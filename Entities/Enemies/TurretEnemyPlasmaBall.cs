@@ -18,7 +18,7 @@ public partial class TurretEnemyPlasmaBall : Area3D
 		_lifeTimer = _lifeTime;
 		_growTimer = 0f;
 		Scale = Vector3.One * 0.1f;
-
+		BodyEntered += OnBodyEntered;
 	}
 
 	public override void _Process(double delta)

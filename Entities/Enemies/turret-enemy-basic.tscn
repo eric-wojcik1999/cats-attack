@@ -1,7 +1,8 @@
-[gd_scene load_steps=12 format=3 uid="uid://dpkjb22ajxbvd"]
+[gd_scene load_steps=13 format=3 uid="uid://dpkjb22ajxbvd"]
 
 [ext_resource type="Script" uid="uid://1b5j6ibhvtd8" path="res://Entities/Enemies/TurretEnemyBasic.cs" id="1_tvetj"]
 [ext_resource type="PackedScene" uid="uid://bmr1estw8xi1t" path="res://Entities/Enemies/turret-enemy-plasma-ball.tscn" id="2_ho62n"]
+[ext_resource type="PackedScene" uid="uid://byqoehorkv5wq" path="res://Entities/Effects/explosion_effect.tscn" id="3_s7pyi"]
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_3y7yv"]
 top_radius = 0.4
@@ -42,6 +43,7 @@ collision_layer = 8
 collision_mask = 2
 script = ExtResource("1_tvetj")
 _plasmaBallScene = ExtResource("2_ho62n")
+_explosionScene = ExtResource("3_s7pyi")
 
 [node name="TurretBaseMesh" type="MeshInstance3D" parent="."]
 mesh = SubResource("CylinderMesh_3y7yv")

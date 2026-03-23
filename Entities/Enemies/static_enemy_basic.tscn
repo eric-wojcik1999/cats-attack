@@ -1,6 +1,7 @@
-[gd_scene load_steps=9 format=3 uid="uid://bwfrqtd62aqnc"]
+[gd_scene load_steps=10 format=3 uid="uid://bwfrqtd62aqnc"]
 
 [ext_resource type="Script" uid="uid://gwneirctmrrx" path="res://Entities/Enemies/StaticEnemyBasic.cs" id="1_3f8f3"]
+[ext_resource type="PackedScene" uid="uid://byqoehorkv5wq" path="res://Entities/Effects/explosion_effect.tscn" id="2_wdda3"]
 
 [sub_resource type="TorusMesh" id="TorusMesh_k268f"]
 inner_radius = 0.001
@@ -30,6 +31,7 @@ transform = Transform3D(0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, 0, 0, 0)
 collision_layer = 8
 collision_mask = 2
 script = ExtResource("1_3f8f3")
+_explosionScene = ExtResource("2_wdda3")
 
 [node name="EnemyMesh" type="MeshInstance3D" parent="."]
 mesh = SubResource("TorusMesh_k268f")

@@ -33,7 +33,7 @@ public partial class PlayerAirBullet : Area3D
 	{
 		if (body is MovingEnemyBasic enemy)
 		{
-			// Make it make the enemy lose health!
+			// Make it make the enemy die!!
 			enemy.Die();
 		}
 		else if (body is TotemEnemyBasic totem)
@@ -41,9 +41,14 @@ public partial class PlayerAirBullet : Area3D
 			// Make it make the enemy lose health!
 			totem.Hurt(_bulletDamage);
 		}
-		else if (body is StaticEnemyBasic staticEnemy)
+		else if (body is TurretEnemyBasic turret)
 		{
 			// Make it make the enemy lose health!
+			turret.Hurt(_bulletDamage);
+		}
+		else if (body is StaticEnemyBasic staticEnemy)
+		{
+			// Make it make the enemy die!!
 			staticEnemy.Die();
 		}
 
