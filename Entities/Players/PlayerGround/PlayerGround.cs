@@ -242,13 +242,6 @@ public partial class PlayerGround : CharacterBody3D
 		}
 	}
 
-    // private async System.Threading.Tasks.Task StartIframesAsync()
-    // {
-    //     _isInvulnerable = true;
-    //     await ToSignal(GetTree().CreateTimer(_invulnSeconds), SceneTreeTimer.SignalName.Timeout);
-    //     _isInvulnerable = false;
-    // }
-
 	public void BounceUp()
 	{
 		Velocity = new Vector3(Velocity.X, _baseJumpVelocity * 0.7f, Velocity.Z);

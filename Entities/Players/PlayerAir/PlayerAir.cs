@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 
 public partial class PlayerAir : CharacterBody3D
 {
@@ -17,17 +18,37 @@ public partial class PlayerAir : CharacterBody3D
 	[Export] private bool _invertMouseX = false;
 	private float _currentLateralOffset = 0f;
 	private float _targetLateralOffset = 0f;
-	[Export] public NodePath _detectWallRayCastPath = "DetectWallRayCast";
-	private RayCast3D _detectWallRayCast;
 	[ExportGroup("Auto vertical avoidance")]
+
 	[Export] private float _maxExtraHeight = 6.0f; 
     [Export] private float _riseSpeed = 8.0f;
     [Export] private float _fallSpeed = 10.0f;
 	private float _baseOffsetYFromAnchor = 0f;  
 	private float _currentExtraHeight = 0f;
+	private float _hangTime = 0.25f;
+	private float _hangTimer = 0f;
+	private readonly List<RayCast3D> _wallRays = new();
+
+	[ExportGroup("Shooting")]
+	[Export] public NodePath _muzzleMarkerPath;
+	[Export] public PackedScene _bulletScene;
+	[Export] public float _rateOfFire = 0.1f;
+	private float _fireTimer = 0f;
+	private Node3D _muzzleMarker;
 
 	public override void _Ready()
 	{
+		_muzzleMarker = GetNode<Node3D>(_muzzleMarkerPath);
+
+		if (_muzzleMarker == null )
+		{
+			GD.Print("[PlayerAir] Muzzle marker not found");
+		}
+		else
+		{
+			GD.Print("[PlayerAir] Muzzle marker initialised");
+		}
+
 		if (_playerGround != null)
 		{
 			// Match the position and rotation of the Player Air marker
@@ -39,8 +60,35 @@ public partial class PlayerAir : CharacterBody3D
 			GD.Print("[Player Air] Player Ground not found");
 		}
 
-		_detectWallRayCast = GetNode<RayCast3D>(_detectWallRayCastPath);
+		initialiseWallRays();
 		_baseOffsetYFromAnchor = GlobalPosition.Y - _playerGround.AirAnchorPosition.Y;
+	}
+
+	private void initialiseWallRays()
+	{
+		Node root = GetNodeOrNull(".") ?? this;
+
+		foreach (Node child in root.GetChildren()) 
+		{
+			if (child is RayCast3D ray)
+			{
+				_wallRays.Add(ray);
+				
+			}
+		}
+
+		if (_wallRays.Count == 0)
+		{
+			GD.Print($"[PlayerAir] No RayCast3D nodes found.");
+		} 
+		else 
+		{
+			GD.Print($"[PlayerAir] {_wallRays.Count} RayCast3D nodes have been initialised.");
+			foreach (var ray in _wallRays)
+			{
+				ray.Enabled = true;
+			}
+		}
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -82,6 +130,9 @@ public partial class PlayerAir : CharacterBody3D
 			// Moves current yaw towards the target yaw
 			rotation.Y +=  diff * yawStep;
 			GlobalRotation = rotation;
+
+			// Fire bullets
+			AutoShoot(dt);
 		}
 		else 
 		{
@@ -154,17 +205,27 @@ public partial class PlayerAir : CharacterBody3D
 	{
 		float baseY = _playerGround.AirAnchorPosition.Y + _baseOffsetYFromAnchor;
 
-		if (_detectWallRayCast == null) 
+		if (_wallRays.Count == 0) 
 		{
-			// If no raycast detected, use OG height
+			// If no raycasts detected, use OG height
 			targetPos.Y = baseY;
-		} 
+		}
 		else 
 		{
-			_detectWallRayCast.ForceRaycastUpdate();
-			bool isBlocked = _detectWallRayCast.IsColliding();
+			bool anyBlockedThisFrame = CheckAnyRaysBlocked();
 
-			if (isBlocked == true)
+			if (anyBlockedThisFrame)
+			{
+				_hangTimer = _hangTime;
+			}
+			else 
+			{
+				_hangTimer = Mathf.Max(0f, _hangTimer - dt);
+			}
+
+			bool blockedWithHang = anyBlockedThisFrame || _hangTimer > 0f;
+
+			if (blockedWithHang)
 			{
 				// Climb towards max
 				_currentExtraHeight = Mathf.MoveToward(_currentExtraHeight, _maxExtraHeight, _riseSpeed * dt);
@@ -176,6 +237,61 @@ public partial class PlayerAir : CharacterBody3D
 			}
 
 			targetPos.Y = baseY + _currentExtraHeight;
+
 		}
+	}
+
+	private bool CheckAnyRaysBlocked()
+	{
+		bool result = false;
+
+		for (int i = 0; i < _wallRays.Count; i++)
+		{
+			RayCast3D ray = _wallRays[i];
+			if (ray.IsColliding())
+			{
+				result = true;
+			}
+		}
+
+		return result;
+	}
+
+	private void AutoShoot(float dt)
+	{
+		// Decrease timer towards 0
+		_fireTimer -= dt;
+
+		// If timer still has time left, ignore rest of function
+		if (_fireTimer > 0f) 
+		{
+			return;
+		}
+
+		// Reset timer if ROF
+		_fireTimer = _rateOfFire;
+		SpawnBullet();
+	}
+
+	private void SpawnBullet()
+	{
+        if (_bulletScene == null)
+        {
+            GD.PrintErr("Bullet scene not assigned to player!");
+            return;
+        }
+
+		// Find Player's forward vector to be direction for bullets
+		Vector3 shootDirection = -_muzzleMarker.GlobalTransform.Basis.Z;
+		shootDirection = shootDirection.Normalized();
+
+		PlayerAirBullet bulletNode = _bulletScene.Instantiate<PlayerAirBullet>();
+		
+		// Add bullet to scene (use current scene root)
+    	GetTree().CurrentScene.AddChild(bulletNode);
+
+		bulletNode.GlobalPosition = _muzzleMarker.GlobalPosition;
+		bulletNode.GlobalRotation = _muzzleMarker.GlobalRotation;
+		bulletNode.Direction = shootDirection;
 	}
 }

@@ -1,6 +1,7 @@
-[gd_scene load_steps=8 format=3 uid="uid://djcdbqorg2qc"]
+[gd_scene load_steps=9 format=3 uid="uid://djcdbqorg2qc"]
 
 [ext_resource type="Script" uid="uid://dw07wh4xo05do" path="res://Entities/Enemies/MovingEnemyBasic.cs" id="1_4hpws"]
+[ext_resource type="PackedScene" uid="uid://byqoehorkv5wq" path="res://Entities/Effects/explosion_effect.tscn" id="2_xsk0n"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_bwuso"]
 radius = 0.65
@@ -28,6 +29,7 @@ radius = 0.5566406
 collision_layer = 8
 collision_mask = 2
 script = ExtResource("1_4hpws")
+_explosionScene = ExtResource("2_xsk0n")
 
 [node name="EnemyMesh" type="MeshInstance3D" parent="."]
 mesh = SubResource("SphereMesh_bwuso")

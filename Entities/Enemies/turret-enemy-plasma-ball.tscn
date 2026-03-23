@@ -1,0 +1,36 @@
+[gd_scene load_steps=7 format=3 uid="uid://bmr1estw8xi1t"]
+
+[ext_resource type="Script" uid="uid://ckfaaborfshqd" path="res://Entities/Enemies/TurretEnemyPlasmaBall.cs" id="1_lkhua"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_bl6it"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lkhua"]
+albedo_color = Color(0.99289435, 1, 0.61852616, 0.6039216)
+metallic = 1.0
+metallic_specular = 0.0
+
+[sub_resource type="SphereMesh" id="SphereMesh_lkhua"]
+radius = 0.9
+height = 1.8
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bl6it"]
+transparency = 1
+blend_mode = 1
+albedo_color = Color(1, 0.21176471, 1, 1)
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_bl6it"]
+radius = 1.0
+
+[node name="TurretEnemyPlasmaBall" type="Area3D"]
+script = ExtResource("1_lkhua")
+
+[node name="InnerPlasmaMesh" type="MeshInstance3D" parent="."]
+mesh = SubResource("SphereMesh_bl6it")
+surface_material_override/0 = SubResource("StandardMaterial3D_lkhua")
+
+[node name="OuterPlasmaMesh" type="MeshInstance3D" parent="InnerPlasmaMesh"]
+mesh = SubResource("SphereMesh_lkhua")
+surface_material_override/0 = SubResource("StandardMaterial3D_bl6it")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_bl6it")
