@@ -353,18 +353,18 @@ public partial class PlayerGround : CharacterBody3D
 		}
 
 		Node3D spawnMarker = GD.Randf() < 0.5f ? _spawnLeft : _spawnRight;
-		Vector3 shootDirection = -spawnMarker.GlobalTransform.Basis.Z;
-		shootDirection = shootDirection.Normalized();
+		// Vector3 shootDirection = -spawnMarker.GlobalTransform.Basis.Z;
+		// shootDirection = shootDirection.Normalized();
 
 		PercyDrone droneNode = _percyDroneScene.Instantiate<PercyDrone>();
 
 		// Add bullet to scene (use current scene root)
 		GetTree().CurrentScene.AddChild(droneNode);
 
-		droneNode.GlobalPosition = spawnMarker.GlobalPosition;
-		droneNode.Direction = shootDirection;
+		// droneNode.GlobalPosition = spawnMarker.GlobalPosition;
+		// droneNode.Direction = shootDirection;
 
-		// drone.Activate(this, spawnMarker.GlobalPosition, _despawnMarker.GlobalPosition);
+		droneNode.Activate(this, spawnMarker.GlobalPosition, _despawnMarker.GlobalPosition);
 
 	}
 

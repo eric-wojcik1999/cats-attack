@@ -35,7 +35,6 @@ public partial class PercyDrone : Area3D
 	private float _activeTimer;
 	private float _retargetTimer;
 	private float _wobbleSeed;
-	public Vector3 Direction { get; set; } = Vector3.Forward;
 
 	public override void _Ready()
 	{
@@ -51,8 +50,8 @@ public partial class PercyDrone : Area3D
 	{
 		float dt = (float)delta;
 
-		// possibly delete
-		GlobalPosition += Direction * _speed * dt;
+		// // possibly delete
+		// GlobalPosition += Direction * _speed * dt;
 
 		if (_state == PercyState.Inactive)
 		{
@@ -81,7 +80,7 @@ public partial class PercyDrone : Area3D
 				UpdateHunting(dt);
 				break;
 			case PercyState.Exiting:
-				// UppdateExiting(dt);
+				UpdateExiting(dt);
 				break;
 		}
 	}
@@ -115,6 +114,14 @@ public partial class PercyDrone : Area3D
 		{
 			_state = PercyState.Hunting;
 		}
+	}
+
+	private void Deactivate()
+	{
+		_state = PercyState.Inactive;
+		_currentTarget = null;
+		Visible = false;
+		Monitoring = false;
 	}
 
 	// Every physics frame, the drone checks whether it has a valid enemy target.
@@ -152,6 +159,16 @@ public partial class PercyDrone : Area3D
 		}
 	}
 
+	private void UpdateExiting(float dt)
+	{
+		FlyTowards(_despawnPosition, dt);
+
+		if (GlobalPosition.DistanceTo(_despawnPosition) < 1.5f) 
+		{
+			Deactivate();
+		}
+	}
+
 	private void StartExit()
 	{
 		_currentTarget = null;
@@ -176,7 +193,8 @@ public partial class PercyDrone : Area3D
 		Vector3 desiredDirection = toTarget.Normalized();
 		Vector3 desiredVelocity = desiredDirection * _speed;
 
-		// desiredVeclocity += GetWobbleOffset();
+		desiredVelocity += GetWobbleOffset();
+		_velocity = _velocity.Lerp(desiredVelocity, Mathf.Clamp(_turnSpeed * dt, 0f, 1f));
 
 		GlobalPosition += _velocity * dt;
 
@@ -248,5 +266,15 @@ public partial class PercyDrone : Area3D
 				_retargetTimer = 0f;
 			}
 		}
+	}
+
+	private Vector3 GetWobbleOffset()
+	{
+		float t = Time.GetTicksMsec() / 1000f;
+		float x = Mathf.Sin((t + _wobbleSeed) * _wobbleSpeed);
+		float y = Mathf.Cos((t + _wobbleSeed) * _wobbleSpeed * 1.37f);
+		float z = Mathf.Sin((t + _wobbleSeed) * _wobbleSpeed * 0.71f);
+
+		return new Vector3(x, y, z) * _wobbleStrength;
 	}
 }

@@ -7,7 +7,9 @@ inner_radius = 0.2
 outer_radius = 0.75
 
 [sub_resource type="ORMMaterial3D" id="ORMMaterial3D_r81j5"]
-albedo_color = Color(1.4439225e-06, 0.60264224, 0.3617186, 1)
+transparency = 1
+blend_mode = 4
+albedo_color = Color(0, 0.6039216, 0.36078432, 0.5372549)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_r81j5"]
 size = Vector3(1.75, 1.5, 1)
