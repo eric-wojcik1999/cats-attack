@@ -1,0 +1,25 @@
+[gd_scene load_steps=5 format=3 uid="uid://bdr78xmt07g35"]
+
+[ext_resource type="Script" uid="uid://mv8qbw20avva" path="res://Entities/Players/PercyDrone.cs" id="1_8tafh"]
+
+[sub_resource type="TorusMesh" id="TorusMesh_r81j5"]
+inner_radius = 0.2
+outer_radius = 0.75
+
+[sub_resource type="ORMMaterial3D" id="ORMMaterial3D_r81j5"]
+albedo_color = Color(1.4439225e-06, 0.60264224, 0.3617186, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_r81j5"]
+size = Vector3(1.75, 1.5, 1)
+
+[node name="PercyDrone" type="Area3D"]
+script = ExtResource("1_8tafh")
+
+[node name="PercyDroneMeshTemp" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0)
+mesh = SubResource("TorusMesh_r81j5")
+surface_material_override/0 = SubResource("ORMMaterial3D_r81j5")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.125, 0, 0)
+shape = SubResource("BoxShape3D_r81j5")

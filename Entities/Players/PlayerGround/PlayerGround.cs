@@ -27,9 +27,19 @@ public partial class PlayerGround : CharacterBody3D
 	private Vector3 _knockbackHorizontal = Vector3.Zero;
 	[Export] public int _collideDamageAmount = 1;
 	[Export] public NodePath _playerMeshNodePath = "PlayerMeshTemp";
+	
+	[Export] public NodePath _droneSpawnLeftPath = "PercyDroneSpawnLeft";
+	[Export] public NodePath _droneSpawnRightPath = "PercyDroneSpawnRight";
+	[Export] public NodePath _droneDespawnPath = "PercyDroneDespawn";
+
 	private bool _hasDied = false;
 	
 	[Export] private Node3D _playerAirPositionMarker;
+	[Export] public PackedScene _percyDroneScene;
+	private Node3D _spawnLeft;
+	private Node3D _spawnRight;
+	private Node3D _despawnMarker;
+
 
 	// Getters 
 	public int Health => _health;
@@ -43,6 +53,9 @@ public partial class PlayerGround : CharacterBody3D
 	{
 		_currentTurnDegPerSec = _defaultTurnDegPerSec;
 		_cameraController = GetNode<Node3D>("CameraController");
+		_spawnLeft = GetNode<Node3D>(_droneSpawnLeftPath);
+		_spawnRight = GetNode<Node3D>(_droneSpawnRightPath);
+		_despawnMarker = GetNode<Node3D>(_droneDespawnPath);
 	}
     
 	public override void _PhysicsProcess(double delta)
@@ -106,6 +119,14 @@ public partial class PlayerGround : CharacterBody3D
 			{
 				newVelocity.Y = _baseJumpVelocity;
 			}
+
+			// ───── testing percy drone ─────
+			if (Input.IsActionJustPressed("jump"))
+			{
+				// delete me
+				SpawnPercyDrone();
+			}
+
 
 			// ───── Auto-forward movement ─────
 			Vector3 forwardVelocity = forwardDir * _autoForwardSpeed;
@@ -321,6 +342,30 @@ public partial class PlayerGround : CharacterBody3D
 				}
 			}
 		}
+	}
+
+	public void SpawnPercyDrone()
+	{
+		if (_percyDroneScene == null)
+		{
+			GD.PushError("[PlayerGround] Percy drone has not been assigned");
+			return;
+		}
+
+		Node3D spawnMarker = GD.Randf() < 0.5f ? _spawnLeft : _spawnRight;
+		Vector3 shootDirection = -spawnMarker.GlobalTransform.Basis.Z;
+		shootDirection = shootDirection.Normalized();
+
+		PercyDrone droneNode = _percyDroneScene.Instantiate<PercyDrone>();
+
+		// Add bullet to scene (use current scene root)
+		GetTree().CurrentScene.AddChild(droneNode);
+
+		droneNode.GlobalPosition = spawnMarker.GlobalPosition;
+		droneNode.Direction = shootDirection;
+
+		// drone.Activate(this, spawnMarker.GlobalPosition, _despawnMarker.GlobalPosition);
+
 	}
 
 }

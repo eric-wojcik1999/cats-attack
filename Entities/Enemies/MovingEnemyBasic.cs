@@ -2,7 +2,7 @@ using Godot;
 using System;
 using System.Threading.Tasks;
 
-public partial class MovingEnemyBasic : CharacterBody3D
+public partial class MovingEnemyBasic : CharacterBody3D, IPercyDroneTarget
 {
 	[Export] private float _baseMovementSpeed = 5.0f;
 	// (1, 0, 0) <- the positive 1 is 'left' on the x-axis
@@ -18,9 +18,11 @@ public partial class MovingEnemyBasic : CharacterBody3D
 	private RayCast3D _detectFloorRayCast;
 	[ExportGroup("Death")]
 	[Export] public PackedScene _explosionScene;
+	private bool _isDead = false;
 
 	public override void _Ready()
 	{
+		AddToGroup("Enemies");
 		_sideDetection = GetNode<Area3D>(_sideDetectionPath);
 		_sideDetection.BodyEntered += OnSideDetectionPlayerEntered;
 		_topDetection = GetNode<Area3D>(_topDetectionPath);
@@ -141,5 +143,15 @@ public partial class MovingEnemyBasic : CharacterBody3D
         explosionNode.GlobalPosition = GlobalPosition;
         _ = explosionNode.Explode();
     }
+
+	public void PercyDroneHit()
+	{
+		Die();
+	}
+
+	public bool IsValidPercyDroneTarget()
+	{
+		return _isDead == false && IsInsideTree() == true;
+	}
 
 }

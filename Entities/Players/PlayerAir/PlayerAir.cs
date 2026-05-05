@@ -291,7 +291,6 @@ public partial class PlayerAir : CharacterBody3D
     	GetTree().CurrentScene.AddChild(bulletNode);
 
 		bulletNode.GlobalPosition = _muzzleMarker.GlobalPosition;
-		bulletNode.GlobalRotation = _muzzleMarker.GlobalRotation;
 		bulletNode.Direction = shootDirection;
 	}
 }

@@ -2,7 +2,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-public partial class TurretEnemyBasic : CharacterBody3D
+public partial class TurretEnemyBasic : CharacterBody3D, IPercyDroneTarget
 {
 	[ExportGroup("Node Paths")]
     [Export] private NodePath _yawPivotPath = "YawPivot"; // Yaw rotates here
@@ -11,7 +11,6 @@ public partial class TurretEnemyBasic : CharacterBody3D
     [Export] private NodePath _losPath = "YawPivot/PitchPivot/MuzzleMarker/LineOfSightRayCast";
     [Export] private NodePath _aggroRangePath = "AggroRange";
     [Export] private NodePath _sideDetectionPath = "SideDetection";
-    
     [Export] private NodePath _topDetectionPath = "TopDetection";
 
     [ExportGroup("Targeting")]
@@ -26,10 +25,9 @@ public partial class TurretEnemyBasic : CharacterBody3D
     [Export] private float _rateOfFire = 1.0f;
     [Export] private float _maxFireDistance = 999f;
 
-
 	[ExportGroup("Death")]
 	[Export] public PackedScene _explosionScene;
-
+    private bool _isDead = false;
 
     [ExportGroup("Properties")]
     [Export] public int _damageAmount = 1;
@@ -46,7 +44,6 @@ public partial class TurretEnemyBasic : CharacterBody3D
     private RayCast3D _losRay;
     private Area3D _aggroRange;
     private Area3D _sideDetection;
-    
     private Area3D _topDetection;
 
     // // This is actually overkill since there is only ever one target, but keeping anyway
@@ -56,6 +53,7 @@ public partial class TurretEnemyBasic : CharacterBody3D
 
     public override void _Ready()
     {
+        AddToGroup("Enemies");
         _yawPivot = GetNodeOrNull<Node3D>(_yawPivotPath);
         _pitchPivot = GetNodeOrNull<Node3D>(_pivotPitchPath);
         _muzzleMarker = GetNodeOrNull<Node3D>(_muzzleMarkerPath);
@@ -252,6 +250,7 @@ public partial class TurretEnemyBasic : CharacterBody3D
 		_currentHealth = Math.Max(_currentHealth - bulletDamage, 0);
 
 		if (_currentHealth <= 0) {
+			_isDead = true;
 			GD.Print("Killed enemy!");
 			Global.Instance.AddCurrency(_currencyAmount);
             ExplodeSelf();
@@ -273,5 +272,13 @@ public partial class TurretEnemyBasic : CharacterBody3D
         _ = explosionNode.Explode();
     }
 
+	public void PercyDroneHit()
+	{
+	    Hurt(999);
+	}
 
+	public bool IsValidPercyDroneTarget()
+	{
+		return _isDead == false && IsInsideTree() == true;
+	}
 }

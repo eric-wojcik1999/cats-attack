@@ -1,6 +1,7 @@
-[gd_scene load_steps=7 format=3 uid="uid://d4nm5bdaxqhsr"]
+[gd_scene load_steps=8 format=3 uid="uid://d4nm5bdaxqhsr"]
 
 [ext_resource type="Script" uid="uid://csfkggqcwrgf" path="res://Entities/Players/PlayerGround/PlayerGround.cs" id="1_lw8c3"]
+[ext_resource type="PackedScene" uid="uid://bdr78xmt07g35" path="res://Entities/Players/PercyDrone.tscn" id="2_f0fqm"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_mv8dw"]
 
@@ -22,6 +23,7 @@ collision_mask = 6
 script = ExtResource("1_lw8c3")
 _baseJumpVelocity = 3.0
 _playerAirPositionMarker = NodePath("PlayerAirPositionMarker")
+_percyDroneScene = ExtResource("2_f0fqm")
 
 [node name="PlayerMeshTemp" type="MeshInstance3D" parent="."]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, 0, 0)
@@ -50,3 +52,12 @@ current = true
 
 [node name="PlayerAirPositionMarker" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.75, 3, 0.5)
+
+[node name="PercyDroneSpawnLeft" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 2.75, 4.75)
+
+[node name="PercyDroneSpawnRight" type="Node3D" parent="."]
+transform = Transform3D(0.99999994, 0, 0, 0, 1, 0, 0, 0, 0.99999994, 1.75, 2.75, 5)
+
+[node name="PercyDroneDespawn" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, 2.75, 4.5)

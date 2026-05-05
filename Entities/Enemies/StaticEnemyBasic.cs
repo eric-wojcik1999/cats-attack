@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public partial class StaticEnemyBasic : CharacterBody3D
+public partial class StaticEnemyBasic : CharacterBody3D, IPercyDroneTarget
 {
 	[Export] public NodePath _sideDetectionPath = "SideDetection";
 	
@@ -12,10 +12,12 @@ public partial class StaticEnemyBasic : CharacterBody3D
 	private Area3D _topDetection;
 	[ExportGroup("Death")]
 	[Export] public PackedScene _explosionScene;
+	private bool _isDead = false;
 
 
 	public override void _Ready()
 	{
+		AddToGroup("Enemies");
 		_sideDetection = GetNode<Area3D>(_sideDetectionPath);
 		_sideDetection.BodyEntered += OnSideDetectionPlayerEntered;
 		_topDetection = GetNode<Area3D>(_topDetectionPath);
@@ -66,6 +68,13 @@ public partial class StaticEnemyBasic : CharacterBody3D
 
 	public void Die()
 	{
+		if (_isDead)
+		{
+			return;
+		}
+
+		_isDead = true;
+
 		GD.Print("Killed enemy!");
 		Global.Instance.AddCurrency(_currencyAmount);
 		ExplodeSelf();
@@ -85,4 +94,14 @@ public partial class StaticEnemyBasic : CharacterBody3D
         explosionNode.GlobalPosition = GlobalPosition;
         _ = explosionNode.Explode();
     }
+
+	public void PercyDroneHit()
+	{
+		Die();
+	}
+
+	public bool IsValidPercyDroneTarget()
+	{
+		return _isDead == false && IsInsideTree() == true;
+	}
 }

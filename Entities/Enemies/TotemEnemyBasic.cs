@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public partial class TotemEnemyBasic : CharacterBody3D
+public partial class TotemEnemyBasic : CharacterBody3D, IPercyDroneTarget
 {
 	[Export] public float _degreesPerSecond = 180f;
 	[Export] public NodePath _sideDetectionPath = "SideDetection";
@@ -9,11 +9,13 @@ public partial class TotemEnemyBasic : CharacterBody3D
 	[Export] public int _currencyAmount = 4;
 	[ExportGroup("Death")]
 	[Export] public PackedScene _explosionScene;
+	private bool _isDead = false;
 	private Area3D _sideDetection;
 	private int _currentHealth = 12;
 
 	public override void _Ready()
 	{
+		AddToGroup("Enemies");
 		_sideDetection = GetNode<Area3D>(_sideDetectionPath);
 		_sideDetection.BodyEntered += OnSideDetectionPlayerEntered;
 	}
@@ -50,6 +52,7 @@ public partial class TotemEnemyBasic : CharacterBody3D
 		_currentHealth = Math.Max(_currentHealth - bulletDamage, 0);
 
 		if (_currentHealth <= 0) {
+			_isDead = true;
 			GD.Print("Killed enemy!");
 			Global.Instance.AddCurrency(_currencyAmount);
 			ExplodeSelf();
@@ -74,4 +77,14 @@ public partial class TotemEnemyBasic : CharacterBody3D
         _ = explosionNode.Explode();
 		_ = explosionNode2.Explode();
     }
+
+	public void PercyDroneHit()
+	{
+		Hurt(999);
+	}
+
+	public bool IsValidPercyDroneTarget()
+	{
+		return _isDead == false && IsInsideTree() == true;
+	}
 }
