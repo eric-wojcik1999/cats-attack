@@ -1,0 +1,35 @@
+[gd_scene load_steps=5 format=3 uid="uid://c10pt2qia8poh"]
+
+[ext_resource type="Script" uid="uid://byj67e1gnmiqe" path="res://Entities/Pickups/PowerUps/PercyPowerup.cs" id="1_edjjy"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_hmbcr"]
+radius = 0.6
+height = 1.3
+radial_segments = 4
+rings = 1
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_edjjy"]
+transparency = 1
+blend_mode = 2
+albedo_color = Color(5.824373e-06, 0.73631835, 0.21750417, 1)
+metallic = 0.15
+metallic_specular = 1.0
+emission_enabled = true
+emission = Color(0, 0.1882353, 0.0627451, 1)
+refraction_enabled = true
+refraction_scale = 1.0
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_hmbcr"]
+radius = 0.75
+
+[node name="PercyPowerUp" type="Area3D"]
+transform = Transform3D(1.3, 0, 0, 0, 1.3, 0, 0, 0, 1.3, 0, 0, 0)
+collision_layer = 4
+script = ExtResource("1_edjjy")
+
+[node name="PercyPowerupTempMesh" type="MeshInstance3D" parent="."]
+mesh = SubResource("SphereMesh_hmbcr")
+surface_material_override/0 = SubResource("StandardMaterial3D_edjjy")
+
+[node name="PercyPowerupCollisionTemp" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_hmbcr")

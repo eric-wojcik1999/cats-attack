@@ -292,5 +292,7 @@ public partial class PlayerAir : CharacterBody3D
 
 		bulletNode.GlobalPosition = _muzzleMarker.GlobalPosition;
 		bulletNode.Direction = shootDirection;
+		// Make the bullet visually face the direction it is moving.
+		bulletNode.LookAt(bulletNode.GlobalPosition + shootDirection, Vector3.Up);
 	}
 }

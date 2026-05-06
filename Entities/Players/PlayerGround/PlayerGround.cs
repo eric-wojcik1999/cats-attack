@@ -7,6 +7,7 @@ public partial class PlayerGround : CharacterBody3D
 
 	[Signal] public delegate void HealthChangedEventHandler(int amount);
 	[Signal] public delegate void DiedEventHandler();
+	[Signal] public delegate void PercyPowerupCollectedEventHandler();
 	[Export] private float _baseMovementSpeed = 5.0f;
 	[Export] private float _autoForwardSpeed = 6.0f;
 	[Export] private float _baseJumpVelocity = 4.5f;
@@ -119,14 +120,6 @@ public partial class PlayerGround : CharacterBody3D
 			{
 				newVelocity.Y = _baseJumpVelocity;
 			}
-
-			// ───── testing percy drone ─────
-			if (Input.IsActionJustPressed("jump"))
-			{
-				// delete me
-				SpawnPercyDrone();
-			}
-
 
 			// ───── Auto-forward movement ─────
 			Vector3 forwardVelocity = forwardDir * _autoForwardSpeed;
@@ -344,7 +337,7 @@ public partial class PlayerGround : CharacterBody3D
 		}
 	}
 
-	public void SpawnPercyDrone()
+	public async Task SpawnPercyDrone()
 	{
 		if (_percyDroneScene == null)
 		{
@@ -352,20 +345,17 @@ public partial class PlayerGround : CharacterBody3D
 			return;
 		}
 
+		EmitSignal(SignalName.PercyPowerupCollected);
+		await ToSignal(GetTree().CreateTimer(1.0f), SceneTreeTimer.SignalName.Timeout);
+
 		Node3D spawnMarker = GD.Randf() < 0.5f ? _spawnLeft : _spawnRight;
-		// Vector3 shootDirection = -spawnMarker.GlobalTransform.Basis.Z;
-		// shootDirection = shootDirection.Normalized();
 
 		PercyDrone droneNode = _percyDroneScene.Instantiate<PercyDrone>();
 
 		// Add bullet to scene (use current scene root)
 		GetTree().CurrentScene.AddChild(droneNode);
 
-		// droneNode.GlobalPosition = spawnMarker.GlobalPosition;
-		// droneNode.Direction = shootDirection;
-
 		droneNode.Activate(this, spawnMarker.GlobalPosition, _despawnMarker.GlobalPosition);
-
 	}
 
 }

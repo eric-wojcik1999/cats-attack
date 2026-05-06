@@ -12,7 +12,7 @@ public partial class PercyDrone : Area3D
 	}
 
 	[ExportGroup("Behaviour")]
-	[Export] private float _activeTime =  8f;
+	[Export] private float _activeTime =  15f;
 	[Export] private float _targetRadius = 35f;
 	[Export] private float _speed = 24f;
 	[Export] private float _turnSpeed = 9f;
@@ -50,9 +50,6 @@ public partial class PercyDrone : Area3D
 	{
 		float dt = (float)delta;
 
-		// // possibly delete
-		// GlobalPosition += Direction * _speed * dt;
-
 		if (_state == PercyState.Inactive)
 		{
 			return;
@@ -60,7 +57,7 @@ public partial class PercyDrone : Area3D
 
 		if (_owner == null || !IsInstanceValid(_owner))
 		{
-			// StartExit();
+			StartExit();
 			return;
 		}
 
@@ -68,7 +65,7 @@ public partial class PercyDrone : Area3D
 
 		if (_activeTimer <= 0f && _state != PercyState.Exiting)
 		{
-			// StartExit();
+			StartExit();
 		}
 
 		switch(_state)
@@ -122,6 +119,7 @@ public partial class PercyDrone : Area3D
 		_currentTarget = null;
 		Visible = false;
 		Monitoring = false;
+		QueueFree();
 	}
 
 	// Every physics frame, the drone checks whether it has a valid enemy target.
@@ -143,7 +141,7 @@ public partial class PercyDrone : Area3D
 
 		if (_currentTarget == null)
 		{
-			Vector3 idlePoint = _owner.GlobalPosition + Vector3.Up * 0.8f;
+			Vector3 idlePoint = _despawnPosition + Vector3.Up * 0.8f;
 			FlyTowards(idlePoint, dt);
 			return;
 		}
