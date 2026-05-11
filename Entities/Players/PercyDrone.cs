@@ -12,7 +12,6 @@ public partial class PercyDrone : Area3D
 	}
 
 	[ExportGroup("Behaviour")]
-	[Export] private float _activeTime =  15f;
 	[Export] private float _targetRadius = 35f;
 	[Export] private float _speed = 24f;
 	[Export] private float _turnSpeed = 9f;
@@ -82,7 +81,7 @@ public partial class PercyDrone : Area3D
 		}
 	}
 
-	public void Activate(Node3D owner, Vector3 spawnPosition, Vector3 despawnPosition)
+	public void Activate(Node3D owner, Vector3 spawnPosition, Vector3 despawnPosition, float duration)
 	{
 		_owner = owner;
 		_spawnPosition = spawnPosition;
@@ -93,7 +92,7 @@ public partial class PercyDrone : Area3D
 		Visible = true;
 		Monitoring = true;
 
-		_activeTimer = _activeTime;
+		_activeTimer = duration;
 		_retargetTimer = 0f;
 		_currentTarget = null;
 		_velocity = Vector3.Zero;

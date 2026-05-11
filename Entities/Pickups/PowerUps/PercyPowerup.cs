@@ -36,23 +36,7 @@ public partial class PercyPowerup : Area3D
         if (body is PlayerGround player)
 		{
 			GD.Print($"[PercyPowerup] has been picked up by the player");
-
-			if (Global.Instance != null)
-			{
-				_ = player.SpawnPercyDrone();
-			}
-			else 
-			{
-				GD.PushError("[PercyPowerup] Global.Instance is null. Is Global autoload configured?");
-			}
-			// // Play SFX if assigned (note: if you QueueFree immediately, you may cut sound)
-			// if (PickupSfx != null)
-			// {
-			// 	_audioPlayer.Stream = PickupSfx;
-			// 	_audioPlayer.GlobalPosition = GlobalPosition;
-			// 	_audioPlayer.Play();
-			// }
-
+			_ = player.SpawnPercyDrone();
 			QueueFree();
 		}
 	}

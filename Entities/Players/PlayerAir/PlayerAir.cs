@@ -36,6 +36,15 @@ public partial class PlayerAir : CharacterBody3D
 	private float _fireTimer = 0f;
 	private Node3D _muzzleMarker;
 
+	[ExportGroup("Pitch Aim")]
+	[Export] private float _pitchMouseSensitivity = 0.0025f;
+	[Export] private float _minPitchDeg = -35f;
+	[Export] private float _maxPitchDeg = 45f;
+	[Export] private bool _invertMouseY = false;
+	[Export] private float _pitchSmoothSpeed = 18f;
+	private float _targetPitch = 0f;
+	private float _currentPitch = 0f;
+
 	public override void _Ready()
 	{
 		_muzzleMarker = GetNode<Node3D>(_muzzleMarkerPath);
@@ -89,6 +98,22 @@ public partial class PlayerAir : CharacterBody3D
 				ray.Enabled = true;
 			}
 		}
+	}
+
+	public override void _Input(InputEvent @event)
+	{
+		if (@event is InputEventMouseMotion mouseMotion)
+		{
+			float direction = _invertMouseY ? 1f : -1f;
+
+			_targetPitch += mouseMotion.Relative.Y * _pitchMouseSensitivity * direction;
+
+			float minPitch = Mathf.DegToRad(_minPitchDeg);
+			float maxPitch = Mathf.DegToRad(_maxPitchDeg);
+
+			_targetPitch = Mathf.Clamp(_targetPitch, minPitch, maxPitch);
+		}
+
 	}
 
 	public override void _PhysicsProcess(double delta)

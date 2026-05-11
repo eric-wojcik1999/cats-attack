@@ -8,6 +8,7 @@ public partial class PlayerGround : CharacterBody3D
 	[Signal] public delegate void HealthChangedEventHandler(int amount);
 	[Signal] public delegate void DiedEventHandler();
 	[Signal] public delegate void PercyPowerupCollectedEventHandler();
+	[Signal] public delegate void PercyPowerupActivatedEventHandler(float duration);
 	[Export] private float _baseMovementSpeed = 5.0f;
 	[Export] private float _autoForwardSpeed = 6.0f;
 	[Export] private float _baseJumpVelocity = 4.5f;
@@ -32,6 +33,7 @@ public partial class PlayerGround : CharacterBody3D
 	[Export] public NodePath _droneSpawnLeftPath = "PercyDroneSpawnLeft";
 	[Export] public NodePath _droneSpawnRightPath = "PercyDroneSpawnRight";
 	[Export] public NodePath _droneDespawnPath = "PercyDroneDespawn";
+	[Export] private float _percyPowerupDuration = 15f;
 
 	private bool _hasDied = false;
 	
@@ -346,16 +348,16 @@ public partial class PlayerGround : CharacterBody3D
 		}
 
 		EmitSignal(SignalName.PercyPowerupCollected);
+		EmitSignal(SignalName.PercyPowerupActivated, _percyPowerupDuration);
 		await ToSignal(GetTree().CreateTimer(1.0f), SceneTreeTimer.SignalName.Timeout);
 
 		Node3D spawnMarker = GD.Randf() < 0.5f ? _spawnLeft : _spawnRight;
-
 		PercyDrone droneNode = _percyDroneScene.Instantiate<PercyDrone>();
 
 		// Add bullet to scene (use current scene root)
 		GetTree().CurrentScene.AddChild(droneNode);
 
-		droneNode.Activate(this, spawnMarker.GlobalPosition, _despawnMarker.GlobalPosition);
+		droneNode.Activate(this, spawnMarker.GlobalPosition, _despawnMarker.GlobalPosition, _percyPowerupDuration);
 	}
 
 }

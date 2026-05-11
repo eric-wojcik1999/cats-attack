@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://cehky8lel227e"]
+[gd_scene load_steps=8 format=3 uid="uid://cehky8lel227e"]
 
 [ext_resource type="Script" uid="uid://vw7qtkwqr8jr" path="res://UI/Hud.cs" id="1_ne75i"]
+[ext_resource type="Texture2D" uid="uid://bflhbv8eaekbm" path="res://Entities/Pickups/PowerUps/percyicon.png" id="2_bytes"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_levl0"]
 bg_color = Color(0.174646, 0.174646, 0.174646, 0.45882353)
@@ -8,6 +9,31 @@ corner_radius_top_left = 15
 corner_radius_top_right = 15
 corner_radius_bottom_right = 15
 corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2o5uh"]
+bg_color = Color(0, 0, 0, 0.41568628)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 5
+expand_margin_left = 10.0
+expand_margin_right = 10.0
+
+[sub_resource type="LabelSettings" id="LabelSettings_ne75i"]
+font_size = 40
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ne75i"]
+bg_color = Color(0.18822904, 0.18822904, 0.18822904, 1)
+border_width_left = 250
+border_color = Color(0.29715472, 0.108520575, 0.09729979, 1)
+border_blend = true
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bytes"]
+bg_color = Color(0.616649, 0.00028628172, 0.6183312, 1)
+border_width_left = 210
+border_width_top = 15
+border_color = Color(0.5892243, 0.22635931, 0.40551934, 1)
+border_blend = true
 
 [node name="HUD" type="CanvasLayer"]
 script = ExtResource("1_ne75i")
@@ -69,3 +95,47 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(1, 0.08235294, 1, 0)
+
+[node name="GameMessageContainer" type="PanelContainer" parent="."]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -0.5
+offset_top = -85.0
+offset_right = 0.5
+offset_bottom = -29.99878
+grow_horizontal = 2
+grow_vertical = 0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_2o5uh")
+
+[node name="GameMessage" type="Label" parent="GameMessageContainer"]
+layout_mode = 2
+label_settings = SubResource("LabelSettings_ne75i")
+horizontal_alignment = 1
+
+[node name="PercyProgressBar" type="ProgressBar" parent="."]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -615.0
+offset_top = 67.0
+offset_right = -75.0
+offset_bottom = 127.0
+grow_horizontal = 0
+theme_override_styles/background = SubResource("StyleBoxFlat_ne75i")
+theme_override_styles/fill = SubResource("StyleBoxFlat_bytes")
+step = 0.0
+value = 100.0
+rounded = true
+
+[node name="PercyPowerupIcon" type="TextureRect" parent="."]
+offset_left = 1204.0
+offset_top = 67.0
+offset_right = 1287.0
+offset_bottom = 127.0
+texture = ExtResource("2_bytes")
+expand_mode = 1
