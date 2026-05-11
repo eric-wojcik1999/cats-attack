@@ -154,6 +154,12 @@ public partial class PlayerAir : CharacterBody3D
 			float yawStep = Mathf.Clamp(_yawFollowSpeed * dt, 0f, 1f);
 			// Moves current yaw towards the target yaw
 			rotation.Y +=  diff * yawStep;
+			// Calculate pitch
+			float pitchStep = Mathf.Clamp(_pitchSmoothSpeed * dt, 0f, 1f);
+			_currentPitch = Mathf.Lerp(_currentPitch, _targetPitch, pitchStep);
+			rotation.X = _currentPitch;
+			rotation.Z = 0f;
+
 			GlobalRotation = rotation;
 
 			// Fire bullets
