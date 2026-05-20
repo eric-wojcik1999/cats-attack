@@ -13,8 +13,8 @@ public partial class CoinDefinition : Resource
     [Export(PropertyHint.MultilineText)]
     public string PickupMessage { get; set; } = "Picked up ${name} + ${amount}";
 
-    [Export]
-    public PackedScene ModelScene { get; set; }
+    // [Export]
+    // public PackedScene ModelScene { get; set; }
 
     [Export]
     public AudioStream PickupSfx { get; set; }

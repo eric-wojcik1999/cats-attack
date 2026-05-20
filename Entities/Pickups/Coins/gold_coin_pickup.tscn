@@ -1,0 +1,10 @@
+[gd_scene load_steps=4 format=3 uid="uid://d01wskgwk2c21"]
+
+[ext_resource type="PackedScene" uid="uid://cguppm588mcqk" path="res://Entities/Pickups/Coins/coin_pickup.tscn" id="1_snuwn"]
+[ext_resource type="PackedScene" uid="uid://cp8n11yjtr4la" path="res://Entities/Pickups/Coins/Meshes/gold_coin_mesh.tscn" id="2_c33jh"]
+[ext_resource type="Resource" uid="uid://bn73s7v1yqpfw" path="res://Entities/Pickups/Coins/Resources/gold_coin.tres" id="2_nkdeq"]
+
+[node name="GoldCoinPickup" instance=ExtResource("1_snuwn")]
+Definition = ExtResource("2_nkdeq")
+
+[node name="GoldCoinMesh" parent="VisualRoot" index="0" instance=ExtResource("2_c33jh")]

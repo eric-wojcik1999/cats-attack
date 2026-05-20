@@ -1,5 +1,10 @@
-[gd_scene load_steps=2 format=3 uid="uid://dj1rimkdwvnh"]
+[gd_scene load_steps=4 format=3 uid="uid://dj1rimkdwvnh"]
 
 [ext_resource type="PackedScene" uid="uid://cguppm588mcqk" path="res://Entities/Pickups/Coins/coin_pickup.tscn" id="1_p3yrm"]
+[ext_resource type="PackedScene" uid="uid://c0usmlteru88j" path="res://Entities/Pickups/Coins/Meshes/bronze_coin_mesh.tscn" id="2_sc0ry"]
+[ext_resource type="Resource" uid="uid://chy6krn3ehsxj" path="res://Entities/Pickups/Coins/Resources/bronze_coin.tres" id="2_xup7a"]
 
 [node name="BronzeCoinPickup" instance=ExtResource("1_p3yrm")]
+Definition = ExtResource("2_xup7a")
+
+[node name="BronzeCoinMesh" parent="VisualRoot" index="0" instance=ExtResource("2_sc0ry")]

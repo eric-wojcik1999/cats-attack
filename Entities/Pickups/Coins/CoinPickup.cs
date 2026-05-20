@@ -19,8 +19,6 @@ public partial class CoinPickup : Area3D
 	{
 		BodyEntered += OnPlayerEntered;
 		_visualRoot = GetNodeOrNull<Node3D>(VisualRootPath);
-		
-		ApplyDefinition();
 
 		// //  Initialise audio player
         // _audioPlayer = GetNodeOrNull<AudioStreamPlayer3D>("PickupAudio");
@@ -36,33 +34,6 @@ public partial class CoinPickup : Area3D
 	{
 		 // Simple spin effect
 		RotateY(Mathf.DegToRad(SpinDegreesPerSecond) * (float)delta);
-	}
-
-	private void ApplyDefinition()
-	{
-		if (Definition == null)
-		{
-			GD.PushWarning("[CoinPickup] No CoinDefinition assigned.");
-			return;
-		}
-
-		if (_visualRoot == null)
-		{
-			GD.PushWarning("[CoinPickup] VisualRoot node is missing");
-			return;
-		}
-
-		foreach (Node child in _visualRoot.GetChildren())
-		{
-			child.QueueFree();
-		}
-
-		if (Definition.ModelScene != null) 
-		{
-			// Applies custom resource model for coin using this script
-			Node model = Definition.ModelScene.Instantiate();
-			_visualRoot.AddChild(model);
-		}
 	}
 
 	private void OnPlayerEntered(Node body) 

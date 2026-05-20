@@ -1,11 +1,15 @@
-[gd_scene load_steps=11 format=3 uid="uid://csdvs0h5p6ume"]
+[gd_scene load_steps=15 format=3 uid="uid://csdvs0h5p6ume"]
 
 [ext_resource type="PackedScene" uid="uid://d4nm5bdaxqhsr" path="res://Entities/Players/PlayerGround/player-ground.tscn" id="1_j5bgn"]
 [ext_resource type="PackedScene" uid="uid://b8qoyreqkcblf" path="res://Entities/Markers/direction_marker.tscn" id="2_73khv"]
 [ext_resource type="PackedScene" uid="uid://cguppm588mcqk" path="res://Entities/Pickups/Coins/coin_pickup.tscn" id="3_cl86r"]
 [ext_resource type="PackedScene" uid="uid://bwfrqtd62aqnc" path="res://Entities/Enemies/static_enemy_basic.tscn" id="3_otfp5"]
+[ext_resource type="PackedScene" uid="uid://dj1rimkdwvnh" path="res://Entities/Pickups/Coins/bronze_coin_pickup.tscn" id="4_0scdy"]
 [ext_resource type="PackedScene" uid="uid://cehky8lel227e" path="res://UI/hud.tscn" id="4_cjwjn"]
+[ext_resource type="PackedScene" uid="uid://dshgihbg5ompd" path="res://Entities/Pickups/Coins/silver_coin_pickup.tscn" id="4_lmm5v"]
 [ext_resource type="PackedScene" uid="uid://djcdbqorg2qc" path="res://Entities/Enemies/moving_enemy_basic.tscn" id="5_1e8n7"]
+[ext_resource type="PackedScene" uid="uid://d01wskgwk2c21" path="res://Entities/Pickups/Coins/gold_coin_pickup.tscn" id="5_84xti"]
+[ext_resource type="PackedScene" uid="uid://6w3peblj34d2" path="res://Entities/Pickups/Coins/platnium_coin_pickup.tscn" id="6_25u40"]
 [ext_resource type="PackedScene" uid="uid://ck3n3piykfu2o" path="res://Entities/Players/PlayerAir/player_air.tscn" id="6_uap1t"]
 [ext_resource type="PackedScene" uid="uid://dvpytmgu5naqg" path="res://Entities/Enemies/totem_enemy_basic.tscn" id="7_72b4k"]
 [ext_resource type="PackedScene" uid="uid://dpkjb22ajxbvd" path="res://Entities/Enemies/turret-enemy-basic.tscn" id="9_etmm2"]
@@ -150,53 +154,68 @@ _turnDegPerSecOverride = 30.0
 
 [node name="Coins" type="Node3D" parent="."]
 
-[node name="CoinPickup" parent="Coins" instance=ExtResource("3_cl86r")]
+[node name="BronzeCoinPickup3" parent="Coins" instance=ExtResource("4_0scdy")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.25, 1, -11)
+VisualRootPath = NodePath("../BronzeCoinPickup/VisualRoot")
 
-[node name="CoinPickup2" parent="Coins" instance=ExtResource("3_cl86r")]
+[node name="BronzeCoinPickup2" parent="Coins" instance=ExtResource("4_0scdy")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.25, 1, -8.25)
+VisualRootPath = NodePath("../BronzeCoinPickup/VisualRoot")
 
-[node name="CoinPickup3" parent="Coins" instance=ExtResource("3_cl86r")]
+[node name="BronzeCoinPickup" parent="Coins" instance=ExtResource("4_0scdy")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.25, 1, -5.25)
 
-[node name="CoinPickup4" parent="Coins" instance=ExtResource("3_cl86r")]
+[node name="SilverCoinPickup" parent="Coins" instance=ExtResource("4_lmm5v")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.25, 1, -14)
 
-[node name="CoinPickup5" parent="Coins" instance=ExtResource("3_cl86r")]
+[node name="GoldCoinPickup" parent="Coins" instance=ExtResource("5_84xti")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.25, 1, -17)
 
-[node name="CoinPickup6" parent="Coins" instance=ExtResource("3_cl86r")]
+[node name="PlatniumCoinPickup6" parent="Coins" instance=ExtResource("6_25u40")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -45.5, -15.5, -199.25)
+VisualRootPath = NodePath("../PlatniumCoinPickup/VisualRoot")
 
-[node name="CoinPickup7" parent="Coins" instance=ExtResource("3_cl86r")]
+[node name="PlatniumCoinPickup5" parent="Coins" instance=ExtResource("6_25u40")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -45.5, -15.5, -195)
+VisualRootPath = NodePath("../PlatniumCoinPickup/VisualRoot")
 
-[node name="CoinPickup8" parent="Coins" instance=ExtResource("3_cl86r")]
+[node name="PlatniumCoinPickup4" parent="Coins" instance=ExtResource("6_25u40")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -45.5, -15.5, -191.25)
+VisualRootPath = NodePath("../PlatniumCoinPickup/VisualRoot")
 
-[node name="CoinPickup9" parent="Coins" instance=ExtResource("3_cl86r")]
+[node name="PlatniumCoinPickup3" parent="Coins" instance=ExtResource("6_25u40")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -45.5, -15.5, -186.75)
+VisualRootPath = NodePath("../PlatniumCoinPickup/VisualRoot")
 
-[node name="CoinPickup10" parent="Coins" instance=ExtResource("3_cl86r")]
+[node name="PlatniumCoinPickup2" parent="Coins" instance=ExtResource("6_25u40")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -45.5, -15.5, -181.75)
+VisualRootPath = NodePath("../PlatniumCoinPickup/VisualRoot")
 
-[node name="CoinPickup11" parent="Coins" instance=ExtResource("3_cl86r")]
+[node name="PlatniumCoinPickup" parent="Coins" instance=ExtResource("6_25u40")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -45.5, -15.5, -176.25)
 
-[node name="CoinPickup12" parent="Coins" instance=ExtResource("3_cl86r")]
+[node name="GoldCoinPickup5" parent="Coins" instance=ExtResource("5_84xti")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -45.5, -15.5, -171.5)
+VisualRootPath = NodePath("../GoldCoinPickup/VisualRoot")
 
-[node name="CoinPickup13" parent="Coins" instance=ExtResource("3_cl86r")]
+[node name="GoldCoinPickup4" parent="Coins" instance=ExtResource("5_84xti")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -45.5, -15.5, -167.25)
+VisualRootPath = NodePath("../GoldCoinPickup/VisualRoot")
 
-[node name="CoinPickup14" parent="Coins" instance=ExtResource("3_cl86r")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -45.5, -15.5, -163.5)
+[node name="GoldCoinPickup3" parent="Coins" instance=ExtResource("5_84xti")]
+VisualRootPath = NodePath("../GoldCoinPickup2/VisualRoot")
 
-[node name="CoinPickup15" parent="Coins" instance=ExtResource("3_cl86r")]
+[node name="GoldCoinPickup2" parent="Coins" instance=ExtResource("5_84xti")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -45.5, -15.5, -159)
+VisualRootPath = NodePath("../GoldCoinPickup/VisualRoot")
 
-[node name="CoinPickup16" parent="Coins" instance=ExtResource("3_cl86r")]
+[node name="SilverCoinPickup3" parent="Coins" instance=ExtResource("4_lmm5v")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -45.5, -15.5, -154)
+VisualRootPath = NodePath("../SilverCoinPickup/VisualRoot")
+
+[node name="SilverCoinPickup2" parent="Coins" instance=ExtResource("4_lmm5v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -45.5, -15.5, -148.5)
+VisualRootPath = NodePath("../SilverCoinPickup/VisualRoot")
 
 [node name="CoinPickup17" parent="Coins" instance=ExtResource("3_cl86r")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -45.5, -15.5, -148.5)

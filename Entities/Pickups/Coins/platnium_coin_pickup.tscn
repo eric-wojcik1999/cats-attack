@@ -1,0 +1,10 @@
+[gd_scene load_steps=4 format=3 uid="uid://6w3peblj34d2"]
+
+[ext_resource type="PackedScene" uid="uid://cguppm588mcqk" path="res://Entities/Pickups/Coins/coin_pickup.tscn" id="1_4uq7v"]
+[ext_resource type="Resource" uid="uid://bmft1wovnslan" path="res://Entities/Pickups/Coins/Resources/platnium_coin.tres" id="2_2jwp7"]
+[ext_resource type="PackedScene" uid="uid://wgty211j1frj" path="res://Entities/Pickups/Coins/Meshes/platnium_coin_mesh.tscn" id="2_6mjq4"]
+
+[node name="PlatniumCoinPickup" instance=ExtResource("1_4uq7v")]
+Definition = ExtResource("2_2jwp7")
+
+[node name="PlatniumCoinMesh" parent="." index="1" instance=ExtResource("2_6mjq4")]
