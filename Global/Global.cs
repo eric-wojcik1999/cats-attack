@@ -11,6 +11,8 @@ public partial class Global : Node
 	// Signal used by UI later
 	[Signal]
 	public delegate void CurrencyChangedEventHandler(int newValue);
+	[Signal]
+	public delegate void GameMessageRequestedEventHandler(string message);
 
 	// Built in function that can be called when a Node is added to the Node tree
 	// Singelton guard to protect against duplicates
@@ -35,11 +37,12 @@ public partial class Global : Node
 		}
 	}
 
-	public void AddCurrency(int amount)
+	public bool AddCurrency(int amount)
 	{
 		if (amount <= 0)
 		{
 			GD.PushWarning("Amount < 0.");
+			return false;
 		} 
 		else 
 		{
@@ -47,6 +50,17 @@ public partial class Global : Node
 			// Emit signal once amount in global instance has changed
 			EmitSignal(SignalName.CurrencyChanged, currency);
 			GD.Print($"[Global] Currency is now: {currency} (+{amount})");
+			return true;
 		}
+	}
+
+	public void RequestGameMessage(string message)
+	{
+		if (String.IsNullOrWhiteSpace(message))
+		{
+			return;
+		}
+
+		EmitSignal(SignalName.GameMessageRequested, message);
 	}
 }

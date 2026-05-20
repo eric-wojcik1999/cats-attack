@@ -1,0 +1,38 @@
+[gd_scene load_steps=7 format=3 uid="uid://wgty211j1frj"]
+
+[sub_resource type="Gradient" id="Gradient_3w82h"]
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_4md4e"]
+gradient = SubResource("Gradient_3w82h")
+
+[sub_resource type="Gradient" id="Gradient_uef78"]
+offsets = PackedFloat32Array(0, 0.21097046, 1)
+colors = PackedColorArray(0, 0, 0, 1, 0.3586498, 0.3586498, 0.3586498, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_3h4lq"]
+gradient = SubResource("Gradient_uef78")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mulvv"]
+albedo_color = Color(0.95617455, 0.97979736, 1.2160255, 1)
+metallic = 1.0
+metallic_specular = 1.0
+metallic_texture = SubResource("GradientTexture2D_3h4lq")
+emission = Color(0.43137255, 0.85882354, 0.43137255, 1)
+emission_energy_multiplier = 0.03
+heightmap_scale = -1.8
+heightmap_deep_parallax = true
+heightmap_min_layers = 8
+heightmap_max_layers = 32
+detail_enabled = true
+detail_blend_mode = 2
+detail_albedo = SubResource("GradientTexture2D_4md4e")
+
+[sub_resource type="PrismMesh" id="PrismMesh_angqp"]
+size = Vector3(1, 1, 0.4)
+
+[node name="PlatniumCoinMesh" type="Node3D"]
+
+[node name="CoinPickupMeshTemp" type="MeshInstance3D" parent="."]
+transform = Transform3D(-1, 8.742278e-08, 0, -8.742278e-08, -1, 0, 0, 0, 1, 0, 0, 0)
+material_override = SubResource("StandardMaterial3D_mulvv")
+mesh = SubResource("PrismMesh_angqp")

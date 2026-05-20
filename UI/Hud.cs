@@ -54,6 +54,7 @@ public partial class Hud : CanvasLayer
 		if (Global.Instance != null)
 		{
 			Global.Instance.CurrencyChanged += OnCurrencyChanged;
+			Global.Instance.GameMessageRequested += OnGameMessageRequested;
 		}
 		else 
 		{
@@ -101,12 +102,19 @@ public partial class Hud : CanvasLayer
         _scoreValueLabel.Text = newValue.ToString();
     }
 
+	private void OnGameMessageRequested(string message)
+	{
+		_gameMessageContainer.Visible = true;
+		ShowGameMessage(message);
+	}
+
     public override void _ExitTree()
     {
         // Unsubscribe to avoid stale handlers
         if (Global.Instance != null) 
 		{
             Global.Instance.CurrencyChanged -= OnCurrencyChanged;
+			Global.Instance.GameMessageRequested -= OnGameMessageRequested;
 		}
 		player.HealthChanged -= OnHealthChanged;
 		player.Died -= OnDied;
