@@ -1,7 +1,8 @@
-[gd_scene load_steps=15 format=3 uid="uid://csdvs0h5p6ume"]
+[gd_scene load_steps=16 format=3 uid="uid://csdvs0h5p6ume"]
 
 [ext_resource type="PackedScene" uid="uid://d4nm5bdaxqhsr" path="res://Entities/Players/PlayerGround/player-ground.tscn" id="1_j5bgn"]
 [ext_resource type="PackedScene" uid="uid://b8qoyreqkcblf" path="res://Entities/Markers/direction_marker.tscn" id="2_73khv"]
+[ext_resource type="PackedScene" uid="uid://cfocmj7wn5dpu" path="res://Entities/Prefabs/test-moving-plarform.tscn" id="3_25u40"]
 [ext_resource type="PackedScene" uid="uid://cguppm588mcqk" path="res://Entities/Pickups/Coins/coin_pickup.tscn" id="3_cl86r"]
 [ext_resource type="PackedScene" uid="uid://bwfrqtd62aqnc" path="res://Entities/Enemies/static_enemy_basic.tscn" id="3_otfp5"]
 [ext_resource type="PackedScene" uid="uid://dj1rimkdwvnh" path="res://Entities/Pickups/Coins/bronze_coin_pickup.tscn" id="4_0scdy"]
@@ -151,6 +152,11 @@ _turnDegPerSecOverride = 30.0
 [node name="DirectionMarker9" parent="DirectionMarkers" instance=ExtResource("2_73khv")]
 transform = Transform3D(1.9750003, 0, 2.3841858e-07, 0, 1.9749998, 0, -2.3841858e-07, 0, 1.9750003, -47.31176, -10.75, -131.2927)
 _turnDegPerSecOverride = 30.0
+
+[node name="BaseMovingPlatform" parent="DirectionMarkers" instance=ExtResource("3_25u40")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 0.25, -31.5)
+TravelTimeSeconds = 0.75
+WaitAtStartSeconds = 0.5
 
 [node name="Coins" type="Node3D" parent="."]
 

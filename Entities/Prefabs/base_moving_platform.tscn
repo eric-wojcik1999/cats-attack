@@ -1,0 +1,23 @@
+[gd_scene load_steps=4 format=3 uid="uid://byn07yin48ns0"]
+
+[ext_resource type="Script" uid="uid://duf45f8u5gb62" path="res://Entities/Prefabs/BaseMovingPlatform.cs" id="1_l1rjs"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_mnwhm"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_w4u7f"]
+size = Vector3(6.25, 0.5, 4.25)
+
+[node name="BaseMovingPlatform" type="Node3D"]
+script = ExtResource("1_l1rjs")
+
+[node name="Body" type="AnimatableBody3D" parent="."]
+collision_layer = 2
+collision_mask = 13
+
+[node name="Visual" type="MeshInstance3D" parent="Body"]
+mesh = SubResource("BoxMesh_mnwhm")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Body"]
+shape = SubResource("BoxShape3D_w4u7f")
+
+[node name="EndPoint" type="Marker3D" parent="."]
