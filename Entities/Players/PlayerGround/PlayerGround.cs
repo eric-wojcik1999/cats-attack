@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 
 public partial class PlayerGround : CharacterBody3D
 {
-
 	[Signal] public delegate void HealthChangedEventHandler(int amount);
 	[Signal] public delegate void DiedEventHandler();
 	[Signal] public delegate void PercyPowerupCollectedEventHandler();
@@ -52,6 +51,16 @@ public partial class PlayerGround : CharacterBody3D
 	public bool IsKnockbackActive => _knockbackTimer > 0f;
 	public Vector3 AirAnchorPosition => _playerAirPositionMarker != null ? _playerAirPositionMarker.GlobalPosition : GlobalPosition;
 
+	// Jump Pad vars
+	[Export] private float _jumpPadControlLockTime = 0.05f;
+	[Export] private float _jumpPadBlendBackTime = 7f;
+	[Export] private float _jumpPadAirSteeringStrength = 1.35f;
+	[Export] private float _jumpPadGravityMultiplier = 1.0f;
+	[Export] private float _jumpPadTriggerLockoutTime = 0.75f;
+	private float _externalLaunchTimer = 0f;
+	private float _jumpPadBlendBackTimer = 0f;
+	private float _jumpPadTriggerLockoutTimer = 0f;
+
 	public override void _Ready() 
 	{
 		_currentTurnDegPerSec = _defaultTurnDegPerSec;
@@ -71,6 +80,35 @@ public partial class PlayerGround : CharacterBody3D
 
 		float dt = (float)delta;
 
+		// ───── Jump Pad Handling ─────
+		if (_externalLaunchTimer > 0f)
+		{
+			_externalLaunchTimer -= dt;
+
+			if(_externalLaunchTimer < 0f) 
+			{
+				_externalLaunchTimer = 0f;
+			}
+		}
+
+		if (_jumpPadBlendBackTimer > 0f)
+		{
+			_jumpPadBlendBackTimer -= dt;
+			if (_jumpPadBlendBackTimer < 0f)
+			{
+				_jumpPadBlendBackTimer = 0f;
+			}
+		}
+
+		if (_jumpPadTriggerLockoutTimer > 0f)
+		{
+			_jumpPadTriggerLockoutTimer -= dt;
+			if (_jumpPadTriggerLockoutTimer < 0f)
+			{
+				_jumpPadTriggerLockoutTimer = 0f;
+			}
+		}
+
 		// ───── Update Player Rotation ─────
 		UpdateYawTurning(dt);
 
@@ -83,7 +121,14 @@ public partial class PlayerGround : CharacterBody3D
 		// ───── Apply gravity ─────
 		if (!onFloor)
 		{
-			newVelocity += GetGravity() * dt;
+			Vector3 gravity = GetGravity();
+
+			if (_jumpPadBlendBackTimer > 0f)
+			{
+				gravity *= _jumpPadGravityMultiplier;
+			}
+
+			newVelocity += gravity * dt;
 		}
 
 		// ───── Shared horizontal basis vectors ─────
@@ -97,9 +142,48 @@ public partial class PlayerGround : CharacterBody3D
 			lateralInputVelocity = rightDir * horizontalInput * _baseMovementSpeed;
 		}
 
-		// if: knowckback timer > 0, then KNOCKBACK STUN
+		// if: _jumpPadBlendBackTimer  > 0 THEN launch the player and blend back to normal velocity
+		// else if: knowckback timer > 0, then KNOCKBACK STUN
 		// else: NORMAL MOVEMENT
-		if (_knockbackTimer > 0f)
+		if (_jumpPadBlendBackTimer > 0f)
+		{
+			// // During a jump pad launch:
+			// // - keep the strong launch velocity
+			// // - allow a tiny amount of lateral steering
+			// // - do not apply normal auto-forward movement yet
+
+			// newVelocity.X += lateralInputVelocity.X * _jumpPadAirSteeringStrength * dt;
+			// newVelocity.Z += lateralInputVelocity.Z * _jumpPadAirSteeringStrength * dt;
+
+			Vector3 forwardVelocity = forwardDir * _autoForwardSpeed;
+
+			if (_externalLaunchTimer > 0f) 
+			{
+				// Phase 1:
+				// Preserve strong launch and add small amount of air steering
+				newVelocity.X += lateralInputVelocity.X * _jumpPadAirSteeringStrength * dt;
+				newVelocity.Z += lateralInputVelocity.Z * _jumpPadAirSteeringStrength * dt;
+			} 
+			else
+			{
+				// Phase 2:
+				// Blend back to normal velocity
+				float blendElapsed = _jumpPadBlendBackTime - _jumpPadBlendBackTimer;
+				float blendT = Mathf.Clamp(blendElapsed / _jumpPadBlendBackTime, 0f, 1f);
+
+				// Smoothstep makes transition less abrupt
+				blendT = blendT * blendT * (3f - 2f * blendT);
+
+				Vector3 targetHorizontalVelocity = forwardVelocity + lateralInputVelocity;
+
+				float returnStrength = 2.5f;
+				float returnBlend = 1f - Mathf.Exp(-returnStrength * blendT * dt);
+
+				newVelocity.X = Mathf.Lerp(newVelocity.X, targetHorizontalVelocity.X, returnBlend);
+				newVelocity.Z = Mathf.Lerp(newVelocity.Z, targetHorizontalVelocity.Z, returnBlend);
+			}
+		}
+		else if (_knockbackTimer > 0f)
 		{
 			_knockbackTimer -= dt;
 			if (_knockbackTimer < 0f)
@@ -358,6 +442,50 @@ public partial class PlayerGround : CharacterBody3D
 		GetTree().CurrentScene.AddChild(droneNode);
 
 		droneNode.Activate(this, spawnMarker.GlobalPosition, _despawnMarker.GlobalPosition, _percyPowerupDuration);
+	}
+
+	public bool CanTriggerJumpPad()
+	{
+		bool canTrigger = true;
+
+		if (_jumpPadTriggerLockoutTimer > 0f)
+		{
+			canTrigger = false;
+		}
+
+		return canTrigger;
+	}
+
+	public void LaunchFromJumpPad(Vector3 horizontalDir, float horizontalSpeed, float verticalSpeed)
+	{
+		if (!CanTriggerJumpPad()) 
+		{
+			return;
+		}
+
+		horizontalDir.Y = 0f;
+
+		if (horizontalDir.LengthSquared() < 0.0001f)
+		{
+			horizontalDir = ForwardDir;
+		}
+
+		horizontalDir = horizontalDir.Normalized();
+
+		Velocity = new Vector3(horizontalDir.X * horizontalSpeed, verticalSpeed, horizontalDir.Z * horizontalSpeed);
+
+		// Short period where the launch is mostly untouched.
+		_externalLaunchTimer = _jumpPadControlLockTime;
+
+		// Longer period where momentum gradually blends back to normal movement.
+		_jumpPadBlendBackTimer = _jumpPadBlendBackTime;
+
+		// Prevent neighboring jump pads from triggering.
+		_jumpPadTriggerLockoutTimer = _jumpPadTriggerLockoutTime;
+
+		// Cancel knockback state so it doesn't fight the jump pad
+		_knockbackTimer = 0f;
+		_knockbackHorizontal = Vector3.Zero;
 	}
 
 }
