@@ -42,7 +42,6 @@ public partial class PlayerGround : CharacterBody3D
 	private Node3D _spawnRight;
 	private Node3D _despawnMarker;
 
-
 	// Getters 
 	public int Health => _health;
 	public int MaxHealth => _maxHealth;
@@ -61,6 +60,21 @@ public partial class PlayerGround : CharacterBody3D
 	private float _jumpPadBlendBackTimer = 0f;
 	private float _jumpPadTriggerLockoutTimer = 0f;
 
+	// Speed pad vars
+	[Export] private float _speedBoostAccelerationTime = 0.35f;
+	[Export] private float _speedBoostDecelerationTime = 0.75f;
+	[Export] private float _speedBoostTriggerLockoutTime = 0.75f;
+	[Export] private NodePath _cameraNodePath = "CameraController/CameraTarget/Camera3D";
+	[Export] private float _speedBoostFovIncrease = 12.0f;
+	private float _speedBoostTimer = 0f;
+	private float _speedBoostElapsedTimer = 0f;
+	private float _speedBoostTotalDuration = 0f;
+	private float _speedBoostTargetMultiplier = 1f;
+	private float _currentSpeedBoostMultiplier = 1f;
+	private float _speedBoostTriggerLockoutTimer = 0f;
+	private Camera3D _camera;
+	private float _baseCameraFov = 75.0f;
+
 	public override void _Ready() 
 	{
 		_currentTurnDegPerSec = _defaultTurnDegPerSec;
@@ -68,6 +82,16 @@ public partial class PlayerGround : CharacterBody3D
 		_spawnLeft = GetNode<Node3D>(_droneSpawnLeftPath);
 		_spawnRight = GetNode<Node3D>(_droneSpawnRightPath);
 		_despawnMarker = GetNode<Node3D>(_droneDespawnPath);
+		_camera = GetNodeOrNull<Camera3D>(_cameraNodePath);
+
+		if (_camera != null)
+		{
+			_baseCameraFov = _camera.Fov;
+		}
+		else
+		{
+			GD.PushWarning("[PlayerGround] Camera3D not found. Check _cameraNodePath.");
+		}
 	}
     
 	public override void _PhysicsProcess(double delta)
@@ -109,6 +133,21 @@ public partial class PlayerGround : CharacterBody3D
 			}
 		}
 
+		// ───── Speed Boost Handling ─────
+
+		UpdateSpeedBoost(dt);
+		UpdateSpeedBoostFov();
+
+		if (_speedBoostTriggerLockoutTimer > 0f)
+		{
+			_speedBoostTriggerLockoutTimer -= dt;
+
+			if (_speedBoostTriggerLockoutTimer < 0f)
+			{
+				_speedBoostTriggerLockoutTimer = 0f;
+			}
+		}
+
 		// ───── Update Player Rotation ─────
 		UpdateYawTurning(dt);
 
@@ -135,11 +174,13 @@ public partial class PlayerGround : CharacterBody3D
 		Vector3 forwardDir = -Transform.Basis.Z;
 		Vector3 rightDir = Transform.Basis.X;
 
+		float movementSpeedMultiplier = _currentSpeedBoostMultiplier;
+		
 		// Lateral input vector
 		Vector3 lateralInputVelocity = Vector3.Zero;
 		if (Mathf.Abs(horizontalInput) >= 0.01f)
 		{
-			lateralInputVelocity = rightDir * horizontalInput * _baseMovementSpeed;
+			lateralInputVelocity = rightDir * horizontalInput * (_baseMovementSpeed * movementSpeedMultiplier);
 		}
 
 		// if: _jumpPadBlendBackTimer  > 0 THEN launch the player and blend back to normal velocity
@@ -147,15 +188,12 @@ public partial class PlayerGround : CharacterBody3D
 		// else: NORMAL MOVEMENT
 		if (_jumpPadBlendBackTimer > 0f)
 		{
-			// // During a jump pad launch:
-			// // - keep the strong launch velocity
-			// // - allow a tiny amount of lateral steering
-			// // - do not apply normal auto-forward movement yet
+			// During a jump pad launch:
+			// - keep the strong launch velocity
+			// - allow a tiny amount of lateral steering
+			// - do not apply normal auto-forward movement yet
 
-			// newVelocity.X += lateralInputVelocity.X * _jumpPadAirSteeringStrength * dt;
-			// newVelocity.Z += lateralInputVelocity.Z * _jumpPadAirSteeringStrength * dt;
-
-			Vector3 forwardVelocity = forwardDir * _autoForwardSpeed;
+			Vector3 forwardVelocity = forwardDir * (_autoForwardSpeed * movementSpeedMultiplier);
 
 			if (_externalLaunchTimer > 0f) 
 			{
@@ -208,7 +246,7 @@ public partial class PlayerGround : CharacterBody3D
 			}
 
 			// ───── Auto-forward movement ─────
-			Vector3 forwardVelocity = forwardDir * _autoForwardSpeed;
+			Vector3 forwardVelocity = forwardDir * (_autoForwardSpeed * movementSpeedMultiplier);
 
 			// ───── Lateral (left/right) movement ─────
 			// If: player is not laterlly moving, slow to a stop
@@ -488,4 +526,105 @@ public partial class PlayerGround : CharacterBody3D
 		_knockbackHorizontal = Vector3.Zero;
 	}
 
+	public bool CanTriggerSpeedBoostPad()
+	{
+		return _speedBoostTriggerLockoutTimer <= 0f;
+	}
+
+	public void ActivateSpeedBoost(float multiplier, float duration)
+	{
+		if (!CanTriggerSpeedBoostPad())
+		{
+			return;
+		}
+
+		multiplier = Mathf.Max(1f, multiplier);
+		duration = Mathf.Max(0.1f, duration);
+
+		bool wasAlreadyBoosted = _speedBoostTimer > 0f;
+
+		_speedBoostTargetMultiplier = multiplier;
+		_speedBoostTotalDuration = duration;
+		_speedBoostTimer = duration;
+
+		// If already boosted, do not restart ramp-up
+		// Prevents another boost pad from slowing player
+		if (!wasAlreadyBoosted)
+		{
+			_speedBoostElapsedTimer = 0f;
+		}
+		else
+		{
+			_speedBoostElapsedTimer = Mathf.Max(_speedBoostElapsedTimer, _speedBoostAccelerationTime);
+		}
+		
+		_speedBoostTriggerLockoutTimer = _speedBoostTriggerLockoutTime;
+	}
+
+	private void UpdateSpeedBoost(float dt)
+	{
+		if (_speedBoostTimer <= 0f)
+		{
+			_speedBoostTimer = 0f;
+			_speedBoostElapsedTimer = 0f;
+			_speedBoostTotalDuration = 0f;
+			_speedBoostTargetMultiplier = 1f;
+			_currentSpeedBoostMultiplier = 1f;
+			return;
+		}
+
+		_speedBoostTimer -= dt;
+		_speedBoostElapsedTimer += dt;
+
+		if (_speedBoostTimer < 0f)
+		{
+			_speedBoostTimer = -0f;
+		}
+
+		float targetMultiplier = _speedBoostTargetMultiplier;
+
+		// Phase 1: ramp up from normal speed to boosted speed.
+		if (_speedBoostElapsedTimer < _speedBoostAccelerationTime)
+		{
+			float t = _speedBoostElapsedTimer / Mathf.Max(_speedBoostAccelerationTime, 0.001f);
+			t = SmoothStep01(t);
+			_currentSpeedBoostMultiplier = Mathf.Lerp(1f, targetMultiplier, t);
+		}
+		// Phase 2: ramp down from boosted speed to normal speed.
+		else if (_speedBoostTimer < _speedBoostDecelerationTime)
+		{
+			float t = _speedBoostTimer / Mathf.Max(_speedBoostDecelerationTime, 0.001f);
+			t = SmoothStep01(t);
+			_currentSpeedBoostMultiplier = Mathf.Lerp(1f, targetMultiplier, t);
+		}
+		// Phase 3: hold boosted speed.
+		else
+		{
+			_currentSpeedBoostMultiplier = targetMultiplier;
+		}
+	}
+	private void UpdateSpeedBoostFov()
+	{
+		if (_camera == null)
+		{
+			return;
+		}
+
+		float boostAmount = 0f;
+
+		if (_speedBoostTargetMultiplier > 1f)
+		{
+			boostAmount = Mathf.InverseLerp(1f, _speedBoostTargetMultiplier, _currentSpeedBoostMultiplier);
+		}
+
+		boostAmount = SmoothStep01(boostAmount);
+
+		_camera.Fov = _baseCameraFov + (_speedBoostFovIncrease * boostAmount);
+	}
+
+	private float SmoothStep01(float t)
+	{
+		t = Mathf.Clamp(t, 0f, 1f);
+		return t * t * (3f - 2f * t);
+	}
 }

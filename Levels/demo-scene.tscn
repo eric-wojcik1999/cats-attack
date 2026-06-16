@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://csdvs0h5p6ume"]
+[gd_scene load_steps=18 format=3 uid="uid://csdvs0h5p6ume"]
 
 [ext_resource type="PackedScene" uid="uid://d4nm5bdaxqhsr" path="res://Entities/Players/PlayerGround/player-ground.tscn" id="1_j5bgn"]
 [ext_resource type="PackedScene" uid="uid://b8qoyreqkcblf" path="res://Entities/Markers/direction_marker.tscn" id="2_73khv"]
@@ -16,6 +16,7 @@
 [ext_resource type="PackedScene" uid="uid://dpkjb22ajxbvd" path="res://Entities/Enemies/turret-enemy-basic.tscn" id="9_etmm2"]
 [ext_resource type="PackedScene" uid="uid://c10pt2qia8poh" path="res://Entities/Pickups/PowerUps/percy_powerup.tscn" id="10_ywcwc"]
 [ext_resource type="PackedScene" uid="uid://be40nk4u707xw" path="res://Entities/Prefabs/base_jump_pad.tscn" id="16_ert4p"]
+[ext_resource type="PackedScene" uid="uid://sdcmin4u5cbp" path="res://Entities/Prefabs/base_speed_pad.tscn" id="17_e4quk"]
 
 [node name="DemoScene" type="Node3D"]
 
@@ -26,12 +27,19 @@ collision_layer = 2
 collision_mask = 13
 size = Vector3(49.75, 0.25, 6.5)
 
-[node name="TestFloor10" type="CSGBox3D" parent="."]
-transform = Transform3D(-4.3669782e-08, -1.9066637e-09, -1, -0.043619383, 0.9990482, 0, 0.9990482, 0.043619383, -4.371139e-08, -0.48051694, -1.1639783, 63.051777)
+[node name="TestFloor11" type="CSGBox3D" parent="."]
+transform = Transform3D(2.9802322e-08, 0, -1, 0, 1, 0, 1, 0, 2.9802322e-08, -0.48051482, -0.125, 219.55807)
 use_collision = true
 collision_layer = 2
 collision_mask = 13
-size = Vector3(30.25, 0.25, 6.5)
+size = Vector3(139.75, 0.25, 6.5)
+
+[node name="TestFloor10" type="CSGBox3D" parent="."]
+transform = Transform3D(-4.3669782e-08, -1.9066637e-09, -1, -0.043619383, 0.9990482, 0, 0.9990482, 0.043619383, -4.371139e-08, -0.48051855, -2.7724433, 99.89168)
+use_collision = true
+collision_layer = 2
+collision_mask = 13
+size = Vector3(104, 0.25, 6.5)
 metadata/_edit_group_ = true
 
 [node name="TestFloor5" type="CSGBox3D" parent="."]
@@ -117,9 +125,12 @@ light_energy = 1.552
 shadow_enabled = true
 
 [node name="PlayerGround" parent="." instance=ExtResource("1_j5bgn")]
-transform = Transform3D(0.9999883, 0, 0, 0, 0.99999076, 0, 0, 0, 0.9999899, 0, 0.75, 75.5)
-_baseJumpVelocity = 6.0
+transform = Transform3D(0.9999883, 0, 0, 0, 0.99999076, 0, 0, 0, 0.9999899, 0, 1, 285.75)
+_baseMovementSpeed = 3.5
+_autoForwardSpeed = 8.0
+_baseJumpVelocity = 6.5
 _lateralDeceleration = 6.0
+_jumpPadAirSteeringStrength = 3.0
 
 [node name="DirectionMarkers" type="Node3D" parent="."]
 
@@ -300,8 +311,92 @@ collision_layer = 2
 collision_mask = 13
 size = Vector3(2, 5.25, 1)
 
+[node name="Wall7" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.75, 3.625, 151.375)
+use_collision = true
+collision_layer = 2
+collision_mask = 13
+size = Vector3(2, 8.25, 2.25)
+
+[node name="Wall8" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.75, 3.625, 163.875)
+use_collision = true
+collision_layer = 2
+collision_mask = 13
+size = Vector3(2, 8.25, 2.25)
+
+[node name="Wall9" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.75, 3.625, 174.625)
+use_collision = true
+collision_layer = 2
+collision_mask = 13
+size = Vector3(2, 8.25, 2.25)
+
+[node name="Wall10" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.75, 3.625, 187.125)
+use_collision = true
+collision_layer = 2
+collision_mask = 13
+size = Vector3(2, 8.25, 2.25)
+
+[node name="Wall11" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.75, 3.625, 199.375)
+use_collision = true
+collision_layer = 2
+collision_mask = 13
+size = Vector3(2, 8.25, 2.25)
+
+[node name="Wall12" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.75, 3.625, 211.875)
+use_collision = true
+collision_layer = 2
+collision_mask = 13
+size = Vector3(2, 8.25, 2.25)
+
+[node name="Wall13" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.75, 3.625, 222.625)
+use_collision = true
+collision_layer = 2
+collision_mask = 13
+size = Vector3(2, 8.25, 2.25)
+
+[node name="Wall14" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.75, 3.625, 235.125)
+use_collision = true
+collision_layer = 2
+collision_mask = 13
+size = Vector3(2, 8.25, 2.25)
+
+[node name="Wall15" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.75, 3.625, 246.875)
+use_collision = true
+collision_layer = 2
+collision_mask = 13
+size = Vector3(2, 8.25, 2.25)
+
+[node name="Wall16" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.75, 3.625, 259.375)
+use_collision = true
+collision_layer = 2
+collision_mask = 13
+size = Vector3(2, 8.25, 2.25)
+
+[node name="Wall17" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.75, 3.625, 270.125)
+use_collision = true
+collision_layer = 2
+collision_mask = 13
+size = Vector3(2, 8.25, 2.25)
+
+[node name="Wall18" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.75, 3.625, 282.625)
+use_collision = true
+collision_layer = 2
+collision_mask = 13
+size = Vector3(2, 8.25, 2.25)
+
 [node name="PlayerAir" parent="." node_paths=PackedStringArray("_playerGround") instance=ExtResource("6_uap1t")]
-transform = Transform3D(1, 0, 0, 0, 0.9659258, 0.2588191, 0, -0.2588191, 0.9659258, 1.5, 4, 77)
+transform = Transform3D(1, 0, 0, 0, 0.9659258, 0.2588191, 0, -0.2588191, 0.9659258, 1.5, 4.25, 287.25)
 _playerGround = NodePath("../PlayerGround")
 _maxExtraHeight = 4.0
 
@@ -385,3 +480,45 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, -0.25, 49)
 
 [node name="BaseJumpPad3" parent="." instance=ExtResource("16_ert4p")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, -0.25, 49)
+
+[node name="BaseSpeedPad" parent="." instance=ExtResource("17_e4quk")]
+transform = Transform3D(1, 0, 0, 0, 1.0000001, 0, 0, 0, 1.0000001, -2.251091, 0.084442616, 265.75)
+_boostMultiplier = 3.0
+_boostDuration = 4.0
+
+[node name="BaseSpeedPad2" parent="." instance=ExtResource("17_e4quk")]
+transform = Transform3D(1, 0, 0, 0, 1.0000001, 0, 0, 0, 1.0000001, -0.501091, 0.084442616, 265.75)
+_boostMultiplier = 3.0
+_boostDuration = 4.0
+
+[node name="BaseSpeedPad3" parent="." instance=ExtResource("17_e4quk")]
+transform = Transform3D(1, 0, 0, 0, 1.0000001, 0, 0, 0, 1.0000001, 1.248909, 0.084442616, 265.75)
+_boostMultiplier = 3.0
+_boostDuration = 4.0
+
+[node name="BaseSpeedPad4" parent="." instance=ExtResource("17_e4quk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.25, 0, 156.25)
+
+[node name="BaseSpeedPad5" parent="." instance=ExtResource("17_e4quk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.25, 0, 156.25)
+
+[node name="BaseSpeedPad6" parent="." instance=ExtResource("17_e4quk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.75, 0, 156.25)
+
+[node name="BaseSpeedPad7" parent="." instance=ExtResource("17_e4quk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, -0.75, 58.25)
+
+[node name="BaseSpeedPad8" parent="." instance=ExtResource("17_e4quk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, -0.75, 58.25)
+
+[node name="BaseSpeedPad9" parent="." instance=ExtResource("17_e4quk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, -0.75, 58.25)
+
+[node name="BaseJumpPad4" parent="." instance=ExtResource("16_ert4p")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, -3, 109.5)
+
+[node name="BaseJumpPad5" parent="." instance=ExtResource("16_ert4p")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, -3, 109.5)
+
+[node name="BaseJumpPad6" parent="." instance=ExtResource("16_ert4p")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, -3, 109.5)
