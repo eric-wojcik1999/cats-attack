@@ -1,0 +1,25 @@
+[gd_scene load_steps=5 format=3 uid="uid://utiu7i4jwyfh"]
+
+[ext_resource type="PackedScene" uid="uid://dftigon5ff875" path="res://Entities/Prefabs/Level Prefabs/test-level-mesh-2df.glb" id="1_datoa"]
+[ext_resource type="Shader" uid="uid://dbv6fcns3kno6" path="res://Shaders/road_edge_mask.gdshader" id="2_t27y1"]
+[ext_resource type="Texture2D" uid="uid://b68wnnpxjaknf" path="res://all-of-it_hexagon-texture-purple.jpg.jpg" id="3_k3s2v"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qdn8b"]
+render_priority = 0
+shader = ExtResource("2_t27y1")
+shader_parameter/albedo_texture = ExtResource("3_k3s2v")
+shader_parameter/base_tint = Color(0.22497547, 0.7735153, 0.5444527, 1)
+shader_parameter/edge_color = Color(0, 0, 0, 1)
+shader_parameter/edge_strength = -10.0
+shader_parameter/edge_power = -0.3
+shader_parameter/roughness_value = 1.25
+shader_parameter/metallic_value = 0.64
+
+[node name="test-mesh-POSSIBLE-COLOR" instance=ExtResource("1_datoa")]
+
+[node name="test-track-4" parent="." index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+surface_material_override/0 = SubResource("ShaderMaterial_qdn8b")
+
+[node name="test-track-4-col" parent="." index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)

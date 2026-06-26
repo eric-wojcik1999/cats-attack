@@ -1,0 +1,25 @@
+[gd_scene load_steps=4 format=3 uid="uid://6x0i8op3lofr"]
+
+[ext_resource type="PackedScene" uid="uid://d4nm5bdaxqhsr" path="res://Entities/Players/PlayerGround/player-ground.tscn" id="1_3mtpf"]
+[ext_resource type="PackedScene" uid="uid://ck3n3piykfu2o" path="res://Entities/Players/PlayerAir/player_air.tscn" id="2_dw28y"]
+[ext_resource type="PackedScene" uid="uid://cc4gsel5ahoig" path="res://Entities/Prefabs/Level Prefabs/Level-1/level_1_track_1.tscn" id="3_bq6a1"]
+
+[node name="Level1" type="Node3D"]
+
+[node name="PlayerGround" parent="." instance=ExtResource("1_3mtpf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+_autoForwardSpeed = 6.5
+_baseJumpVelocity = 6.0
+
+[node name="PlayerAir" parent="." node_paths=PackedStringArray("_playerGround") instance=ExtResource("2_dw28y")]
+transform = Transform3D(1, 0, 0, 0, 0.9659258, 0.2588191, 0, -0.2588191, 0.9659258, 2, 3.5, 1.5)
+_playerGround = NodePath("../PlayerGround")
+_maxExtraHeight = 4.0
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.5883883, -0.7303799, 0.3469069, -0.24236242, 0.25000006, 0.9374222, -0.7714011, -0.6356455, -0.029919524, -6.7305164, 12.75, 10.433086)
+light_energy = 1.552
+shadow_enabled = true
+
+[node name="level-1-track-1" parent="." instance=ExtResource("3_bq6a1")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, 0, -0.5)

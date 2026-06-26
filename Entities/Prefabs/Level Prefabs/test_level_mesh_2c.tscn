@@ -1,0 +1,21 @@
+[gd_scene load_steps=5 format=3 uid="uid://bn2o3ehq1r62h"]
+
+[ext_resource type="PackedScene" uid="uid://bvjc5lvgiajk6" path="res://Entities/Prefabs/Level Prefabs/test-level-mesh-2c.glb" id="1_glg22"]
+[ext_resource type="Shader" uid="uid://dbv6fcns3kno6" path="res://Shaders/road_edge_mask.gdshader" id="2_xdyst"]
+[ext_resource type="Texture2D" uid="uid://lkw4sk3eowda" path="res://all-of-it_hexagon-texture-purple.jpg" id="3_qse23"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qse23"]
+render_priority = 0
+shader = ExtResource("2_xdyst")
+shader_parameter/albedo_texture = ExtResource("3_qse23")
+shader_parameter/base_tint = Color(0.9355364, 0.9355364, 0.93553627, 1)
+shader_parameter/edge_color = Color(0.21135995, 8.5432083e-07, 0.13044187, 1)
+shader_parameter/edge_strength = 1.0
+shader_parameter/edge_power = 1.0
+shader_parameter/roughness_value = 1.0
+shader_parameter/metallic_value = 0.0
+
+[node name="test-level-mesh-2c" instance=ExtResource("1_glg22")]
+
+[node name="test-track-4" parent="." index="0"]
+surface_material_override/0 = SubResource("ShaderMaterial_qse23")

@@ -1,0 +1,102 @@
+[gd_scene load_steps=6 format=3 uid="uid://cc4gsel5ahoig"]
+
+[ext_resource type="PackedScene" uid="uid://bc6ry2ugqf1d7" path="res://Entities/Prefabs/Level Prefabs/Level-1/level-1-track-1.glb" id="1_xkjmp"]
+[ext_resource type="Shader" uid="uid://dbv6fcns3kno6" path="res://Shaders/road_edge_mask.gdshader" id="2_o6dbh"]
+[ext_resource type="Texture2D" uid="uid://b68wnnpxjaknf" path="res://all-of-it_hexagon-texture-purple.jpg.jpg" id="3_iorxi"]
+[ext_resource type="PackedScene" uid="uid://b8qoyreqkcblf" path="res://Entities/Markers/direction_marker.tscn" id="4_iorxi"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rjiuf"]
+render_priority = 0
+shader = ExtResource("2_o6dbh")
+shader_parameter/albedo_texture = ExtResource("3_iorxi")
+shader_parameter/base_tint = Color(0.22352941, 0.77254903, 0.54509807, 1)
+shader_parameter/edge_color = Color(0, 0, 0, 1)
+shader_parameter/edge_strength = -10.0
+shader_parameter/edge_power = 0.2
+shader_parameter/roughness_value = 1.605
+shader_parameter/metallic_value = 0.0
+
+[node name="level-1-track-1" instance=ExtResource("1_xkjmp")]
+
+[node name="track-01" parent="." index="0"]
+surface_material_override/0 = SubResource("ShaderMaterial_rjiuf")
+
+[node name="StaticBody3D" parent="track-01-col" index="0"]
+collision_layer = 2
+collision_mask = 13
+
+[node name="DirectionMarker3" parent="." index="2" instance=ExtResource("4_iorxi")]
+transform = Transform3D(-0.15753762, 0, -0.9875131, 0, 1, 0, 0.9875131, 0, -0.15753762, 11.607795, 1.5068388, 1.5163996)
+_turnDegPerSecOverride = 15.0
+
+[node name="DirectionMarker4" parent="." index="3" instance=ExtResource("4_iorxi")]
+transform = Transform3D(-0.364194, 0, -0.93132305, 0, 1, 0, 0.93132305, 0, -0.364194, 24.286089, 1.9632306, 6.071832)
+_turnDegPerSecOverride = 15.0
+
+[node name="DirectionMarker5" parent="." index="4" instance=ExtResource("4_iorxi")]
+transform = Transform3D(-0.1314259, 0, -0.9913262, 0, 1, 0, 0.9913262, 0, -0.1314259, 30.867077, 2.6287231, 9.116183)
+_turnDegPerSecOverride = 15.0
+
+[node name="DirectionMarker6" parent="." index="5" instance=ExtResource("4_iorxi")]
+transform = Transform3D(0.26976037, 0, -0.9629275, 0, 1, 0, 0.9629275, 0, 0.26976037, 57.089245, 1.7449713, 7.358655)
+_turnDegPerSecOverride = 15.0
+
+[node name="DirectionMarker7" parent="." index="6" instance=ExtResource("4_iorxi")]
+transform = Transform3D(0.09122366, 0, -0.9958306, 0, 1, 0, 0.9958306, 0, 0.09122366, 44.145184, 2.3871913, 9.365189)
+_turnDegPerSecOverride = 15.0
+
+[node name="DirectionMarker8" parent="." index="7" instance=ExtResource("4_iorxi")]
+transform = Transform3D(0.23961821, 0, -0.9708674, 0, 1, 0, 0.9708674, 0, 0.23961821, 64.85008, -0.119081974, 5.11916)
+_turnDegPerSecOverride = 15.0
+
+[node name="DirectionMarker9" parent="." index="8" instance=ExtResource("4_iorxi")]
+transform = Transform3D(-0.040986206, 0, -0.9991599, 0, 1, 0, 0.9991599, 0, -0.040986206, 75.29125, -1.2315993, 4.586222)
+_turnDegPerSecOverride = 15.0
+
+[node name="DirectionMarker10" parent="." index="9" instance=ExtResource("4_iorxi")]
+transform = Transform3D(-0.113549925, 0, -0.99353224, 0, 1, 0, 0.99353224, 0, -0.113549925, 79.252205, -1.2315993, 5.1416006)
+_turnDegPerSecOverride = 15.0
+
+[node name="DirectionMarker11" parent="." index="10" instance=ExtResource("4_iorxi")]
+transform = Transform3D(-0.02736324, 0, -0.9996255, 0, 1, 0, 0.9996255, 0, -0.02736324, 126.9264, -1.5745473, 10.48316)
+_turnDegPerSecOverride = 15.0
+
+[node name="DirectionMarker12" parent="." index="11" instance=ExtResource("4_iorxi")]
+transform = Transform3D(0.17687869, 0, -0.9842326, 0, 1, 0, 0.9842326, 0, 0.17687869, 134.94724, -1.5745473, 10.48316)
+_turnDegPerSecOverride = 15.0
+
+[node name="DirectionMarker13" parent="." index="12" instance=ExtResource("4_iorxi")]
+transform = Transform3D(0.11313393, 0, -0.9935798, 0, 1, 0, 0.9935798, 0, 0.11313393, 150.99464, -1.9636226, 7.463044)
+_turnDegPerSecOverride = 15.0
+
+[node name="DirectionMarker14" parent="." index="13" instance=ExtResource("4_iorxi")]
+transform = Transform3D(0.06531615, 0, -0.9978646, 0, 1, 0, 0.9978646, 0, 0.06531615, 158.3208, -2.539326, 6.591205)
+_turnDegPerSecOverride = 15.0
+
+[node name="DirectionMarker15" parent="." index="14" instance=ExtResource("4_iorxi")]
+transform = Transform3D(-0.030433826, 0, -0.99953693, 0, 1, 0, 0.99953693, 0, -0.030433826, 5.2454586, 1.5068388, 0.657346)
+_turnDegPerSecOverride = 15.0
+
+[node name="DirectionMarker16" parent="." index="15" instance=ExtResource("4_iorxi")]
+transform = Transform3D(-0.24358116, 0, -0.9698806, 0, 1, 0, 0.9698806, 0, -0.24358116, 17.19349, 1.5068388, 3.3588464)
+_turnDegPerSecOverride = 15.0
+
+[node name="DirectionMarker17" parent="." index="16" instance=ExtResource("4_iorxi")]
+transform = Transform3D(-0.08788589, 0, -0.9961307, 0, 1, 0, 0.9961307, 0, -0.08788589, 36.886143, 2.6287231, 9.646748)
+_turnDegPerSecOverride = 15.0
+
+[node name="DirectionMarker18" parent="." index="17" instance=ExtResource("4_iorxi")]
+transform = Transform3D(0.14739524, 0, -0.9890778, 0, 1, 0, 0.9890778, 0, 0.14739524, 49.80312, 2.3871913, 8.889048)
+_turnDegPerSecOverride = 15.0
+
+[node name="DirectionMarker19" parent="." index="18" instance=ExtResource("4_iorxi")]
+transform = Transform3D(-0.10088255, 0, -0.99489844, 0, 1, 0, 0.99489844, 0, -0.10088255, 110.196526, -1.987081, 9.044949)
+_turnDegPerSecOverride = 15.0
+
+[node name="DirectionMarker20" parent="." index="19" instance=ExtResource("4_iorxi")]
+transform = Transform3D(0.20242846, 0, -0.97929704, 0, 1, 0, 0.97929704, 0, 0.20242846, 140.99835, -1.5745473, 9.458384)
+_turnDegPerSecOverride = 15.0
+
+[node name="DirectionMarker21" parent="." index="20" instance=ExtResource("4_iorxi")]
+transform = Transform3D(-0.06825905, 0, -0.9976678, 0, 1, 0, 0.9976678, 0, -0.06825905, 0.9856944, 1.5068388, 0.657346)
+_turnDegPerSecOverride = 15.0

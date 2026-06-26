@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://bfqxj4vq1npp8"]
+
+[ext_resource type="PackedScene" uid="uid://vsdg4gyai587" path="res://Entities/Prefabs/Level Prefabs/test-track.glb" id="1_k08qg"]
+
+[node name="test-track" instance=ExtResource("1_k08qg")]
+
+[node name="StaticBody3D" parent="TestTrack_001" index="0"]
+collision_layer = 2
+collision_mask = 13

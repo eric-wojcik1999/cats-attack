@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://cqc5xjcs7wqlu"]
+
+[ext_resource type="PackedScene" uid="uid://c3w1grjcpeavs" path="res://Entities/Prefabs/Level Prefabs/test-level-mesh-2.glb" id="1_f5v2g"]
+
+[node name="test-level-mesh-2" instance=ExtResource("1_f5v2g")]
+
+[node name="StaticBody3D" parent="TestCube-col" index="0"]
+collision_layer = 2
+collision_mask = 13

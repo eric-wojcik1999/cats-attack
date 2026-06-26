@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://chatlnft2d34p"]
+
+[ext_resource type="PackedScene" uid="uid://7j7j6uj184sw" path="res://Entities/Prefabs/Level Prefabs/Level-1/level-1-track-6.glb" id="1_odcnf"]
+
+[node name="level-1-track-6" instance=ExtResource("1_odcnf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -355)
