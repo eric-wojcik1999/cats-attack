@@ -45,8 +45,37 @@ public partial class PlayerGround : CharacterBody3D
 	// Getters 
 	public int Health => _health;
 	public int MaxHealth => _maxHealth;
-	public Vector3 ForwardDir => -GlobalTransform.Basis.Z;
-	public Vector3 RightDir => GlobalTransform.Basis.X;
+	public Vector3 ForwardDir 
+	{
+		get 
+		{
+			Vector3 forward = -GlobalTransform.Basis.Z;
+			forward.Y = 0f;
+
+			if (forward.LengthSquared() < 0.0001f)
+			{
+				return Vector3.Forward;
+			}
+
+			return forward.Normalized();
+		}
+	}
+	public Vector3 RightDir
+	{
+		get{
+			Vector3 forward = ForwardDir;
+
+			// Horizontal right vector derived from forward.
+			Vector3 right = new Vector3(-forward.Z, 0f, forward.X);
+
+			if (right.LengthSquared() < 0.0001f)
+			{
+				return Vector3.Right;
+			}
+
+			return right.Normalized();
+		}
+	}
 	public bool IsKnockbackActive => _knockbackTimer > 0f;
 	public Vector3 AirAnchorPosition => _playerAirPositionMarker != null ? _playerAirPositionMarker.GlobalPosition : GlobalPosition;
 
@@ -75,6 +104,18 @@ public partial class PlayerGround : CharacterBody3D
 	private Camera3D _camera;
 	private float _baseCameraFov = 75.0f;
 
+	// Path guide vars
+	[ExportGroup("Path Guide")]
+	[Export] private bool _usePathGuide = true;
+	[Export] private NodePath _pathGuideNodePath = "";
+	[Export] private float _pathLookAheadDistance = 4.0f;
+	[Export] private float _pathTurnDegPerSec = 10.0f; // Maybe set to 30.0f default?
+	[Export] private bool _snapYawToPathOnReady = false;
+
+	// Likely need to only have ONE path for the entire level
+	private Path3D _pathGuide;
+	private Curve3D _pathCurve;
+
 	public override void _Ready() 
 	{
 		_currentTurnDegPerSec = _defaultTurnDegPerSec;
@@ -91,6 +132,16 @@ public partial class PlayerGround : CharacterBody3D
 		else
 		{
 			GD.PushWarning("[PlayerGround] Camera3D not found. Check _cameraNodePath.");
+		}
+
+		InitialisePathGuide();
+
+		if (_snapYawToPathOnReady)
+		{
+			if (TryGetPathGuideForward(out Vector3 initialForward))
+			{
+				SnapYawToForward(initialForward);
+			}
 		}
 	}
     
@@ -148,6 +199,10 @@ public partial class PlayerGround : CharacterBody3D
 			}
 		}
 
+		// ───── Guide Path Direction ─────
+		// Replaces direction markers by continously choosing a desired forward from the nearest point on the Path3D guide curve
+		UpdatePathGuideForward();
+
 		// ───── Update Player Rotation ─────
 		UpdateYawTurning(dt);
 
@@ -171,8 +226,12 @@ public partial class PlayerGround : CharacterBody3D
 		}
 
 		// ───── Shared horizontal basis vectors ─────
-		Vector3 forwardDir = -Transform.Basis.Z;
-		Vector3 rightDir = Transform.Basis.X;
+		// Vector3 forwardDir = -Transform.Basis.Z;
+		// Vector3 rightDir = Transform.Basis.X;
+		// This meanns that auto-forward and lateral movement uses the player's world facing direction
+		Vector3 forwardDir = ForwardDir;
+		Vector3 rightDir = RightDir;
+
 
 		float movementSpeedMultiplier = _currentSpeedBoostMultiplier;
 		
@@ -626,5 +685,127 @@ public partial class PlayerGround : CharacterBody3D
 	{
 		t = Mathf.Clamp(t, 0f, 1f);
 		return t * t * (3f - 2f * t);
+	}
+
+	private void InitialisePathGuide()
+	{
+		if (!_usePathGuide)
+		{
+			return;
+		}
+
+		if (string.IsNullOrWhiteSpace(_pathGuideNodePath.ToString()))
+		{
+			GD.PushWarning("[PlayerGround] Path guide is enabled, but _pathGuideNodePath is empty.");
+			return;
+		}
+
+		_pathGuide = GetNodeOrNull<Path3D>(_pathGuideNodePath);
+
+		if (_pathGuide == null)
+		{
+			GD.PushWarning($"[PlayerGround] Could not find Path3D at path {_pathGuideNodePath}");
+			return;	
+		}
+
+		_pathCurve = _pathGuide.Curve;
+
+	}
+
+	private void UpdatePathGuideForward()
+	{
+		if (!_usePathGuide)
+		{
+			return;
+		}
+
+		if (TryGetPathGuideForward(out Vector3 desiredForward))
+		{
+			SetDesiredForward(desiredForward, _pathTurnDegPerSec);
+		}
+	
+	}
+
+	private bool TryGetPathGuideForward(out Vector3 desiredForward)
+	{
+		desiredForward = Vector3.Zero;
+
+		if (_pathGuide == null)
+		{
+			return false;
+		}
+
+		// null-coalescing assignment operator in csharp
+		// only assign right if left is null
+		_pathCurve ??= _pathGuide.Curve;
+
+		if (_pathCurve == null)
+		{
+			return false;
+		}
+
+		float pathLength = _pathCurve.GetBakedLength();
+
+		if (pathLength <= 0.01f)
+		{
+			return false;
+		}
+
+		// Convert player world position into the Path3D's local space.
+		Vector3 playerLocalPos = _pathGuide.ToLocal(GlobalPosition);
+
+		// Find nearest offset on the baked curve.
+		float closestOffset = _pathCurve.GetClosestOffset(playerLocalPos);
+
+		// Look slightly ahead along the curve
+		float lookAhead = Mathf.Max(_pathLookAheadDistance, 0.01f);
+		float aheadOffset = Mathf.Clamp(closestOffset + lookAhead, 0f, pathLength);
+		Vector3 closestLocal = _pathCurve.SampleBaked(closestOffset, true);
+		Vector3 aheadLocal = _pathCurve.SampleBaked(aheadOffset, true);
+		Vector3 closestGlobal = _pathGuide.ToGlobal(closestLocal);
+		Vector3 aheadGlobal = _pathGuide.ToGlobal(aheadLocal);
+		Vector3 direction = aheadGlobal - closestGlobal;
+
+		// If we are near end of curve, ahead and closest may be similar.
+		// In this circumstance, sample behind the player instead.
+		if (direction.LengthSquared() < 0.0001f)
+		{
+			float behindOffset = Mathf.Clamp(closestOffset - lookAhead, 0f, pathLength);
+			Vector3 behindLocal = _pathCurve.SampleBaked(behindOffset, true);
+			Vector3 behindGlobal = _pathGuide.ToGlobal(behindLocal);
+			direction = closestGlobal - behindGlobal;
+		}
+
+		// Keep the player upright - path controls the yaw not the pitch.
+		direction.Y = 0f;
+
+		if (direction.LengthSquared() < 0.0001f)
+		{
+			return false;
+		}
+
+		desiredForward = direction.Normalized();
+		return true;
+	}
+
+	private void SnapYawToForward(Vector3 forward)
+	{
+		forward.Y = 0f;
+
+		if (forward.LengthSquared() < 0.0001f)
+		{
+			return;
+		}
+
+		forward = forward.Normalized();
+
+		float targetYaw = Mathf.Atan2(-forward.X, -forward.Z);
+
+		Vector3 rotation = GlobalRotation;
+		rotation.Y = targetYaw;
+		GlobalRotation = rotation;
+
+		_desiredForward = forward;
+		_hasDesiredForward = false;
 	}
 }

@@ -1,8 +1,15 @@
-[gd_scene load_steps=4 format=3 uid="uid://6x0i8op3lofr"]
+[gd_scene load_steps=5 format=3 uid="uid://6x0i8op3lofr"]
 
 [ext_resource type="PackedScene" uid="uid://d4nm5bdaxqhsr" path="res://Entities/Players/PlayerGround/player-ground.tscn" id="1_3mtpf"]
 [ext_resource type="PackedScene" uid="uid://ck3n3piykfu2o" path="res://Entities/Players/PlayerAir/player_air.tscn" id="2_dw28y"]
 [ext_resource type="PackedScene" uid="uid://cc4gsel5ahoig" path="res://Entities/Prefabs/Level Prefabs/Level-1/level_1_track_1.tscn" id="3_bq6a1"]
+
+[sub_resource type="Curve3D" id="Curve3D_bq6a1"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6.69, 0, 0.725, 0, 0, 0, 0, 0, 0, 18.145, 0.545, 2.91, 0, 0, 0, 0, 0, 0, 30.815, 1.805, 8.45, 0, 0, 0, 0, 0, 0, 45, 2.05, 9.62, 0, 0, 0, 0, 0, 0, 60, 0, 6.515, 0, 0, 0, 0, 0, 0, 65, -1.140452, 4.98, 0, 0, 0, 0, 0, 0, 70, -1.5114683, 4.27, 0, 0, 0, 0, 0, 0, 75, -1.5371668, 4.4, 0, 0, 0, 0, 0, 0, 80, -1.5503564, 4.95, 0, 0, 0, 0, 0, 0, 120, -1.905, 10.02, 0, 0, 0, 0, 0, 0, 130, -1.75, 9.655, 0, 0, 0, 0, 0, 0, 140, -1.75, 7.73, 0, 0, 0, 0, 0, 0, 150, -2, 5.06, 0, 0, 0, 0, 0, 0, 160, -3.75, 4.03, 0, 0, 0, 0, 0, 0, 180, 0, 4.095, 0, 0, 0, 0, 0, 0, 200, 0, 4.71),
+"tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+}
+point_count = 17
 
 [node name="Level1" type="Node3D"]
 
@@ -10,6 +17,7 @@
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 _autoForwardSpeed = 6.5
 _baseJumpVelocity = 6.0
+_pathGuideNodePath = NodePath("../TrackGuidePath")
 
 [node name="PlayerAir" parent="." node_paths=PackedStringArray("_playerGround") instance=ExtResource("2_dw28y")]
 transform = Transform3D(1, 0, 0, 0, 0.9659258, 0.2588191, 0, -0.2588191, 0.9659258, 2, 3.5, 1.5)
@@ -23,3 +31,8 @@ shadow_enabled = true
 
 [node name="level-1-track-1" parent="." instance=ExtResource("3_bq6a1")]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, 0, -0.5)
+
+[node name="TrackGuidePath" type="Path3D" parent="."]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, 0, 0)
+curve = SubResource("Curve3D_bq6a1")
+debug_custom_color = Color(1, 1, 1, 1)
