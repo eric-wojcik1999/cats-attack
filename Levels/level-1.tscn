@@ -1,22 +1,26 @@
-[gd_scene load_steps=5 format=3 uid="uid://6x0i8op3lofr"]
+[gd_scene load_steps=7 format=3 uid="uid://6x0i8op3lofr"]
 
 [ext_resource type="PackedScene" uid="uid://d4nm5bdaxqhsr" path="res://Entities/Players/PlayerGround/player-ground.tscn" id="1_3mtpf"]
 [ext_resource type="PackedScene" uid="uid://ck3n3piykfu2o" path="res://Entities/Players/PlayerAir/player_air.tscn" id="2_dw28y"]
 [ext_resource type="PackedScene" uid="uid://cc4gsel5ahoig" path="res://Entities/Prefabs/Level Prefabs/Level-1/level_1_track_1.tscn" id="3_bq6a1"]
+[ext_resource type="PackedScene" uid="uid://be40nk4u707xw" path="res://Entities/Prefabs/base_jump_pad.tscn" id="4_0aets"]
+[ext_resource type="PackedScene" uid="uid://bkjums4at4bri" path="res://Entities/Prefabs/Level Prefabs/Level-1/level_1_track_2.tscn" id="4_1ylsx"]
 
 [sub_resource type="Curve3D" id="Curve3D_bq6a1"]
 _data = {
-"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6.69, 0, 0.725, 0, 0, 0, 0, 0, 0, 18.145, 0.545, 2.91, 0, 0, 0, 0, 0, 0, 30.815, 1.805, 8.45, 0, 0, 0, 0, 0, 0, 45, 2.05, 9.62, 0, 0, 0, 0, 0, 0, 60, 0, 6.515, 0, 0, 0, 0, 0, 0, 65, -1.140452, 4.98, 0, 0, 0, 0, 0, 0, 70, -1.5114683, 4.27, 0, 0, 0, 0, 0, 0, 75, -1.5371668, 4.4, 0, 0, 0, 0, 0, 0, 80, -1.5503564, 4.95, 0, 0, 0, 0, 0, 0, 120, -1.905, 10.02, 0, 0, 0, 0, 0, 0, 130, -1.75, 9.655, 0, 0, 0, 0, 0, 0, 140, -1.75, 7.73, 0, 0, 0, 0, 0, 0, 150, -2, 5.06, 0, 0, 0, 0, 0, 0, 160, -3.75, 4.03, 0, 0, 0, 0, 0, 0, 180, 0, 4.095, 0, 0, 0, 0, 0, 0, 200, 0, 4.71),
-"tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6.69, 0, 0.725, 0, 0, 0, 0, 0, 0, 18.145, 0.545, 2.91, 0, 0, 0, 0, 0, 0, 30.815, 1.805, 8.45, 0, 0, 0, 0, 0, 0, 45, 2.05, 9.62, 0, 0, 0, 0, 0, 0, 60, 0, 6.515, 0, 0, 0, 0, 0, 0, 65, -1.140452, 4.98, 0, 0, 0, 0, 0, 0, 70, -1.5114683, 4.27, 0, 0, 0, 0, 0, 0, 75, -1.5371668, 4.4, 0, 0, 0, 0, 0, 0, 80, -1.5503564, 4.95, 0, 0, 0, 0, 0, 0, 120, -1.905, 10.02, 0, 0, 0, 0, 0, 0, 130, -1.75, 9.655, 0, 0, 0, 0, 0, 0, 140, -1.75, 7.73, 0, 0, 0, 0, 0, 0, 150, -2, 5.06, 0, 0, 0, 0, 0, 0, 160, -3.75, 4.03, 0, 0, 0, 0, 0, 0, 180, 0, 4.095, 0, 0, 0, 0, 0, 0, 200, 0, 4.71, 0, 0, 0, 0, 0, 0, 241.11, -5.044, 7.831, 0, 0, 0, 0, 0, 0, 255.215, -7.2080035, 5.605, 0, 0, 0, 0, 0, 0, 263.17, -7.2080035, 3.155, 0, 0, 0, 0, 0, 0, 270, -7.2080035, 3.33, 0, 0, 0, 0, 0, 0, 290, -4.6479936, 9.57, 0, 0, 0, 0, 0, 0, 300, -4.9702573, 13.43, 0, 0, 0, 0, 0, 0, 321.82742, -4.680188, 14.000001),
+"tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 }
-point_count = 17
+point_count = 24
 
 [node name="Level1" type="Node3D"]
 
 [node name="PlayerGround" parent="." instance=ExtResource("1_3mtpf")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
-_autoForwardSpeed = 6.5
+_autoForwardSpeed = 8.5
 _baseJumpVelocity = 6.0
+_lateralDeceleration = 4.0
+_jumpPadAirSteeringStrength = 1.65
 _pathGuideNodePath = NodePath("../TrackGuidePath")
 
 [node name="PlayerAir" parent="." node_paths=PackedStringArray("_playerGround") instance=ExtResource("2_dw28y")]
@@ -32,7 +36,26 @@ shadow_enabled = true
 [node name="level-1-track-1" parent="." instance=ExtResource("3_bq6a1")]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, 0, -0.5)
 
+[node name="BaseJumpPad" parent="level-1-track-1" instance=ExtResource("4_0aets")]
+transform = Transform3D(0.022562101, -0.1498524, -0.98845106, -0.032841645, 0.9880579, -0.15054235, 0.99920607, 0.03585892, 0.017371265, 198.27008, -1.4147575, 2.29813)
+
+[node name="BaseJumpPad2" parent="level-1-track-1" instance=ExtResource("4_0aets")]
+transform = Transform3D(0.022562101, -0.1498524, -0.98845106, -0.032841645, 0.9880579, -0.15054235, 0.99920607, 0.03585892, 0.017371265, 198.2663, -1.4771632, 4.206467)
+
+[node name="BaseJumpPad3" parent="level-1-track-1" instance=ExtResource("4_0aets")]
+transform = Transform3D(0.022562101, -0.1498524, -0.98845106, -0.032841645, 0.9880579, -0.15054235, 0.99920607, 0.03585892, 0.017371265, 198.2605, -1.5724642, 6.237395)
+
+[node name="BaseJumpPad4" parent="level-1-track-1" instance=ExtResource("4_0aets")]
+transform = Transform3D(0.022562101, -0.1498524, -0.98845106, -0.032841645, 0.9880579, -0.15054235, 0.99920607, 0.03585892, 0.017371265, 198.25464, -1.6690543, 8.262502)
+
+[node name="BaseJumpPad5" parent="level-1-track-1" instance=ExtResource("4_0aets")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 1.9502795, -0.32637247, -0.018223342)
+_upVelocity = 18.0
+
 [node name="TrackGuidePath" type="Path3D" parent="."]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, 0, 0)
 curve = SubResource("Curve3D_bq6a1")
 debug_custom_color = Color(1, 1, 1, 1)
+
+[node name="level-1-track-2" parent="." instance=ExtResource("4_1ylsx")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -33.25, -7.5, -234.37819)

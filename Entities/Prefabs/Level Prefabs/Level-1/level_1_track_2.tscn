@@ -1,6 +1,25 @@
-[gd_scene load_steps=2 format=3 uid="uid://bkjums4at4bri"]
+[gd_scene load_steps=5 format=3 uid="uid://bkjums4at4bri"]
 
 [ext_resource type="PackedScene" uid="uid://cla78p005n0fw" path="res://Entities/Prefabs/Level Prefabs/Level-1/level-1-track-2.glb" id="1_xcrtt"]
+[ext_resource type="Shader" uid="uid://cbjnlljxhee8x" path="res://Shaders/road_edge_mask-params.gdshader" id="2_2o7nm"]
+[ext_resource type="Texture2D" uid="uid://b68wnnpxjaknf" path="res://all-of-it_hexagon-texture-purple.jpg.jpg" id="3_y3jov"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vbxnf"]
+render_priority = 0
+shader = ExtResource("2_2o7nm")
+shader_parameter/albedo_texture = ExtResource("3_y3jov")
+shader_parameter/base_tint = Color(0.22352941, 0.77254903, 0.54509807, 1)
+shader_parameter/edge_color = Color(0, 0, 0, 1)
+shader_parameter/edge_strength = -10.0
+shader_parameter/edge_power = 0.2
+shader_parameter/roughness_value = 1.6
+shader_parameter/metallic_value = 0.0
 
 [node name="level-1-track-2" instance=ExtResource("1_xcrtt")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -38.5)
+
+[node name="track-02" parent="." index="0"]
+surface_material_override/0 = SubResource("ShaderMaterial_vbxnf")
+
+[node name="StaticBody3D" parent="track-02-col" index="0"]
+collision_layer = 2
+collision_mask = 13

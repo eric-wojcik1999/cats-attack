@@ -83,11 +83,33 @@ public partial class PlayerGround : CharacterBody3D
 	[Export] private float _jumpPadControlLockTime = 0.05f;
 	[Export] private float _jumpPadBlendBackTime = 7f;
 	[Export] private float _jumpPadAirSteeringStrength = 1.35f;
-	[Export] private float _jumpPadGravityMultiplier = 1.0f;
+	// Keep upward motion close to normal but make the falling different/softer.
+	[Export] private float _jumpPadUpGravityModifier = 0.9f;
+	[Export] private float _jumpPadFallGravityModifier = 1.5f;
+	// Prevents fall from becoming too fast/abrupt near the end
+	[Export] private float _jumpPadMaxFallSpeed = 55.0f;
+	[Export] private bool _disableFloorSnappingDuringJumpPad = true;
 	[Export] private float _jumpPadTriggerLockoutTime = 0.75f;
 	private float _externalLaunchTimer = 0f;
 	private float _jumpPadBlendBackTimer = 0f;
 	private float _jumpPadTriggerLockoutTimer = 0f;
+	private bool _jumpPadArcActive = false;
+	private float _defaultFloorSnapLength = 0f;
+
+	// Jump pad - landing impact
+	[Export] private float _jumpPadBounceMinImpactSpeed = 2.0f;
+	[Export] private float _jumpPadBounceVelocityMultipler = 0.16f;
+	[Export] private float _jumpPadMaxBounceVelocity = 2.5f;
+	[Export] private int _jumpPadMaxBounces = 4;
+	[Export] private float _jumpPadLandingHorizontalRetention = 0.88f;
+	private int _jumpPadBouncesRemaining = 0;
+
+	// Jump pad - skidding
+	[Export] private float _jumpPadSkidTime = 0f;
+	[Export] private float _jumpPadSkidFriction = 22.0f;
+	[Export] private float _jumpPadSkidSteeringStrength = 0.95f;
+	private float _jumpPadSkidTimer = 5f;
+	private Vector3 _jumpPadSkidVelocity = Vector3.Zero;
 
 	// Speed pad vars
 	[Export] private float _speedBoostAccelerationTime = 0.35f;
@@ -124,6 +146,8 @@ public partial class PlayerGround : CharacterBody3D
 		_spawnRight = GetNode<Node3D>(_droneSpawnRightPath);
 		_despawnMarker = GetNode<Node3D>(_droneDespawnPath);
 		_camera = GetNodeOrNull<Camera3D>(_cameraNodePath);
+
+		_defaultFloorSnapLength = FloorSnapLength;
 
 		if (_camera != null)
 		{
@@ -217,21 +241,35 @@ public partial class PlayerGround : CharacterBody3D
 		{
 			Vector3 gravity = GetGravity();
 
-			if (_jumpPadBlendBackTimer > 0f)
+			if (_jumpPadArcActive)
 			{
-				gravity *= _jumpPadGravityMultiplier;
+				if (newVelocity.Y > 0f)
+				{
+					// Going up - keep gravity mostly the same
+					gravity *= _jumpPadUpGravityModifier;
+				}
+				else
+				{
+					// Going down - make gravity a bit softer
+					// ACTUALLY maybe want to tweak with hard gravity here so can skid around, not necessarily padded
+					gravity *= _jumpPadFallGravityModifier;
+				}
 			}
 
 			newVelocity += gravity * dt;
+
+			if (_jumpPadArcActive && _jumpPadMaxFallSpeed > 0f)
+			{
+				newVelocity.Y = Mathf.Max(newVelocity.Y, -_jumpPadMaxFallSpeed);
+			}
 		}
 
 		// ───── Shared horizontal basis vectors ─────
 		// Vector3 forwardDir = -Transform.Basis.Z;
 		// Vector3 rightDir = Transform.Basis.X;
-		// This meanns that auto-forward and lateral movement uses the player's world facing direction
+		// This means that auto-forward and lateral movement uses the player's world facing direction
 		Vector3 forwardDir = ForwardDir;
 		Vector3 rightDir = RightDir;
-
 
 		float movementSpeedMultiplier = _currentSpeedBoostMultiplier;
 		
@@ -242,43 +280,59 @@ public partial class PlayerGround : CharacterBody3D
 			lateralInputVelocity = rightDir * horizontalInput * (_baseMovementSpeed * movementSpeedMultiplier);
 		}
 
-		// if: _jumpPadBlendBackTimer  > 0 THEN launch the player and blend back to normal velocity
-		// else if: knowckback timer > 0, then KNOCKBACK STUN
-		// else: NORMAL MOVEMENT
-		if (_jumpPadBlendBackTimer > 0f)
+		if (_jumpPadArcActive)
 		{
-			// During a jump pad launch:
-			// - keep the strong launch velocity
-			// - allow a tiny amount of lateral steering
-			// - do not apply normal auto-forward movement yet
-
-			Vector3 forwardVelocity = forwardDir * (_autoForwardSpeed * movementSpeedMultiplier);
-
-			if (_externalLaunchTimer > 0f) 
+			if (_externalLaunchTimer <= 0f)
 			{
-				// Phase 1:
 				// Preserve strong launch and add small amount of air steering
 				newVelocity.X += lateralInputVelocity.X * _jumpPadAirSteeringStrength * dt;
 				newVelocity.Z += lateralInputVelocity.Z * _jumpPadAirSteeringStrength * dt;
-			} 
+			}
+		}
+		else if (_jumpPadSkidTimer > 0f && onFloor) 
+		{
+			_jumpPadSkidTimer -= dt;
+
+			if (_jumpPadSkidTimer < 0f)
+			{
+				_jumpPadSkidTimer = 0f;
+			}
+
+			Vector3 forwardVelocity = forwardDir * (_autoForwardSpeed * movementSpeedMultiplier);
+			Vector3 targetHorizontalVelocity = forwardVelocity + lateralInputVelocity;
+
+			// Allow limited steering while skidding
+			_jumpPadSkidVelocity += lateralInputVelocity * _jumpPadSkidSteeringStrength * dt;
+
+			float skidSpeed = _jumpPadSkidVelocity.Length();
+
+			if (skidSpeed > 0.001f)
+			{
+				Vector3 skidDir = _jumpPadSkidVelocity / skidSpeed;
+
+				// Friction to reduce sliding
+				skidSpeed = Mathf.MoveToward(skidSpeed, 0f, _jumpPadSkidFriction * dt);
+
+				Vector3 skidHorizontalVelocity = skidDir * skidSpeed;
+
+				// At end of skid blend back into normal movement
+				float skidElapsedT = 1f - (_jumpPadSkidTimer / Mathf.Max(_jumpPadSkidTime, 0.001f));
+				float controlBlend = Mathf.InverseLerp(0.65f, 1.0f, skidElapsedT);
+				controlBlend = SmoothStep01(controlBlend);
+
+				Vector3 finalHorizontalVelocity = skidHorizontalVelocity.Lerp(targetHorizontalVelocity, controlBlend);
+
+				newVelocity.X = finalHorizontalVelocity.X;
+				newVelocity.Z = finalHorizontalVelocity.Z;
+				_jumpPadSkidVelocity = skidHorizontalVelocity;
+			}
 			else
 			{
-				// Phase 2:
-				// Blend back to normal velocity
-				float blendElapsed = _jumpPadBlendBackTime - _jumpPadBlendBackTimer;
-				float blendT = Mathf.Clamp(blendElapsed / _jumpPadBlendBackTime, 0f, 1f);
-
-				// Smoothstep makes transition less abrupt
-				blendT = blendT * blendT * (3f - 2f * blendT);
-
-				Vector3 targetHorizontalVelocity = forwardVelocity + lateralInputVelocity;
-
-				float returnStrength = 2.5f;
-				float returnBlend = 1f - Mathf.Exp(-returnStrength * blendT * dt);
-
-				newVelocity.X = Mathf.Lerp(newVelocity.X, targetHorizontalVelocity.X, returnBlend);
-				newVelocity.Z = Mathf.Lerp(newVelocity.Z, targetHorizontalVelocity.Z, returnBlend);
+				newVelocity.X = targetHorizontalVelocity.X;
+				newVelocity.Z = targetHorizontalVelocity.Z;
+				_jumpPadSkidTimer = 0f;
 			}
+
 		}
 		else if (_knockbackTimer > 0f)
 		{
@@ -324,9 +378,17 @@ public partial class PlayerGround : CharacterBody3D
 			}
 		}
 
+		float preMoveVerticalVelocity = newVelocity.Y;
+		Vector3 preMoveHorizontalVelocity = new Vector3(newVelocity.X, 0f, newVelocity.Z);
+
 		// ───── Commit movement once ─────
 		Velocity = newVelocity;
 		MoveAndSlide();
+
+		if (_jumpPadArcActive && IsOnFloor() && preMoveVerticalVelocity <= 0f)
+		{
+			HandleJumpPadLanding(-preMoveVerticalVelocity, preMoveHorizontalVelocity);
+		}
 
 		// ───── Post-move collision reactions ─────
 		TryApplyWallKnockback();
@@ -571,11 +633,21 @@ public partial class PlayerGround : CharacterBody3D
 
 		Velocity = new Vector3(horizontalDir.X * horizontalSpeed, verticalSpeed, horizontalDir.Z * horizontalSpeed);
 
+		_jumpPadArcActive = true;
+		_jumpPadBouncesRemaining = _jumpPadMaxBounces;
+		_jumpPadSkidTimer = 0f;
+		_jumpPadSkidVelocity = Vector3.Zero;
+
+		if (_disableFloorSnappingDuringJumpPad) 
+		{
+			 FloorSnapLength = 0f;
+		}
+
 		// Short period where the launch is mostly untouched.
 		_externalLaunchTimer = _jumpPadControlLockTime;
 
-		// Longer period where momentum gradually blends back to normal movement.
-		_jumpPadBlendBackTimer = _jumpPadBlendBackTime;
+		// // Longer period where momentum gradually blends back to normal movement.
+		// _jumpPadBlendBackTimer = 0f;
 
 		// Prevent neighboring jump pads from triggering.
 		_jumpPadTriggerLockoutTimer = _jumpPadTriggerLockoutTime;
@@ -583,6 +655,50 @@ public partial class PlayerGround : CharacterBody3D
 		// Cancel knockback state so it doesn't fight the jump pad
 		_knockbackTimer = 0f;
 		_knockbackHorizontal = Vector3.Zero;
+	}
+
+	private void HandleJumpPadLanding(float impactFallSpeed, Vector3 landingHorizontalVelocity)
+	{
+		Vector3 retainedHorizontal = landingHorizontalVelocity * _jumpPadLandingHorizontalRetention;
+
+		bool shouldBounce = _jumpPadBouncesRemaining > 0 && impactFallSpeed >= _jumpPadBounceMinImpactSpeed;
+
+		if (shouldBounce)
+		{
+			_jumpPadBouncesRemaining--;
+
+			float bounceVelocity = impactFallSpeed * _jumpPadBounceVelocityMultipler;
+			bounceVelocity = Mathf.Clamp(bounceVelocity, 0f, _jumpPadMaxBounceVelocity);
+
+			// Bounce upwards
+			Velocity = new Vector3(retainedHorizontal.X, bounceVelocity, retainedHorizontal.Z);
+			_jumpPadArcActive = true;
+
+			if (_disableFloorSnappingDuringJumpPad)
+			{
+				FloorSnapLength = 0f;
+			}
+
+			return;
+		}
+
+		// Final landing - stop arc
+		EndJumpArc();
+
+		_jumpPadSkidVelocity = retainedHorizontal;
+		_jumpPadSkidTimer = _jumpPadSkidTime;
+
+		Velocity = new Vector3(retainedHorizontal.X, 0f, retainedHorizontal.Z);
+	}
+
+	private void EndJumpArc()
+	{
+		_jumpPadArcActive = false;
+
+		if (_disableFloorSnappingDuringJumpPad)
+		{
+			FloorSnapLength = _defaultFloorSnapLength;
+		}
 	}
 
 	public bool CanTriggerSpeedBoostPad()
