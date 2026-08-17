@@ -27,8 +27,6 @@ public partial class PlayerGround : CharacterBody3D
 	private float _knockbackTimer = 0f;
 	private Vector3 _knockbackHorizontal = Vector3.Zero;
 	[Export] public int _collideDamageAmount = 1;
-	[Export] public NodePath _playerMeshNodePath = "PlayerMeshTemp";
-	
 	[Export] public NodePath _droneSpawnLeftPath = "PercyDroneSpawnLeft";
 	[Export] public NodePath _droneSpawnRightPath = "PercyDroneSpawnRight";
 	[Export] public NodePath _droneDespawnPath = "PercyDroneDespawn";
@@ -60,6 +58,18 @@ public partial class PlayerGround : CharacterBody3D
 			return forward.Normalized();
 		}
 	}
+	public float CurrentAutoForwardSpeed => _autoForwardSpeed * _currentSpeedBoostMultiplier;
+	public float CurrentForwardVelocity
+	{
+		get
+		{
+			Vector3 horizontalVelocity =
+				new Vector3(Velocity.X, 0.0f, Velocity.Z);
+
+			return horizontalVelocity.Dot(ForwardDir);
+		}
+	}
+
 	public Vector3 RightDir
 	{
 		get{
@@ -138,6 +148,70 @@ public partial class PlayerGround : CharacterBody3D
 	private Path3D _pathGuide;
 	private Curve3D _pathCurve;
 
+	[ExportGroup("Player Visual")]
+	[Export] private Node3D _playerVisualRoot;
+
+	[ExportGroup("Visual Lean")]
+	[Export(PropertyHint.Range, "0.0, 45.0, 0.5")]
+	private float _maximumnLeanDegrees = 12.0f;
+
+	[Export(PropertyHint.Range, "1.0, 30.0, 0.5")]
+	private float _leanSpeed = 10.0f;
+
+	private float _visualBaseRoll;
+
+	[ExportGroup("GroundDust")]
+	[Export] private GpuParticles3D _groundDust;
+	[Export] private GpuParticles3D _landingDustBurst;
+	[Export(PropertyHint.Range, "0.0,1.0,0.05")]
+	private float _groundDustVelocityInheritance = 0.85f;
+
+	[Export(PropertyHint.Range, "0.0,20.0,0.1")]
+	private float _landingDustMinimumFallSpeed = 1.5f;
+
+	[Export(PropertyHint.Range, "0.1,30.0,0.1")]
+	private float _landingDustFullImpactSpeed = 10.0f;
+
+	[Export(PropertyHint.Range, "0.0,1.0,0.05")]
+	private float _landingDustMinimumAmountRatio = 0.4f;
+
+	private bool _wasOnFloor;
+	private bool _floorStateInitialised;
+	[ExportGroup("Audio")]
+	[Export] private AudioStream _hurtSfx;
+	[Export] private AudioStream _deathSfx;
+
+	[Export(PropertyHint.Range, "-40.0, 6.0, 0.5")]
+	private float _hurtSfxVolumeDb = -6.0f;
+
+	[Export(PropertyHint.Range, "-40.0, 6.0, 0.5")]
+	private float _deathSfxVolumeDb = -4.0f;
+	[ExportGroup("Jump Pad Skid Audio")]
+
+	[Export] private AudioStream _jumpPadSkidSfx;
+
+	[Export(PropertyHint.Range, "-40.0, 6.0, 0.5")]
+	private float _jumpPadSkidVolumeDb = -4.0f;
+
+	// How much of the sound is allowed to play before fading.
+	[Export(PropertyHint.Range, "0.05, 2.0, 0.05")]
+	private float _jumpPadSkidClipTime = 0.35f;
+
+	// Quick fade after the audible portion.
+	[Export(PropertyHint.Range, "0.01, 0.5, 0.01")]
+	private float _jumpPadSkidFadeTime = 0.10f;
+
+	// Allows stronger landings to make louder skid sounds.
+	[Export(PropertyHint.Range, "0.0, 1.0, 0.05")]
+	private float _jumpPadSkidMinimumVolumeFactor = 0.45f;
+
+	private AudioStreamPlayer _jumpPadSkidAudio;
+	private Tween _jumpPadSkidAudioTween;
+
+	[Export(PropertyHint.Range, "0.0,30.0,0.5")]
+	private float _hardLandingMinimumFallSpeed = 7.0f;
+
+		
 	public override void _Ready() 
 	{
 		_currentTurnDegPerSec = _defaultTurnDegPerSec;
@@ -146,6 +220,14 @@ public partial class PlayerGround : CharacterBody3D
 		_spawnRight = GetNode<Node3D>(_droneSpawnRightPath);
 		_despawnMarker = GetNode<Node3D>(_droneDespawnPath);
 		_camera = GetNodeOrNull<Camera3D>(_cameraNodePath);
+
+		if (_playerVisualRoot == null) 
+		{
+			GD.PushWarning("[PlayerGround] Player Visual Root has not been assigned.");
+		} else 
+		{
+			_visualBaseRoll = _playerVisualRoot.Rotation.Z;
+		}
 
 		_defaultFloorSnapLength = FloorSnapLength;
 
@@ -167,6 +249,11 @@ public partial class PlayerGround : CharacterBody3D
 				SnapYawToForward(initialForward);
 			}
 		}
+
+		InitialiseGroundDustContinious();
+		InitialiseGroundDustLanding();
+		InitialiseJumpPadSkidAudio();
+		AddToGroup("Player");
 	}
     
 	public override void _PhysicsProcess(double delta)
@@ -232,6 +319,7 @@ public partial class PlayerGround : CharacterBody3D
 
 		bool onFloor = IsOnFloor();
 		float horizontalInput = Input.GetActionStrength("move_ground_right") - Input.GetActionStrength("move_ground_left");
+		UpdateVisualLean(horizontalInput, dt);
 
 		// Start from current velocity and build next frame's velocity
 		Vector3 newVelocity = Velocity;
@@ -385,10 +473,42 @@ public partial class PlayerGround : CharacterBody3D
 		Velocity = newVelocity;
 		MoveAndSlide();
 
-		if (_jumpPadArcActive && IsOnFloor() && preMoveVerticalVelocity <= 0f)
+		// This is the floor state after this frame's movement.
+		bool isOnFloorNow = IsOnFloor();
+
+		// Detect transition from being airborne to grounded
+		bool landedThisFrame = _floorStateInitialised && !_wasOnFloor && isOnFloorNow;
+
+		float landingImpactSpeed = Mathf.Max(-preMoveVerticalVelocity, 0.0f);
+
+		bool wasJumpPadLanding = _jumpPadArcActive;
+
+		if (_jumpPadArcActive && isOnFloorNow && preMoveVerticalVelocity <= 0f)
 		{
 			HandleJumpPadLanding(-preMoveVerticalVelocity, preMoveHorizontalVelocity);
 		}
+
+		// Hard NORMAL landing.
+		// Jump-pad impacts already play the sound from HandleJumpPadLanding().
+		if (landedThisFrame && !wasJumpPadLanding && landingImpactSpeed >= _hardLandingMinimumFallSpeed)
+		{
+			PlayJumpPadSkidSfx(landingImpactSpeed);
+		}
+
+
+		// Only create burst after landing handler
+		// Jump pad bounce should not produce full landing burst until after player reaches final landing
+		if (landedThisFrame && landingImpactSpeed >= _landingDustMinimumFallSpeed)
+		{
+			TriggerLandingDustBurst(landingImpactSpeed);
+		}
+
+		// ───── Apply ground dust effect ─────
+		UpdateGroundDust(isOnFloorNow);
+
+		// Save floor state for the next physics frame.
+		_wasOnFloor = isOnFloorNow;
+		_floorStateInitialised = true;
 
 		// ───── Post-move collision reactions ─────
 		TryApplyWallKnockback();
@@ -482,8 +602,9 @@ public partial class PlayerGround : CharacterBody3D
 
 		GD.Print($"[PlayerGround] health is: {_health})");
 
-		if (_health != prevHealth)
+		if (_health < prevHealth && _health > 0)
 		{
+			PlayDetachedSfx(_hurtSfx, _hurtSfxVolumeDb);
 			// Emit signal to update UI health value
 			EmitSignal(SignalName.HealthChanged, _health);
 		}
@@ -491,10 +612,15 @@ public partial class PlayerGround : CharacterBody3D
 		// Handling death
 		if (_health == 0 && prevHealth > 0)
 		{
+			PlayDetachedSfx(_deathSfx, _deathSfxVolumeDb);
 			_hasDied = true;
 			EmitSignal(SignalName.Died);
-			MeshInstance3D playerMesh = GetNode<MeshInstance3D>(_playerMeshNodePath);
-			playerMesh.Visible = false;
+
+			if (IsInstanceValid(_playerVisualRoot))
+			{
+				_playerVisualRoot.Visible = false;
+			}
+
 			await ToSignal(GetTree().CreateTimer(3), SceneTreeTimer.SignalName.Timeout);
 			GD.Print("[PlayerGround] reload level!");
 			// TO DO: Reload level which would be stored in Global
@@ -662,6 +788,8 @@ public partial class PlayerGround : CharacterBody3D
 		Vector3 retainedHorizontal = landingHorizontalVelocity * _jumpPadLandingHorizontalRetention;
 
 		bool shouldBounce = _jumpPadBouncesRemaining > 0 && impactFallSpeed >= _jumpPadBounceMinImpactSpeed;
+
+    	PlayJumpPadSkidSfx(impactFallSpeed);
 
 		if (shouldBounce)
 		{
@@ -923,5 +1051,180 @@ public partial class PlayerGround : CharacterBody3D
 
 		_desiredForward = forward;
 		_hasDesiredForward = false;
+	}
+
+	private void UpdateVisualLean(float horizontalInput, float delta)
+	{
+		if (!GodotObject.IsInstanceValid(_playerVisualRoot))
+		{
+			return;
+		}
+
+		float leanDirection = 1.0f;
+
+		float targetLeanRadius = Mathf.DegToRad(_maximumnLeanDegrees * horizontalInput * leanDirection);
+
+		float targetRoll = _visualBaseRoll + targetLeanRadius;
+
+		float smoothing = 1.0f - Mathf.Exp(-_leanSpeed * delta);
+
+		Vector3 visualRotation = _playerVisualRoot.Rotation;
+
+		visualRotation.Z = Mathf.LerpAngle(visualRotation.Z, targetRoll, smoothing);
+
+		_playerVisualRoot.Rotation = visualRotation;
+	}
+
+	private void InitialiseGroundDustContinious()
+	{
+		if (!GodotObject.IsInstanceValid(_groundDust)) 
+		{
+			GD.PushWarning("[PlayerGround] Ground Dust has not been assigned.");
+			return;
+		}
+
+		_groundDust.LocalCoords  = true;
+		_groundDust.OneShot = false;
+		_groundDust.Explosiveness = 0.0f;
+		_groundDust.Emitting = false;
+
+		if (_groundDust.ProcessMaterial is ParticleProcessMaterial material)
+		{
+			material.InheritVelocityRatio = Mathf.Clamp(_groundDustVelocityInheritance, 0.0f, 0.1f);
+		}
+		else 
+		{
+			GD.PushWarning("[PlayerGround] Ground Dust does not use a ParticleProcessMaterial.");
+		}
+	}
+
+	private void InitialiseGroundDustLanding()
+	{
+		if (!GodotObject.IsInstanceValid(_landingDustBurst)) 
+		{
+			GD.PushWarning("[PlayerGround] Landing Dust Burst has not been assigned.");
+			return;
+		}
+
+		_landingDustBurst.LocalCoords  = false;
+		_landingDustBurst.OneShot = true;
+		_landingDustBurst.Explosiveness = 1.0f;
+		_landingDustBurst.Emitting = false;
+	}
+
+	private void UpdateGroundDust(bool isOnFloorNow)
+	{
+		if (!GodotObject.IsInstanceValid(_groundDust))
+		{
+			GD.PushWarning("[PlayerGround] Ground Dust has not been assigned.");
+			return;
+		}
+
+		bool shouldEmit = isOnFloorNow && Velocity.Y <= 0.05 && !_jumpPadArcActive && !_hasDied;
+
+		if (_groundDust.Emitting != shouldEmit)
+		{
+			_groundDust.Emitting = shouldEmit;
+		}
+	}
+
+	private void TriggerLandingDustBurst(float impactFloorSpeed)
+	{
+		if (!GodotObject.IsInstanceValid(_landingDustBurst))
+		{
+			GD.PushWarning("[PlayerGround] Landing Dust Burst has not been assigned.");
+			return;
+		}
+
+		float fullImpactSpeed = Mathf.Max(_landingDustFullImpactSpeed, _landingDustMinimumFallSpeed + 0.01f);
+
+		float impactFactor = Mathf.InverseLerp(_landingDustMinimumFallSpeed, fullImpactSpeed, impactFloorSpeed);
+
+		_landingDustBurst.AmountRatio = Mathf.Lerp(_landingDustMinimumAmountRatio, 1.0f, impactFactor);
+
+		// Restart immediately, even if particles from a previous
+		// landing burst are still alive.
+		_landingDustBurst.Restart();
+	}
+
+	private void PlayDetachedSfx(AudioStream stream, float volumeDb)
+	{
+		if (stream == null)
+		{
+			return;
+		}
+
+		AudioStreamPlayer player = new AudioStreamPlayer();
+
+		player.Stream = stream;
+		player.VolumeDb = volumeDb;
+		player.Bus = "Sfx";
+
+		Node parent = GetTree().CurrentScene ?? GetTree().Root;
+		parent.AddChild(player);
+		player.Finished += player.QueueFree;
+		player.Play();
+	}
+
+	private void InitialiseJumpPadSkidAudio()
+	{
+		if (_jumpPadSkidSfx == null)
+		{
+			GD.PushWarning("[PlayerGround] Jump pad SFX has not been assigned.");
+
+			return;
+		}
+
+		_jumpPadSkidAudio = new AudioStreamPlayer();
+		_jumpPadSkidAudio.Name = "JumpPadSkidAudio";
+		_jumpPadSkidAudio.Stream = _jumpPadSkidSfx;
+		_jumpPadSkidAudio.VolumeDb = _jumpPadSkidVolumeDb;
+		_jumpPadSkidAudio.Bus = "Sfx";
+		AddChild(_jumpPadSkidAudio);
+	}
+
+	private void PlayJumpPadSkidSfx(float impactSpeed)
+	{
+		if (!GodotObject.IsInstanceValid(_jumpPadSkidAudio))
+		{
+			return;
+		}
+
+		// Kill the previous fade sequence if another bounce happens
+		// before it has finished.
+		if (_jumpPadSkidAudioTween != null && _jumpPadSkidAudioTween.IsValid())
+		{
+			_jumpPadSkidAudioTween.Kill();
+		}
+
+		// Stop whatever portion of the sound is currently playing.
+		_jumpPadSkidAudio.Stop();
+
+		// Scale volume using landing strength.
+		float impactFactor = Mathf.InverseLerp(_jumpPadBounceMinImpactSpeed, Mathf.Max(_landingDustFullImpactSpeed, _jumpPadBounceMinImpactSpeed + 0.01f), impactSpeed);
+		impactFactor = Mathf.Clamp(impactFactor, 0f, 1f);
+		float volumeFactor = Mathf.Lerp(_jumpPadSkidMinimumVolumeFactor, 1f, impactFactor);
+
+		// Convert a linear intensity factor into dB.
+		float impactVolumeDb = _jumpPadSkidVolumeDb + Mathf.LinearToDb(Mathf.Max(volumeFactor, 0.001f));
+		_jumpPadSkidAudio.VolumeDb = impactVolumeDb;
+		_jumpPadSkidAudio.Play(0f);
+		_jumpPadSkidAudioTween = CreateTween();
+		// First leave it at full volume for the short skid portion.
+		_jumpPadSkidAudioTween.TweenInterval(_jumpPadSkidClipTime);
+		// Then fade it quickly.
+		_jumpPadSkidAudioTween.TweenProperty(_jumpPadSkidAudio, "volume_db", -40f, _jumpPadSkidFadeTime);
+		_jumpPadSkidAudioTween.TweenCallback(
+			Callable.From(() =>
+			{
+				if (GodotObject.IsInstanceValid(_jumpPadSkidAudio))
+				{
+					_jumpPadSkidAudio.Stop();
+
+					// Restore base volume so the next landing doesn't begin at -40 dB.
+					_jumpPadSkidAudio.VolumeDb = _jumpPadSkidVolumeDb;
+				}
+			})
+		);
 	}
 }

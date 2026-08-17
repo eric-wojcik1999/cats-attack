@@ -1,7 +1,12 @@
-[gd_scene load_steps=8 format=3 uid="uid://d4nm5bdaxqhsr"]
+[gd_scene load_steps=13 format=3 uid="uid://d4nm5bdaxqhsr"]
 
 [ext_resource type="Script" uid="uid://csfkggqcwrgf" path="res://Entities/Players/PlayerGround/PlayerGround.cs" id="1_lw8c3"]
 [ext_resource type="PackedScene" uid="uid://bdr78xmt07g35" path="res://Entities/Players/PercyDrone.tscn" id="2_f0fqm"]
+[ext_resource type="PackedScene" uid="uid://cvhydhtyflf7q" path="res://Entities/Players/PlayerGround/waiyan_base.tscn" id="3_fk83d"]
+[ext_resource type="AudioStream" uid="uid://dnq5sdnxijejt" path="res://Audio/Sfx/Players/melon-hurt-2.mp3" id="3_fyiub"]
+[ext_resource type="PackedScene" uid="uid://cyfbg5o8jl6p" path="res://Entities/Effects/dust-effect.tscn" id="4_nccrk"]
+[ext_resource type="AudioStream" uid="uid://eq5xk2y7x8y" path="res://Audio/Sfx/Players/melon-hurt.mp3" id="4_s58nq"]
+[ext_resource type="AudioStream" uid="uid://soo6b3ghx1bw" path="res://Audio/Sfx/Players/melon-break.mp3" id="5_s58nq"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_mv8dw"]
 
@@ -15,18 +20,26 @@ size = Vector3(0.25, 0.25, 0.5)
 albedo_color = Color(1, 0, 1, 1)
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_mv8dw"]
-radius = 0.75
-height = 2.375
+radius = 1.0
+height = 2.6484375
 
-[node name="PlayerGround" type="CharacterBody3D" node_paths=PackedStringArray("_playerAirPositionMarker")]
+[node name="PlayerGround" type="CharacterBody3D" node_paths=PackedStringArray("_playerAirPositionMarker", "_playerVisualRoot", "_groundDust", "_landingDustBurst")]
 collision_mask = 6
 script = ExtResource("1_lw8c3")
+_autoForwardSpeed = 6.5
 _baseJumpVelocity = 3.0
 _playerAirPositionMarker = NodePath("PlayerAirPositionMarker")
 _percyDroneScene = ExtResource("2_f0fqm")
+_playerVisualRoot = NodePath("PlayerVisual")
+_groundDust = NodePath("Ground Dust Emitters/DustEffect")
+_landingDustBurst = NodePath("Ground Dust Emitters/DustEffectLanding")
+_hurtSfx = ExtResource("3_fyiub")
+_deathSfx = ExtResource("4_s58nq")
+_jumpPadSkidSfx = ExtResource("5_s58nq")
 
 [node name="PlayerMeshTemp" type="MeshInstance3D" parent="."]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, 0, 0)
+visible = false
 mesh = SubResource("CapsuleMesh_mv8dw")
 surface_material_override/0 = SubResource("StandardMaterial3D_phw1g")
 
@@ -35,15 +48,20 @@ transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -0.5
 mesh = SubResource("BoxMesh_mv8dw")
 surface_material_override/0 = SubResource("StandardMaterial3D_mv8dw")
 
-[node name="PlayerCollisionTemp" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0625, 0)
+[node name="PlayerCollision" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.23828125, 0.25)
 shape = SubResource("CapsuleShape3D_mv8dw")
+
+[node name="PlayerVisual" type="Node3D" parent="."]
+transform = Transform3D(-1.5, 0, -1.3113416e-07, 0, 1.5, 0, 1.3113416e-07, 0, -1.5, 0, -0.785, 0)
+
+[node name="waiyan-base" parent="PlayerVisual" instance=ExtResource("3_fk83d")]
 
 [node name="CameraController" type="Node3D" parent="."]
 top_level = true
 
 [node name="CameraTarget" type="Node3D" parent="CameraController"]
-transform = Transform3D(-4.1075264e-08, -0.34202006, 0.93969244, -1.4950173e-08, 0.93969244, 0.34202006, -0.99999994, -8.881784e-16, -4.371138e-08, 4.1175604, 1.971499, 0.078990124)
+transform = Transform3D(0.37415725, -0.2239901, 0.89990795, -0.20630142, 0.9259719, 0.31625193, -0.9041271, -0.30398035, 0.30024973, 3.526862, 1.4168876, 1.2215302)
 rotation_order = 1
 
 [node name="Camera3D" type="Camera3D" parent="CameraController/CameraTarget"]
@@ -61,3 +79,10 @@ transform = Transform3D(0.99999994, 0, 0, 0, 1, 0, 0, 0, 0.99999994, 1.75, 2.75,
 
 [node name="PercyDroneDespawn" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 3.25, 4.5)
+
+[node name="Ground Dust Emitters" type="Node3D" parent="."]
+
+[node name="DustEffect" parent="Ground Dust Emitters" instance=ExtResource("4_nccrk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.94711727, 1.5427897)
+
+[node name="DustEffectLanding" parent="Ground Dust Emitters" instance=ExtResource("4_nccrk")]

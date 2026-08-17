@@ -78,5 +78,6 @@ public partial class BaseSpeedPad : Area3D
 		_lastTriggerTime = now;
 		_playersTriggeredInsideThisEntry.Add(player);
 		player.ActivateSpeedBoost(_boostMultiplier, _boostDuration);
+		SfxManager.Instance?.PlaySpeedBoost(GlobalPosition);
 	}
 }

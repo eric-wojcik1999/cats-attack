@@ -40,6 +40,7 @@ public partial class BaseJumpPad : Area3D
 
 		Vector3 launchDirection = GetPlayerLaunchDirection(player);
 		player.LaunchFromJumpPad(launchDirection, _forwardVelocity, _upVelocity);
+		SfxManager.Instance?.PlayJumpPad(GlobalPosition);
 	}
 
 	private Vector3 GetPlayerLaunchDirection(PlayerGround player)

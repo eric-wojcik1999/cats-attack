@@ -1,6 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://c10pt2qia8poh"]
+[gd_scene load_steps=6 format=3 uid="uid://c10pt2qia8poh"]
 
 [ext_resource type="Script" uid="uid://byj67e1gnmiqe" path="res://Entities/Pickups/PowerUps/PercyPowerup.cs" id="1_edjjy"]
+[ext_resource type="AudioStream" uid="uid://ls4bbqkpskqn" path="res://Audio/Sfx/Pickups/percy-drone-pickup.mp3" id="2_kdqya"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_hmbcr"]
 radius = 0.6
@@ -26,6 +27,7 @@ radius = 0.75
 transform = Transform3D(1.3, 0, 0, 0, 1.3, 0, 0, 0, 1.3, 0, 0, 0)
 collision_layer = 4
 script = ExtResource("1_edjjy")
+PickupSfx = ExtResource("2_kdqya")
 
 [node name="PercyPowerupTempMesh" type="MeshInstance3D" parent="."]
 mesh = SubResource("SphereMesh_hmbcr")

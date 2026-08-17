@@ -1,6 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://bdr78xmt07g35"]
+[gd_scene load_steps=8 format=3 uid="uid://bdr78xmt07g35"]
 
 [ext_resource type="Script" uid="uid://mv8qbw20avva" path="res://Entities/Players/PercyDrone.cs" id="1_8tafh"]
+[ext_resource type="PackedScene" uid="uid://batigrul34w6g" path="res://Entities/Players/percy_base.tscn" id="2_61cwa"]
+[ext_resource type="AudioStream" uid="uid://cbveb4jgv8twu" path="res://Audio/Sfx/Players/percy-drone-start.mp3" id="2_p1bhy"]
+[ext_resource type="AudioStream" uid="uid://c6w6hpiom2v46" path="res://Audio/Sfx/Players/percy-drone-loop.mp3" id="3_8m21g"]
 
 [sub_resource type="TorusMesh" id="TorusMesh_r81j5"]
 inner_radius = 0.2
@@ -16,12 +19,18 @@ size = Vector3(1.75, 1.5, 1)
 
 [node name="PercyDrone" type="Area3D"]
 script = ExtResource("1_8tafh")
+_startSfx = ExtResource("2_p1bhy")
+_loopSfx = ExtResource("3_8m21g")
 
 [node name="PercyDroneMeshTemp" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0)
+visible = false
 mesh = SubResource("TorusMesh_r81j5")
 surface_material_override/0 = SubResource("ORMMaterial3D_r81j5")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.125, 0, 0)
 shape = SubResource("BoxShape3D_r81j5")
+
+[node name="percy-base" parent="." instance=ExtResource("2_61cwa")]
+transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 0, -0.5, 0.25)

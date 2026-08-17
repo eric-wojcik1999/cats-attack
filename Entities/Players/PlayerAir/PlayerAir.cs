@@ -30,11 +30,13 @@ public partial class PlayerAir : CharacterBody3D
 	private readonly List<RayCast3D> _wallRays = new();
 
 	[ExportGroup("Shooting")]
-	[Export] public NodePath _muzzleMarkerPath;
+	[Export] public NodePath _muzzleMarkerLeftPath;
+	[Export] public NodePath _muzzleMarkerRightPath;
 	[Export] public PackedScene _bulletScene;
 	[Export] public float _rateOfFire = 0.1f;
 	private float _fireTimer = 0f;
-	private Node3D _muzzleMarker;
+	private Node3D _muzzleMarkerLeft;
+	private Node3D _muzzleMarkerRight;
 
 	[ExportGroup("Pitch Aim")]
 	[Export] private float _pitchMouseSensitivity = 0.0025f;
@@ -45,17 +47,33 @@ public partial class PlayerAir : CharacterBody3D
 	private float _targetPitch = 0f;
 	private float _currentPitch = 0f;
 
+	[ExportGroup("Visual Lean")]
+	[Export] private Node3D _playerVisualRoot;
+	[Export(PropertyHint.Range, "0.0, 45.0, 0.5")]
+	private float _maximumLeanDegrees = 15.0f;
+	[Export(PropertyHint.Range, "1.0, 30.0, 0.5")]
+	private float _leanSpeed = 10.0f;
+	[Export(PropertyHint.Range, "0.1, 50.0, 0.1")]
+	private float _fullLeanLateralSpeed = 8.0f;
+	[Export(PropertyHint.Range, "1.0, 1.0, 0.05")]
+	private float _leanDeadZone = 0.05f;
+	private bool _invertLeanDirection = false;
+	private float _visualBaseRoll;
+	private float _previousLateralOffset;
+
+	[ExportGroup("Sfx")]
+	[Export] private AudioStreamPlayer _propellerLoop;
+	[Export] private AudioStreamPlayer _laserLoop;
+	private ulong _nextVolleyId = 1;
+
 	public override void _Ready()
 	{
-		_muzzleMarker = GetNode<Node3D>(_muzzleMarkerPath);
+		_muzzleMarkerLeft = GetNode<Node3D>(_muzzleMarkerLeftPath);
+		_muzzleMarkerRight = GetNode<Node3D>(_muzzleMarkerRightPath);
 
-		if (_muzzleMarker == null )
+		if (_muzzleMarkerLeft == null || _muzzleMarkerRight == null)
 		{
-			GD.Print("[PlayerAir] Muzzle marker not found");
-		}
-		else
-		{
-			GD.Print("[PlayerAir] Muzzle marker initialised");
+			GD.PushWarning("[PlayerAir] Muzzle marker not found");
 		}
 
 		if (_playerGround != null)
@@ -66,11 +84,25 @@ public partial class PlayerAir : CharacterBody3D
 		}
 		else 
 		{
-			GD.Print("[Player Air] Player Ground not found");
+			GD.Print("[Player Air] Player Air not found");
 		}
+
+		if (!GodotObject.IsInstanceValid(_playerVisualRoot))
+		{
+			GD.PushWarning("[PlayerAir] Player AIr visual root has not been assigned.");
+		}
+		else 
+		{
+			_visualBaseRoll = _playerVisualRoot.Rotation.Z;
+		}
+
+		_previousLateralOffset = _currentLateralOffset;
 
 		initialiseWallRays();
 		_baseOffsetYFromAnchor = GlobalPosition.Y - _playerGround.AirAnchorPosition.Y;
+
+		_propellerLoop.Play();
+		_laserLoop.Play();
 	}
 
 	private void initialiseWallRays()
@@ -124,14 +156,26 @@ public partial class PlayerAir : CharacterBody3D
 
 			UpdateTargetLateralFromMouseScreenX();
 
-			// ───── Calculate independant lateral movement ─────
-			float lateralBlend = 1f - Mathf.Exp(-_lateralSmoothSpeed * dt);
-			_currentLateralOffset = Mathf.Lerp(_currentLateralOffset, _targetLateralOffset, lateralBlend);
+			// // ───── Calculate independant lateral movement ─────
+			// float lateralBlend = 1f - Mathf.Exp(-_lateralSmoothSpeed * dt);
+			// _currentLateralOffset = Mathf.Lerp(_currentLateralOffset, _targetLateralOffset, lateralBlend);
 
-			// // ───── Auto-forward movement, shadowing Player Ground + auto vertical adjustment ─────
-			// Vector3 targetPos = GetTargetFollowPosition();
-			// float posBlend = 1f - Mathf.Exp(-_positionSmoothSpeed * dt);
-			// GlobalPosition = GlobalPosition.Lerp(targetPos, posBlend);
+			// ───── Calculate independant lateral movement ─────
+			float lateralOffsetBeforeMovement = _currentLateralOffset;
+			float lateralBlend = 1f - Mathf.Exp(-_lateralSmoothSpeed * dt);
+			_currentLateralOffset =  Mathf.Lerp(_currentLateralOffset, _targetLateralOffset, lateralBlend);
+
+			// Calculate how fast player moves sideways in air
+			float lateralMovementSpeed = 0.0f;
+
+			if (dt > 0.0001f)
+			{
+				lateralMovementSpeed = (_currentLateralOffset - lateralOffsetBeforeMovement) / dt;
+			}
+
+			UpdateVisualLean(lateralMovementSpeed, dt);
+
+			_previousLateralOffset = _currentLateralOffset;
 
 			// Compute X/Z follow target
 			Vector3 targetPos = GetTargetFollowPosition();
@@ -167,7 +211,7 @@ public partial class PlayerAir : CharacterBody3D
 		}
 		else 
 		{
-			GD.Print("[Player Air] Player Ground not found");
+			GD.Print("[Player Air] Player Air not found");
 		}
 	}
 
@@ -301,10 +345,12 @@ public partial class PlayerAir : CharacterBody3D
 
 		// Reset timer if ROF
 		_fireTimer = _rateOfFire;
-		SpawnBullet();
+		ulong volleyId = _nextVolleyId++;
+		SpawnBullet(_muzzleMarkerLeft, volleyId);
+		SpawnBullet(_muzzleMarkerRight, volleyId);
 	}
 
-	private void SpawnBullet()
+	private void SpawnBullet(Node3D muzzleMarker, ulong volleyId)
 	{
         if (_bulletScene == null)
         {
@@ -313,7 +359,7 @@ public partial class PlayerAir : CharacterBody3D
         }
 
 		// Find Player's forward vector to be direction for bullets
-		Vector3 shootDirection = -_muzzleMarker.GlobalTransform.Basis.Z;
+		Vector3 shootDirection = -muzzleMarker.GlobalTransform.Basis.Z;
 		shootDirection = shootDirection.Normalized();
 
 		PlayerAirBullet bulletNode = _bulletScene.Instantiate<PlayerAirBullet>();
@@ -321,9 +367,45 @@ public partial class PlayerAir : CharacterBody3D
 		// Add bullet to scene (use current scene root)
     	GetTree().CurrentScene.AddChild(bulletNode);
 
-		bulletNode.GlobalPosition = _muzzleMarker.GlobalPosition;
+    	bulletNode.VolleyId = volleyId;
+		bulletNode.GlobalPosition = muzzleMarker.GlobalPosition;
 		bulletNode.Direction = shootDirection;
 		// Make the bullet visually face the direction it is moving.
 		bulletNode.LookAt(bulletNode.GlobalPosition + shootDirection, Vector3.Up);
+	}
+
+	private void UpdateVisualLean(float lateralMovementSpeed, float delta)
+	{
+		if (!GodotObject.IsInstanceValid(_playerVisualRoot))
+		{
+			return;
+		}
+
+		float safeFullLeanSpeed = Mathf.Max(_fullLeanLateralSpeed, 0.01f);
+
+		// convert movement speed to between a value of -1 and 1
+		float normalisedLean = Mathf.Clamp(lateralMovementSpeed / safeFullLeanSpeed, -1.0f, 1.0f);
+
+		if (Mathf.Abs(normalisedLean) < _leanDeadZone)
+		{
+			normalisedLean = 0.0f;
+		}
+
+		if (_invertLeanDirection)
+		{
+			normalisedLean = -normalisedLean;
+		}
+
+		float targetLeanRadians = Mathf.DegToRad(_maximumLeanDegrees  * normalisedLean);
+
+		float targetRoll = _visualBaseRoll + targetLeanRadians;
+
+		float smoothing = 1.0f - Mathf.Exp(-_leanSpeed * delta);
+
+		Vector3 visualRotation = _playerVisualRoot.Rotation;
+
+		visualRotation.Z = Mathf.LerpAngle(visualRotation.Z, targetRoll, smoothing);
+
+		_playerVisualRoot.Rotation = visualRotation;
 	}
 }

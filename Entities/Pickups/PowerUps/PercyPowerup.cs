@@ -14,15 +14,6 @@ public partial class PercyPowerup : Area3D
 	{
 		// Connect to built-in signals
 		BodyEntered += OnPlayerEntered;
-
-		// //  Initialise audio player
-        // _audioPlayer = GetNodeOrNull<AudioStreamPlayer3D>("PickupAudio");
-        // if (_audioPlayer == null)
-        // {
-        //     _audioPlayer = new AudioStreamPlayer3D();
-        //     _audioPlayer.Name = "PickupAudio";
-        //     AddChild(_audioPlayer);
-        // }
 	}
 
 	public override void _Process(double delta)
@@ -36,8 +27,28 @@ public partial class PercyPowerup : Area3D
         if (body is PlayerGround player)
 		{
 			GD.Print($"[PercyPowerup] has been picked up by the player");
+			PlayPickupSfxDetached();
 			_ = player.SpawnPercyDrone();
 			QueueFree();
 		}
+	}
+
+	private void PlayPickupSfxDetached()
+	{
+		if (PickupSfx == null)
+		{
+			return;
+		}
+
+		AudioStreamPlayer player = new AudioStreamPlayer
+		{
+			Stream = PickupSfx,
+			Bus = "Sfx"
+		};
+
+		Node parent = GetTree().CurrentScene ?? GetTree().Root;
+		parent.AddChild(player);
+		player.Finished += player.QueueFree;
+		player.Play();
 	}
 }

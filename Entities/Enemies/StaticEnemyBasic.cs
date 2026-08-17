@@ -13,7 +13,12 @@ public partial class StaticEnemyBasic : CharacterBody3D, IPercyDroneTarget
 	[ExportGroup("Death")]
 	[Export] public PackedScene _explosionScene;
 	private bool _isDead = false;
-
+	[Export] private AnimationPlayer _animationPlayer;
+	private static readonly StringName IdleAnimationName = new StringName("idle-static-bug");
+	[ExportGroup("Audio")]
+	[Export] private AudioStream _deathSfx;
+	[Export(PropertyHint.Range, "-40.0, 12.0, 0.5")]
+	private float _deathSfxVolumeDb = 12.0f;
 
 	public override void _Ready()
 	{
@@ -22,6 +27,7 @@ public partial class StaticEnemyBasic : CharacterBody3D, IPercyDroneTarget
 		_sideDetection.BodyEntered += OnSideDetectionPlayerEntered;
 		_topDetection = GetNode<Area3D>(_topDetectionPath);
 		_topDetection.BodyEntered += OnTopDetectionPlayerEntered;
+		InitialiseAnimation();
 	}
 
 	private void OnSideDetectionPlayerEntered(Node3D body) 
@@ -89,6 +95,8 @@ public partial class StaticEnemyBasic : CharacterBody3D, IPercyDroneTarget
             return;
         }
 
+		PlayDetachedSfx(_deathSfx, _deathSfxVolumeDb);
+
         ExplosionEffect explosionNode = _explosionScene.Instantiate<ExplosionEffect>();
         GetTree().CurrentScene.AddChild(explosionNode);
         explosionNode.GlobalPosition = GlobalPosition;
@@ -103,5 +111,47 @@ public partial class StaticEnemyBasic : CharacterBody3D, IPercyDroneTarget
 	public bool IsValidPercyDroneTarget()
 	{
 		return _isDead == false && IsInsideTree() == true;
+	}
+
+	private void InitialiseAnimation()
+	{
+		if (!GodotObject.IsInstanceValid(_animationPlayer))
+		{
+			GD.PushWarning("[StaticEnemyBasic] AnimationPlayer has not been assigned.");
+			return;
+		}
+
+		if (!_animationPlayer.HasAnimation(IdleAnimationName))
+		{
+			GD.PushWarning($"[StaticEnemyBasic] Animation '{IdleAnimationName}' was not found.");
+			return;
+		}
+
+		Animation animation = _animationPlayer.GetAnimation(IdleAnimationName);
+		animation.LoopMode = Animation.LoopModeEnum.Linear;
+		_animationPlayer.Play(IdleAnimationName);
+	}
+
+	private void PlayDetachedSfx(AudioStream stream, float volumeDb)
+	{
+		if (stream == null)
+		{
+			return;
+		}
+
+    	// Capture death position before the enemy gets freed.
+		Vector3 soundPosition = GlobalPosition;
+
+		AudioStreamPlayer3D player = new AudioStreamPlayer3D();
+
+		player.Stream = stream;
+		player.VolumeDb = volumeDb;
+		player.Bus = "Sfx";
+
+		Node parent = GetTree().CurrentScene ?? GetTree().Root;
+		parent.AddChild(player);
+		player.GlobalPosition = soundPosition;
+		player.Finished += player.QueueFree;
+		player.Play();
 	}
 }

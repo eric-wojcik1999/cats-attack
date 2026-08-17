@@ -1,11 +1,12 @@
 [gd_resource type="Resource" script_class="CoinDefinition" load_steps=3 format=3 uid="uid://chy6krn3ehsxj"]
 
-[ext_resource type="PackedScene" uid="uid://c0usmlteru88j" path="res://Entities/Pickups/Coins/Meshes/bronze_coin_mesh.tscn" id="1_m3rt4"]
+[ext_resource type="AudioStream" uid="uid://078no20wscei" path="res://Audio/Sfx/Pickups/coin-pickup.mp3" id="1_m3rt4"]
 [ext_resource type="Script" uid="uid://deg26gac31hkf" path="res://Entities/Pickups/Coins/Definitions/CoinDefinition.cs" id="1_pqs6u"]
 
 [resource]
 script = ExtResource("1_pqs6u")
 DisplayName = "Bronze Coin"
 PickupMessage = "Picked up Bronze Coin +1"
-ModelScene = ExtResource("1_m3rt4")
+PickupSfx = ExtResource("1_m3rt4")
+PickupVolumeDb = -10.0
 metadata/_custom_type_script = "uid://deg26gac31hkf"

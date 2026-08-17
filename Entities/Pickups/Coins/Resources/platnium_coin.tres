@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="CoinDefinition" load_steps=3 format=3 uid="uid://bmft1wovnslan"]
 
-[ext_resource type="PackedScene" uid="uid://wgty211j1frj" path="res://Entities/Pickups/Coins/Meshes/platnium_coin_mesh.tscn" id="1_0elf5"]
+[ext_resource type="AudioStream" uid="uid://dafynpe1fdpw7" path="res://Audio/Sfx/Pickups/coin-pickup-3.mp3" id="1_0elf5"]
 [ext_resource type="Script" uid="uid://deg26gac31hkf" path="res://Entities/Pickups/Coins/Definitions/CoinDefinition.cs" id="1_qibl0"]
 
 [resource]
@@ -8,5 +8,6 @@ script = ExtResource("1_qibl0")
 DisplayName = "Platnium Coin"
 Amount = 20
 PickupMessage = "Picked up Platnium Coin +20"
-ModelScene = ExtResource("1_0elf5")
+PickupSfx = ExtResource("1_0elf5")
+PickupVolumeDb = -10.0
 metadata/_custom_type_script = "uid://deg26gac31hkf"

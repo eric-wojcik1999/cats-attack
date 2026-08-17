@@ -1,7 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://ck3n3piykfu2o"]
+[gd_scene load_steps=9 format=3 uid="uid://ck3n3piykfu2o"]
 
 [ext_resource type="Script" uid="uid://bx66h3i54nj1t" path="res://Entities/Players/PlayerAir/PlayerAir.cs" id="1_ee2jk"]
 [ext_resource type="PackedScene" uid="uid://dd2txh130vuww" path="res://Entities/Players/PlayerAir/player-air-bullet.tscn" id="2_bllsx"]
+[ext_resource type="PackedScene" uid="uid://b2oo2ol51jnd1" path="res://Entities/Players/PlayerAir/yunrei_base.tscn" id="4_cm06o"]
+[ext_resource type="AudioStream" uid="uid://dhj4crfb7uc8q" path="res://Audio/Sfx/Players/patches-loop-loop.mp3" id="4_g2ryd"]
+[ext_resource type="AudioStream" uid="uid://6i1hescfkaye" path="res://Audio/Sfx/Players/patches-fire.mp3" id="5_2miwt"]
 
 [sub_resource type="PrismMesh" id="PrismMesh_doxca"]
 size = Vector3(0.7, 0.9, 0.2)
@@ -12,13 +15,18 @@ albedo_color = Color(1, 0.08387346, 0.31673864, 1)
 [sub_resource type="SphereShape3D" id="SphereShape3D_ee2jk"]
 radius = 0.75
 
-[node name="PlayerAir" type="CharacterBody3D"]
+[node name="PlayerAir" type="CharacterBody3D" node_paths=PackedStringArray("_playerVisualRoot", "_propellerLoop", "_laserLoop")]
 script = ExtResource("1_ee2jk")
-_muzzleMarkerPath = NodePath("MuzzleMarker")
+_muzzleMarkerLeftPath = NodePath("MuzzleMarker")
+_muzzleMarkerRightPath = NodePath("MuzzleMarker2")
 _bulletScene = ExtResource("2_bllsx")
+_playerVisualRoot = NodePath("PlayerVisual")
+_propellerLoop = NodePath("PropellerLoop")
+_laserLoop = NodePath("LaserLoop")
 
 [node name="PlayerMeshTemp" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0)
+visible = false
 mesh = SubResource("PrismMesh_doxca")
 surface_material_override/0 = SubResource("StandardMaterial3D_doxca")
 
@@ -57,4 +65,24 @@ transform = Transform3D(0.9659258, -0.25881904, 0, 0.25881904, 0.9659258, 0, 0, 
 collision_mask = 2
 
 [node name="MuzzleMarker" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.41098756, 0.41586888, -1)
+
+[node name="MuzzleMarker2" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.4089756, 0.41393298, -1)
+
+[node name="PlayerVisual" type="Node3D" parent="."]
+transform = Transform3D(-1.5, 0, -1.3113416e-07, 0, 1.5, 0, 1.3113416e-07, 0, -1.5, 0, -0.785, 0)
+
+[node name="yunrei-base" parent="PlayerVisual" instance=ExtResource("4_cm06o")]
+
+[node name="PropellerLoop" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_g2ryd")
+volume_db = -20.0
+autoplay = true
+bus = &"Player Sfx"
+
+[node name="LaserLoop" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_2miwt")
+volume_db = -30.0
+autoplay = true
+bus = &"Player Sfx"

@@ -225,9 +225,6 @@ VisualRootPath = NodePath("../GoldCoinPickup/VisualRoot")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -45.5, -15.5, -167.25)
 VisualRootPath = NodePath("../GoldCoinPickup/VisualRoot")
 
-[node name="GoldCoinPickup3" parent="Coins" instance=ExtResource("5_84xti")]
-VisualRootPath = NodePath("../GoldCoinPickup2/VisualRoot")
-
 [node name="GoldCoinPickup2" parent="Coins" instance=ExtResource("5_84xti")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -45.5, -15.5, -159)
 VisualRootPath = NodePath("../GoldCoinPickup/VisualRoot")
@@ -249,10 +246,10 @@ player = NodePath("../PlayerGround")
 [node name="Enemies" type="Node3D" parent="."]
 
 [node name="MovingEnemyBasic" parent="Enemies" instance=ExtResource("5_1e8n7")]
-transform = Transform3D(-0.49999997, 0, -0.8660253, 0, 0.9999999, 0, 0.8660253, 0, -0.50000006, 9, -4.5, -43.25)
+transform = Transform3D(-0.49999997, 0, -0.8660253, 0, 0.9999999, 0, 0.8660253, 0, -0.50000006, 9, -5.75, -43.25)
 
 [node name="MovingEnemyBasic2" parent="Enemies" instance=ExtResource("5_1e8n7")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -12.25, -10.25, -72.75)
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -12.25, -11, -72.75)
 
 [node name="TotemEnemyBasic" parent="Enemies" instance=ExtResource("7_72b4k")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -48.75, -18.25, -120.75)
@@ -467,10 +464,10 @@ transform = Transform3D(-2.5, 0, 2.1855695e-07, 0, 2.5, 0, -2.1855695e-07, 0, -2
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.25, -4.75, -37.5)
 
 [node name="MovingEnemyBasic7" parent="." instance=ExtResource("5_1e8n7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19, -10.75, -73)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19, -11, -73)
 
 [node name="MovingEnemyBasic8" parent="." instance=ExtResource("5_1e8n7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.25, -10.75, -72.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.25, -11, -72.5)
 
 [node name="BaseJumpPad" parent="." instance=ExtResource("16_ert4p")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, -0.25, 49)
@@ -522,3 +519,30 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, -3, 109.5)
 
 [node name="BaseJumpPad6" parent="." instance=ExtResource("16_ert4p")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, -3, 109.5)
+
+[node name="PercyPowerUp2" parent="." instance=ExtResource("10_ywcwc")]
+transform = Transform3D(1.3, 0, 0, 0, 1.3, 0, 0, 0, 1.3, -0.5, 0.75, 1.5)
+
+[node name="MovingEnemyBasic9" parent="." instance=ExtResource("5_1e8n7")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -2.5, -1.5, 88.5)
+
+[node name="StaticEnemyBasic9" parent="." instance=ExtResource("3_otfp5")]
+transform = Transform3D(0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, 1, 0.5, 226.5)
+
+[node name="StaticEnemyBasic10" parent="." instance=ExtResource("3_otfp5")]
+transform = Transform3D(0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, -2.25, 0.5, 224)
+
+[node name="StaticEnemyBasic11" parent="." instance=ExtResource("3_otfp5")]
+transform = Transform3D(0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, 0.75, 0.5, 223.5)
+
+[node name="TurretEnemyBasic7" parent="." instance=ExtResource("9_etmm2")]
+transform = Transform3D(2.4148142, 0, 0.6470485, 0, 2.5, 0, -0.6470485, 0, 2.4148142, -1.25, 1.25, 248.5)
+
+[node name="TotemEnemyBasic" parent="." instance=ExtResource("7_72b4k")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, 0.5, 206.25)
+
+[node name="TotemEnemyBasic2" parent="." instance=ExtResource("7_72b4k")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0.75, 268.5)
+
+[node name="PercyPowerUp3" parent="." instance=ExtResource("10_ywcwc")]
+transform = Transform3D(1.3, 0, 0, 0, 1.3, 0, 0, 0, 1.3, 0, 0.75, 271.75)

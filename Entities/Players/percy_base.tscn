@@ -1,0 +1,5 @@
+[gd_scene load_steps=2 format=3 uid="uid://batigrul34w6g"]
+
+[ext_resource type="PackedScene" uid="uid://dou7mk2882mkx" path="res://Entities/Players/percy-base.glb" id="1_jo7qm"]
+
+[node name="percy-base" instance=ExtResource("1_jo7qm")]

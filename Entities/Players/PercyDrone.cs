@@ -34,6 +34,24 @@ public partial class PercyDrone : Area3D
 	private float _activeTimer;
 	private float _retargetTimer;
 	private float _wobbleSeed;
+	[ExportGroup("Audio")]
+
+	[Export] private AudioStream _startSfx;
+
+	[Export] private AudioStream _loopSfx;
+
+	[Export(PropertyHint.Range, "-40.0,6.0,0.5")]
+	private float _startSfxVolumeDb = -4f;
+
+	[Export(PropertyHint.Range, "-40.0,6.0,0.5")]
+	private float _loopSfxVolumeDb = -7f;
+
+	[Export(PropertyHint.Range, "0.0,1.0,0.05")]
+	private float _audioCrossfadeTime = 0.2f;
+
+	private AudioStreamPlayer _startAudio;
+	private AudioStreamPlayer _loopAudio;
+	private Tween _audioTween;
 
 	public override void _Ready()
 	{
@@ -43,6 +61,8 @@ public partial class PercyDrone : Area3D
 		Monitoring = true;
 
 		_wobbleSeed = (float)GD.RandRange(0.0, 1000.0);
+
+		InitialiseAudio();
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -98,6 +118,8 @@ public partial class PercyDrone : Area3D
 		_velocity = Vector3.Zero;
 
 		_state = PercyState.Entering;
+
+		StartDroneAudio();
 	}
 
 	private void UpdateEntering(float dt)
@@ -168,8 +190,15 @@ public partial class PercyDrone : Area3D
 
 	private void StartExit()
 	{
+		if (_state == PercyState.Exiting)
+		{
+			return;
+		}
+
 		_currentTarget = null;
 		_state = PercyState.Exiting;
+
+		FadeOutDroneAudio();
 	}
 
 	// Work out the direction from the drone to the target point.
@@ -273,5 +302,103 @@ public partial class PercyDrone : Area3D
 		float z = Mathf.Sin((t + _wobbleSeed) * _wobbleSpeed * 0.71f);
 
 		return new Vector3(x, y, z) * _wobbleStrength;
+	}
+
+	private void InitialiseAudio()
+	{
+		_startAudio = new AudioStreamPlayer
+		{
+			Name = "PercyStartAudio",
+			Stream = _startSfx,
+			VolumeDb = _startSfxVolumeDb,
+			Bus = "Sfx"
+		};
+
+		AddChild(_startAudio);
+
+		_loopAudio = new AudioStreamPlayer
+		{
+			Name = "PercyLoopAudio",
+			Stream = _loopSfx,
+			VolumeDb = -40f,
+			Bus = "Sfx"
+		};
+
+		if (_loopAudio.Stream is AudioStreamMP3 mp3)
+		{
+			mp3.Loop = true;
+		}
+
+		AddChild(_loopAudio);
+
+		if (_startAudio != null)
+		{
+			_startAudio.Finished += BeginLoopAudio;
+		}
+	}
+
+	private void StartDroneAudio()
+	{
+		if (_audioTween != null && _audioTween.IsValid())
+		{
+			_audioTween.Kill();
+		}
+
+		if (GodotObject.IsInstanceValid(_loopAudio))
+		{
+			_loopAudio.Stop();
+			_loopAudio.VolumeDb = -40f;
+		}
+
+		if (GodotObject.IsInstanceValid(_startAudio) &&
+			_startAudio.Stream != null)
+		{
+			_startAudio.VolumeDb = _startSfxVolumeDb;
+			_startAudio.Play();
+		}
+		else
+		{
+			// No start clip assigned, so just start looping immediately.
+			BeginLoopAudio();
+		}
+	}
+
+	private void BeginLoopAudio()
+	{
+		if (!GodotObject.IsInstanceValid(_loopAudio) ||
+			_loopAudio.Stream == null)
+		{
+			return;
+		}
+
+		_loopAudio.VolumeDb = -40f;
+		_loopAudio.Play();
+		_audioTween = CreateTween();
+		_audioTween.TweenProperty(_loopAudio, "volume_db", _loopSfxVolumeDb, _audioCrossfadeTime);
+	}
+
+	private void FadeOutDroneAudio()
+	{
+		if (_audioTween != null && _audioTween.IsValid())
+		{
+			_audioTween.Kill();
+		}
+
+		if (!GodotObject.IsInstanceValid(_loopAudio) || !_loopAudio.Playing)
+		{
+			return;
+		}
+
+		_audioTween = CreateTween();
+		_audioTween.TweenProperty(_loopAudio, "volume_db", -40f, 0.35f);
+		_audioTween.TweenCallback(
+			Callable.From(() =>
+			{
+				if (GodotObject.IsInstanceValid(_loopAudio))
+				{
+					_loopAudio.Stop();
+				}
+			})
+		);
 	}
 }

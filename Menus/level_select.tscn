@@ -1,0 +1,180 @@
+[gd_scene load_steps=9 format=3 uid="uid://bsdvsjqj3n0lk"]
+
+[ext_resource type="Shader" uid="uid://d4fntb561ji3e" path="res://Menus/main_menu.gdshader" id="1_ceq2k"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_cbjk5"]
+shader = ExtResource("1_ceq2k")
+shader_parameter/pixel_columns = 220.0
+shader_parameter/pixel_rows = 124.0
+shader_parameter/dither_scale = 85.0
+shader_parameter/dither_strength = 0.18
+shader_parameter/speed = 0.7
+shader_parameter/flow_scale = 3.2
+shader_parameter/warp_strength = 0.32
+shader_parameter/large_wave_strength = 0.13
+shader_parameter/detail_strength = 0.035
+shader_parameter/palette_speed = 0.055
+shader_parameter/cat_columns = 9.0
+shader_parameter/cat_rows = 6.0
+shader_parameter/cat_size = 0.28
+shader_parameter/cat_flow_speed = 0.055
+shader_parameter/cat_sideways_drift = 0.2
+shader_parameter/cat_opacity = 0.55
+shader_parameter/cat_brightness = 1.15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_b6uew"]
+content_margin_top = 100.0
+bg_color = Color(0.64705884, 0.5137255, 0, 1)
+border_width_left = 8
+border_width_top = 8
+border_width_right = 8
+border_width_bottom = 8
+border_color = Color(0, 0, 0, 0.627451)
+
+[sub_resource type="SystemFont" id="SystemFont_ceq2k"]
+font_names = PackedStringArray("Cascadia Code")
+
+[sub_resource type="SystemFont" id="SystemFont_cbjk5"]
+font_names = PackedStringArray("Cascadia Mono")
+oversampling = 2.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rd7hm"]
+bg_color = Color(0.6891119, 0.5486396, 0, 1)
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(0, 0, 0, 1)
+shadow_color = Color(0, 0, 0, 1)
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ids4p"]
+bg_color = Color(0.47260183, 0, 0.16799879, 1)
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_eae58"]
+bg_color = Color(0.8919852, 0.3578871, 0.5729743, 1)
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(0, 0, 0, 1)
+
+[node name="Level Select" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TextureRect" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_cbjk5")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 128
+theme_override_constants/margin_top = 128
+theme_override_constants/margin_right = 128
+theme_override_constants/margin_bottom = 128
+
+[node name="CenterContainer" type="CenterContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer/CenterContainer"]
+custom_minimum_size = Vector2(1664, 824)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_b6uew")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/CenterContainer/PanelContainer"]
+layout_mode = 2
+theme_override_constants/separation = 120
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/CenterContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+theme_override_constants/separation = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/CenterContainer/PanelContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 80
+
+[node name="Level Select" type="Label" parent="MarginContainer/CenterContainer/PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0.62028664, 0.30175364, 0.4281104, 1)
+theme_override_fonts/font = SubResource("SystemFont_ceq2k")
+theme_override_font_sizes/font_size = 80
+text = "LEVEL SELECT!"
+
+[node name="Seperator" type="Control" parent="MarginContainer/CenterContainer/PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="GridContainer" type="GridContainer" parent="MarginContainer/CenterContainer/PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/h_separation = 60
+theme_override_constants/v_separation = 4
+columns = 3
+
+[node name="Level 1" type="Button" parent="MarginContainer/CenterContainer/PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer/GridContainer"]
+custom_minimum_size = Vector2(100, 32)
+layout_mode = 2
+focus_mode = 0
+theme_override_colors/font_color = Color(0.6935592, 0.9255834, 7.70092e-07, 1)
+theme_override_fonts/font = SubResource("SystemFont_cbjk5")
+theme_override_font_sizes/font_size = 56
+theme_override_styles/normal = SubResource("StyleBoxFlat_rd7hm")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_ids4p")
+theme_override_styles/hover = SubResource("StyleBoxFlat_eae58")
+text = "01"
+
+[node name="Level 2" type="Button" parent="MarginContainer/CenterContainer/PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer/GridContainer"]
+custom_minimum_size = Vector2(100, 32)
+layout_mode = 2
+focus_mode = 0
+theme_override_colors/font_color = Color(0.6935592, 0.9255834, 7.70092e-07, 1)
+theme_override_fonts/font = SubResource("SystemFont_cbjk5")
+theme_override_font_sizes/font_size = 48
+theme_override_styles/normal = SubResource("StyleBoxFlat_rd7hm")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_ids4p")
+theme_override_styles/hover = SubResource("StyleBoxFlat_eae58")
+text = "02"
+
+[node name="Level 3" type="Button" parent="MarginContainer/CenterContainer/PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer/GridContainer"]
+custom_minimum_size = Vector2(100, 32)
+layout_mode = 2
+focus_mode = 0
+theme_override_colors/font_color = Color(0.6935592, 0.9255834, 7.70092e-07, 1)
+theme_override_fonts/font = SubResource("SystemFont_cbjk5")
+theme_override_font_sizes/font_size = 48
+theme_override_styles/normal = SubResource("StyleBoxFlat_rd7hm")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_ids4p")
+theme_override_styles/hover = SubResource("StyleBoxFlat_eae58")
+text = "03"
+
+[node name="Seperator2" type="Control" parent="MarginContainer/CenterContainer/PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="BackButton" type="Button" parent="MarginContainer/CenterContainer/PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
+custom_minimum_size = Vector2(282, 32)
+layout_mode = 2
+size_flags_horizontal = 4
+focus_mode = 0
+theme_override_colors/font_color = Color(0.6935592, 0.9255834, 7.70092e-07, 1)
+theme_override_fonts/font = SubResource("SystemFont_cbjk5")
+theme_override_font_sizes/font_size = 64
+theme_override_styles/normal = SubResource("StyleBoxFlat_rd7hm")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_ids4p")
+theme_override_styles/hover = SubResource("StyleBoxFlat_eae58")
+text = "BACK!"

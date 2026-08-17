@@ -13,9 +13,9 @@ public partial class CoinDefinition : Resource
     [Export(PropertyHint.MultilineText)]
     public string PickupMessage { get; set; } = "Picked up ${name} + ${amount}";
 
-    // [Export]
-    // public PackedScene ModelScene { get; set; }
+    [ExportGroup("Audio")]
+    [Export] public AudioStream PickupSfx { get; set; }
 
-    [Export]
-    public AudioStream PickupSfx { get; set; }
+    [Export(PropertyHint.Range, "-40.0, 6.0, 0.5")]
+    public float PickupVolumeDb { get; set; } = -6.0f;
 }

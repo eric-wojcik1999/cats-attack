@@ -62,7 +62,7 @@ public partial class CoinPickup : Area3D
 		}
 
 		_collected = true;
-		Monitoring = false;
+		SetDeferred(Area3D.PropertyName.Monitoring, false);
 
 		bool addedCurrency = Global.Instance.AddCurrency(Definition.Amount);
 
@@ -94,17 +94,15 @@ public partial class CoinPickup : Area3D
 			return;
 		}
 
-		AudioStreamPlayer3D audioPlayer = new AudioStreamPlayer3D
-		{
-			Stream = Definition.PickupSfx,
-			GlobalPosition = GlobalPosition
-		};
+        AudioStreamPlayer3D audioPlayer = new AudioStreamPlayer3D();
+        audioPlayer.Stream = Definition.PickupSfx;
+        audioPlayer.VolumeDb = Definition.PickupVolumeDb;
+        audioPlayer.Bus = "Sfx";
 
-		Node parent = GetTree().CurrentScene ?? GetTree().Root;
-
-		parent.AddChild(audioPlayer);
-
-		// Finished expects a function call later
-		audioPlayer.Finished += () => audioPlayer.QueueFree();
+        Node parent = GetTree().CurrentScene ?? GetTree().Root;
+        parent.AddChild(audioPlayer);
+        audioPlayer.GlobalPosition = GlobalPosition;
+        audioPlayer.Finished += audioPlayer.QueueFree;
+        audioPlayer.Play();
 	}
 }

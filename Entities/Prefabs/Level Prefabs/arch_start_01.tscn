@@ -1,0 +1,14 @@
+[gd_scene load_steps=2 format=3 uid="uid://cvsljqigbdc8u"]
+
+[ext_resource type="PackedScene" uid="uid://ieb73phor4ve" path="res://Entities/Prefabs/Level Prefabs/arch-start-01.glb" id="1_56o85"]
+
+[node name="arch-start-01" instance=ExtResource("1_56o85")]
+
+[node name="arch-start-finish" parent="." index="0"]
+cast_shadow = 0
+
+[node name="start" parent="." index="1"]
+cast_shadow = 0
+
+[node name="arch-start-finish-col" parent="." index="3"]
+cast_shadow = 0

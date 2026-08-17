@@ -1,12 +1,13 @@
 [gd_resource type="Resource" script_class="CoinDefinition" load_steps=3 format=3 uid="uid://c053l86uh8ji5"]
 
 [ext_resource type="Script" uid="uid://deg26gac31hkf" path="res://Entities/Pickups/Coins/Definitions/CoinDefinition.cs" id="1_265wa"]
-[ext_resource type="PackedScene" uid="uid://i55xucr7h46x" path="res://Entities/Pickups/Coins/Meshes/silver_coin_mesh.tscn" id="1_u413c"]
+[ext_resource type="AudioStream" uid="uid://078no20wscei" path="res://Audio/Sfx/Pickups/coin-pickup.mp3" id="1_u413c"]
 
 [resource]
 script = ExtResource("1_265wa")
 DisplayName = "Silver Coin"
 Amount = 5
 PickupMessage = "Picked up Silver Coin +5"
-ModelScene = ExtResource("1_u413c")
+PickupSfx = ExtResource("1_u413c")
+PickupVolumeDb = -10.0
 metadata/_custom_type_script = "uid://deg26gac31hkf"

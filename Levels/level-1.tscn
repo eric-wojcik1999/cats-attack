@@ -1,27 +1,95 @@
-[gd_scene load_steps=7 format=3 uid="uid://6x0i8op3lofr"]
+[gd_scene load_steps=28 format=3 uid="uid://6x0i8op3lofr"]
 
 [ext_resource type="PackedScene" uid="uid://d4nm5bdaxqhsr" path="res://Entities/Players/PlayerGround/player-ground.tscn" id="1_3mtpf"]
+[ext_resource type="PackedScene" uid="uid://cehky8lel227e" path="res://UI/hud.tscn" id="1_b6mne"]
+[ext_resource type="Script" uid="uid://cxyjmputw301p" path="res://Levels/Level1.cs" id="1_t2a2k"]
+[ext_resource type="AudioStream" uid="uid://82jlbmkp87k7" path="res://Audio/Music/level-theme.mp3" id="2_dmhm2"]
 [ext_resource type="PackedScene" uid="uid://ck3n3piykfu2o" path="res://Entities/Players/PlayerAir/player_air.tscn" id="2_dw28y"]
 [ext_resource type="PackedScene" uid="uid://cc4gsel5ahoig" path="res://Entities/Prefabs/Level Prefabs/Level-1/level_1_track_1.tscn" id="3_bq6a1"]
 [ext_resource type="PackedScene" uid="uid://be40nk4u707xw" path="res://Entities/Prefabs/base_jump_pad.tscn" id="4_0aets"]
 [ext_resource type="PackedScene" uid="uid://bkjums4at4bri" path="res://Entities/Prefabs/Level Prefabs/Level-1/level_1_track_2.tscn" id="4_1ylsx"]
+[ext_resource type="PackedScene" uid="uid://ci8qpgkwrd6qa" path="res://Entities/Prefabs/Level Prefabs/Level-1/level_1_track_4.tscn" id="6_oxkis"]
+[ext_resource type="PackedScene" uid="uid://b6flphgycwkxu" path="res://Entities/Prefabs/Level Prefabs/Level-1/level_1_track_3.tscn" id="7_r041s"]
+[ext_resource type="PackedScene" uid="uid://sdcmin4u5cbp" path="res://Entities/Prefabs/base_speed_pad.tscn" id="7_ys3un"]
+[ext_resource type="PackedScene" uid="uid://bds2t2vi50n0i" path="res://Entities/Prefabs/Level Prefabs/Level-1/level_1_track_5.tscn" id="8_aoct0"]
+[ext_resource type="PackedScene" uid="uid://chatlnft2d34p" path="res://Entities/Prefabs/Level Prefabs/Level-1/level_1_track_6.tscn" id="9_n4bx7"]
+[ext_resource type="PackedScene" uid="uid://dj1rimkdwvnh" path="res://Entities/Pickups/Coins/bronze_coin_pickup.tscn" id="12_kmeag"]
+[ext_resource type="PackedScene" uid="uid://djcdbqorg2qc" path="res://Entities/Enemies/moving_enemy_basic.tscn" id="13_6p1x0"]
+[ext_resource type="PackedScene" uid="uid://dshgihbg5ompd" path="res://Entities/Pickups/Coins/silver_coin_pickup.tscn" id="13_jfi0m"]
+[ext_resource type="PackedScene" uid="uid://bwfrqtd62aqnc" path="res://Entities/Enemies/static_enemy_basic.tscn" id="15_8jvyo"]
+[ext_resource type="PackedScene" uid="uid://cteowd8i5gaa6" path="res://Entities/Prefabs/Level Prefabs/arch-end-01.glb" id="16_tucxj"]
+[ext_resource type="PackedScene" uid="uid://cq0a5sj37iivr" path="res://Entities/Prefabs/Level Prefabs/arch_01.tscn" id="17_rb4r8"]
+[ext_resource type="PackedScene" uid="uid://dfwc4tqehrd17" path="res://Entities/Prefabs/Level Prefabs/arch_start_02.tscn" id="18_vqiix"]
 
 [sub_resource type="Curve3D" id="Curve3D_bq6a1"]
 _data = {
-"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6.69, 0, 0.725, 0, 0, 0, 0, 0, 0, 18.145, 0.545, 2.91, 0, 0, 0, 0, 0, 0, 30.815, 1.805, 8.45, 0, 0, 0, 0, 0, 0, 45, 2.05, 9.62, 0, 0, 0, 0, 0, 0, 60, 0, 6.515, 0, 0, 0, 0, 0, 0, 65, -1.140452, 4.98, 0, 0, 0, 0, 0, 0, 70, -1.5114683, 4.27, 0, 0, 0, 0, 0, 0, 75, -1.5371668, 4.4, 0, 0, 0, 0, 0, 0, 80, -1.5503564, 4.95, 0, 0, 0, 0, 0, 0, 120, -1.905, 10.02, 0, 0, 0, 0, 0, 0, 130, -1.75, 9.655, 0, 0, 0, 0, 0, 0, 140, -1.75, 7.73, 0, 0, 0, 0, 0, 0, 150, -2, 5.06, 0, 0, 0, 0, 0, 0, 160, -3.75, 4.03, 0, 0, 0, 0, 0, 0, 180, 0, 4.095, 0, 0, 0, 0, 0, 0, 200, 0, 4.71, 0, 0, 0, 0, 0, 0, 241.11, -5.044, 7.831, 0, 0, 0, 0, 0, 0, 255.215, -7.2080035, 5.605, 0, 0, 0, 0, 0, 0, 263.17, -7.2080035, 3.155, 0, 0, 0, 0, 0, 0, 270, -7.2080035, 3.33, 0, 0, 0, 0, 0, 0, 290, -4.6479936, 9.57, 0, 0, 0, 0, 0, 0, 300, -4.9702573, 13.43, 0, 0, 0, 0, 0, 0, 321.82742, -4.680188, 14.000001),
-"tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6.69, 0, 0.725, 0, 0, 0, 0, 0, 0, 18.145, 0.545, 2.91, 0, 0, 0, 0, 0, 0, 30.815, 1.805, 8.45, 0, 0, 0, 0, 0, 0, 45, 2.05, 9.62, 0, 0, 0, 0, 0, 0, 60, 0, 6.515, 0, 0, 0, 0, 0, 0, 65, -1.140452, 4.98, 0, 0, 0, 0, 0, 0, 70, -1.5114683, 4.27, 0, 0, 0, 0, 0, 0, 75, -1.5371668, 4.4, 0, 0, 0, 0, 0, 0, 80, -1.5503564, 4.95, 0, 0, 0, 0, 0, 0, 120, -1.905, 10.02, 0, 0, 0, 0, 0, 0, 130, -1.75, 9.655, 0, 0, 0, 0, 0, 0, 140, -1.75, 7.73, 0, 0, 0, 0, 0, 0, 150, -2, 5.06, 0, 0, 0, 0, 0, 0, 160, -3.75, 4.03, 0, 0, 0, 0, 0, 0, 180, 0, 4.095, 0, 0, 0, 0, 0, 0, 200, 0, 4.71, 0, 0, 0, 0, 0, 0, 241.11, -5.044, 7.831, 0, 0, 0, 0, 0, 0, 255.215, -7.2080035, 5.605, 0, 0, 0, 0, 0, 0, 263.17, -7.2080035, 3.155, 0, 0, 0, 0, 0, 0, 270, -7.2080035, 3.33, 0, 0, 0, 0, 0, 0, 290, -4.6479936, 9.57, 0, 0, 0, 0, 0, 0, 300, -4.9702573, 13.43, 0, 0, 0, 0, 0, 0, 321.82742, -4.680188, 14.000001, 0, 0, 0, 0, 0, 0, 400, -3.44, 4.035, 0, 0, 0, 0, 0, 0, 420, -3.005, -7.72, 0, 0, 0, 0, 0, 0, 440, -4, -13.705, 0, 0, 0, 0, 0, 0, 500, -8.08, -9.525, 0, 0, 0, 0, 0, 0, 540, -8.985, -11.235, 0, 0, 0, 0, 0, 0, 560.235, -10.88, -7.91, 0, 0, 0, 0, 0, 0, 580, -9, 3.105, 0, 0, 0, 0, 0, 0, 620, -6.855, 15.94, 0, 0, 0, 0, 0, 0, 650, -6.735, 17.135, 0, 0, 0, 0, 0, 0, 690, -8.175, 26.885, 0, 0, 0, 0, 0, 0, 720, -10.005, 36.175, 0, 0, 0, 0, 0, 0, 760, -5.225, 43.665, 0, 0, 0, 0, 0, 0, 820, -3, 50, 0, 0, 0, 0, 0, 0, 870, -3.335, 50.955, 0, 0, 0, 0, 0, 0, 890, -2.825, 44.14, 0, 0, 0, 0, 0, 0, 910, -2.53, 41.9, 0, 0, 0, 0, 0, 0, 930, -3.465, 50.2, 0, 0, 0, 0, 0, 0, 950, -3, 56.005, 0, 0, 0, 0, 0, 0, 970, -3, 57.19, 0, 0, 0, 0, 0, 0, 1030, -4.525, 46.41, 0, 0, 0, 0, 0, 0, 1070, -10, 36.245, 0, 0, 0, 0, 0, 0, 1100, -9.125, 28.555, 0, 0, 0, 0, 0, 0, 1200, -12.375, 4.37, 0, 0, 0, 0, 0, 0, 1320, -15.995, -25.36),
+"tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 }
-point_count = 24
+point_count = 48
+
+[sub_resource type="Gradient" id="Gradient_vqiix"]
+colors = PackedColorArray(0.40006053, 0.007911155, 0.3749644, 1, 0.8514728, 0.54458004, 0.8717912, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_t2a2k"]
+noise_type = 3
+frequency = 0.006
+fractal_octaves = 10
+fractal_lacunarity = 2.75
+fractal_gain = 0.35
+domain_warp_enabled = true
+domain_warp_amplitude = 23.03
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_dmhm2"]
+noise = SubResource("FastNoiseLite_t2a2k")
+color_ramp = SubResource("Gradient_vqiix")
+seamless = true
+seamless_blend_skirt = 0.7
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_baoot"]
+panorama = SubResource("NoiseTexture2D_dmhm2")
+
+[sub_resource type="Sky" id="Sky_vqiix"]
+sky_material = SubResource("PanoramaSkyMaterial_baoot")
+
+[sub_resource type="Environment" id="Environment_t2a2k"]
+background_mode = 2
+sky = SubResource("Sky_vqiix")
+glow_intensity = 1.0
+glow_bloom = 0.02
+glow_blend_mode = 0
+fog_mode = 1
+fog_light_color = Color(0.87341946, 1.3476611e-05, 0.5844462, 1)
+fog_light_energy = 1.05
+fog_density = 1.0
+fog_sky_affect = 0.364
+fog_height_density = 1.0
+fog_depth_begin = -90.5
+fog_depth_end = 0.0
+volumetric_fog_enabled = true
+volumetric_fog_density = 0.02
+volumetric_fog_albedo = Color(0.93406755, 2.7915835e-06, 0.5634768, 1)
+volumetric_fog_emission = Color(0.68764514, 0.031361755, 0.49668598, 1)
+volumetric_fog_length = 50.0
+volumetric_fog_sky_affect = 0.4
 
 [node name="Level1" type="Node3D"]
+script = ExtResource("1_t2a2k")
+_levelMusic = ExtResource("2_dmhm2")
+
+[node name="HUD" parent="." node_paths=PackedStringArray("player") instance=ExtResource("1_b6mne")]
+player = NodePath("../PlayerGround")
 
 [node name="PlayerGround" parent="." instance=ExtResource("1_3mtpf")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
-_autoForwardSpeed = 8.5
+_baseMovementSpeed = 5.5
+_autoForwardSpeed = 12.0
 _baseJumpVelocity = 6.0
 _lateralDeceleration = 4.0
 _jumpPadAirSteeringStrength = 1.65
 _pathGuideNodePath = NodePath("../TrackGuidePath")
+_maximumnLeanDegrees = 6.0
+_leanSpeed = 5.0
 
 [node name="PlayerAir" parent="." node_paths=PackedStringArray("_playerGround") instance=ExtResource("2_dw28y")]
 transform = Transform3D(1, 0, 0, 0, 0.9659258, 0.2588191, 0, -0.2588191, 0.9659258, 2, 3.5, 1.5)
@@ -34,7 +102,7 @@ light_energy = 1.552
 shadow_enabled = true
 
 [node name="level-1-track-1" parent="." instance=ExtResource("3_bq6a1")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, 0, -0.5)
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0.010978699, 0.009262085, -0.5232792)
 
 [node name="BaseJumpPad" parent="level-1-track-1" instance=ExtResource("4_0aets")]
 transform = Transform3D(0.022562101, -0.1498524, -0.98845106, -0.032841645, 0.9880579, -0.15054235, 0.99920607, 0.03585892, 0.017371265, 198.27008, -1.4147575, 2.29813)
@@ -48,10 +116,6 @@ transform = Transform3D(0.022562101, -0.1498524, -0.98845106, -0.032841645, 0.98
 [node name="BaseJumpPad4" parent="level-1-track-1" instance=ExtResource("4_0aets")]
 transform = Transform3D(0.022562101, -0.1498524, -0.98845106, -0.032841645, 0.9880579, -0.15054235, 0.99920607, 0.03585892, 0.017371265, 198.25464, -1.6690543, 8.262502)
 
-[node name="BaseJumpPad5" parent="level-1-track-1" instance=ExtResource("4_0aets")]
-transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 1.9502795, -0.32637247, -0.018223342)
-_upVelocity = 18.0
-
 [node name="TrackGuidePath" type="Path3D" parent="."]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, 0, 0)
 curve = SubResource("Curve3D_bq6a1")
@@ -59,3 +123,890 @@ debug_custom_color = Color(1, 1, 1, 1)
 
 [node name="level-1-track-2" parent="." instance=ExtResource("4_1ylsx")]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -33.25, -7.5, -234.37819)
+
+[node name="Node3D" type="Node3D" parent="level-1-track-2"]
+
+[node name="BaseJumpPad" parent="level-1-track-2/Node3D" instance=ExtResource("4_0aets")]
+transform = Transform3D(0.10501453, -1.2033767e-09, -0.9944708, -0.02283952, 0.9997364, -0.0024118177, 0.9942085, 0.022966515, 0.104986824, 84.55385, 1.0021586, 43.409176)
+_upVelocity = 18.0
+_forwardVelocity = 20.0
+
+[node name="BaseJumpPad2" parent="level-1-track-2/Node3D" instance=ExtResource("4_0aets")]
+transform = Transform3D(0.10501453, -1.2033767e-09, -0.9944708, -0.02283952, 0.9997364, -0.0024118177, 0.9942085, 0.022966515, 0.104986824, 84.703384, 0.95782804, 45.338905)
+_upVelocity = 18.0
+_forwardVelocity = 20.0
+
+[node name="BaseJumpPad3" parent="level-1-track-2/Node3D" instance=ExtResource("4_0aets")]
+transform = Transform3D(0.10501453, -1.2033767e-09, -0.9944708, -0.02283952, 0.9997364, -0.0024118177, 0.9942085, 0.022966515, 0.104986824, 84.90019, 0.91263866, 47.306)
+_upVelocity = 18.0
+_forwardVelocity = 20.0
+
+[node name="BaseJumpPad4" parent="level-1-track-2/Node3D" instance=ExtResource("4_0aets")]
+transform = Transform3D(0.10501453, -1.2033767e-09, -0.9944708, -0.02283952, 0.9997364, -0.0024118177, 0.9942085, 0.022966515, 0.104986824, 85.14302, 0.8676739, 49.26332)
+_upVelocity = 18.0
+_forwardVelocity = 20.0
+
+[node name="level-1-track-4" parent="." instance=ExtResource("6_oxkis")]
+transform = Transform3D(-0.1736482, 0, 0.9848077, 0, 1, 0, -0.9848077, 0, -0.1736482, -149.10104, -10.48254, -508.60553)
+
+[node name="BaseSpeedPad" parent="level-1-track-4" instance=ExtResource("7_ys3un")]
+transform = Transform3D(-0.4010141, 0.0017362777, -0.916071, 0.007762158, 0.9999689, -0.001502625, 0.91603965, -0.007713259, -0.4010151, 24.98529, -1.6633968, 142.94763)
+_boostMultiplier = 1.75
+_boostDuration = 8.0
+
+[node name="BaseSpeedPad2" parent="level-1-track-4" instance=ExtResource("7_ys3un")]
+transform = Transform3D(-0.40101427, 0.0017362776, -0.9160713, 0.007762162, 0.99996877, -0.0015026254, 0.91604, -0.007713259, -0.40101516, 24.219788, -1.64925, 144.60945)
+_boostMultiplier = 1.75
+_boostDuration = 8.0
+
+[node name="BaseSpeedPad3" parent="level-1-track-4" instance=ExtResource("7_ys3un")]
+transform = Transform3D(-0.4010142, 0.0017362774, -0.91607124, 0.0077621634, 0.9999689, -0.001502626, 0.9160402, -0.007713259, -0.40101522, 23.363525, -1.6330414, 146.51791)
+_boostMultiplier = 1.75
+_boostDuration = 8.0
+
+[node name="BaseSpeedPad4" parent="level-1-track-4" instance=ExtResource("7_ys3un")]
+transform = Transform3D(-0.4010144, 0.0017362777, -0.91607153, 0.007762163, 0.9999687, -0.0015026255, 0.9160405, -0.007713259, -0.40101528, 22.554565, -1.6170626, 148.40741)
+_boostMultiplier = 1.75
+_boostDuration = 8.0
+
+[node name="BaseSpeedPad5" parent="level-1-track-4" instance=ExtResource("7_ys3un")]
+transform = Transform3D(-0.40079367, 0.00933641, -0.9161224, 0.050294742, 0.99866444, -0.011825775, 0.9147881, -0.050815728, -0.40072787, 125.18378, 2.1406279, 190.09335)
+_boostMultiplier = 1.75
+_boostDuration = 8.0
+
+[node name="BaseSpeedPad6" parent="level-1-track-4" instance=ExtResource("7_ys3un")]
+transform = Transform3D(-0.40079388, 0.009336408, -0.91612285, 0.050294764, 0.9986643, -0.011825776, 0.91478866, -0.05081572, -0.4007279, 124.41882, 2.2322178, 191.75284)
+_boostMultiplier = 1.75
+_boostDuration = 8.0
+
+[node name="BaseSpeedPad7" parent="level-1-track-4" instance=ExtResource("7_ys3un")]
+transform = Transform3D(-0.40079376, 0.009336408, -0.91612256, 0.05029478, 0.99866444, -0.011825781, 0.9147892, -0.050815728, -0.40072805, 123.562744, 2.337201, 193.65875)
+_boostMultiplier = 1.75
+_boostDuration = 8.0
+
+[node name="BaseSpeedPad8" parent="level-1-track-4" instance=ExtResource("7_ys3un")]
+transform = Transform3D(-0.40079403, 0.0093364045, -0.9161233, 0.050294798, 0.9986644, -0.0118257785, 0.9147893, -0.050815724, -0.40072814, 122.7547, 2.440773, 195.54579)
+_boostMultiplier = 1.75
+_boostDuration = 8.0
+
+[node name="BaseSpeedPad9" parent="level-1-track-4" instance=ExtResource("7_ys3un")]
+transform = Transform3D(-0.35515964, 0.0049143108, -0.9347952, 0.03955706, 0.99916935, -0.009776301, 0.9339699, -0.040449794, -0.35505927, 247.54205, 5.4450493, 241.01985)
+_boostMultiplier = 2.0
+
+[node name="BaseSpeedPad10" parent="level-1-track-4" instance=ExtResource("7_ys3un")]
+transform = Transform3D(-0.3551599, 0.004914307, -0.9347959, 0.039557077, 0.99916935, -0.009776305, 0.93397105, -0.04044982, -0.35505927, 246.86023, 5.517067, 242.71605)
+_boostMultiplier = 2.0
+
+[node name="BaseSpeedPad11" parent="level-1-track-4" instance=ExtResource("7_ys3un")]
+transform = Transform3D(-0.35515967, 0.004914306, -0.9347953, 0.039557073, 0.9991695, -0.009776306, 0.933972, -0.04044982, -0.35505933, 246.09918, 5.5996275, 244.66287)
+_boostMultiplier = 2.0
+
+[node name="BaseSpeedPad12" parent="level-1-track-4" instance=ExtResource("7_ys3un")]
+transform = Transform3D(-0.35516, 0.004914302, -0.9347963, 0.03955709, 0.99916923, -0.009776307, 0.93397224, -0.040449835, -0.35505944, 245.3852, 5.681095, 246.58862)
+_boostMultiplier = 2.0
+
+[node name="BaseJumpPad" parent="level-1-track-4" instance=ExtResource("4_0aets")]
+transform = Transform3D(-0.32254857, 0.0025051082, -0.9465525, 0.032240678, 0.99944556, -0.008341253, 0.9460059, -0.033207808, -0.32245046, 258.2812, 5.8679147, 244.75496)
+_upVelocity = 18.0
+_forwardVelocity = 16.0
+
+[node name="BaseJumpPad2" parent="level-1-track-4" instance=ExtResource("4_0aets")]
+transform = Transform3D(-0.32254857, 0.0025051082, -0.9465525, 0.032240678, 0.99944556, -0.008341253, 0.9460059, -0.033207808, -0.32245046, 257.6062, 5.9298596, 246.5684)
+_upVelocity = 18.0
+_forwardVelocity = 16.0
+
+[node name="BaseJumpPad3" parent="level-1-track-4" instance=ExtResource("4_0aets")]
+transform = Transform3D(-0.32254857, 0.0025051082, -0.9465525, 0.032240678, 0.99944556, -0.008341253, 0.9460059, -0.033207808, -0.32245046, 256.95825, 5.9935236, 248.43549)
+_upVelocity = 18.0
+_forwardVelocity = 16.0
+
+[node name="BaseJumpPad4" parent="level-1-track-4" instance=ExtResource("4_0aets")]
+transform = Transform3D(-0.32254857, 0.0025051082, -0.9465525, 0.032240678, 0.99944556, -0.008341253, 0.9460059, -0.033207808, -0.32245046, 256.3557, 6.0574126, 250.3129)
+_upVelocity = 18.0
+_forwardVelocity = 16.0
+
+[node name="level-1-track-3" parent="." instance=ExtResource("7_r041s")]
+transform = Transform3D(-0.13917308, 0, 0.99026805, 0, 1, 0, -0.99026805, 0, -0.13917308, -76.51349, -6.9960437, -369.83633)
+
+[node name="BaseJumpPad" parent="level-1-track-3" instance=ExtResource("4_0aets")]
+transform = Transform3D(-0.22527534, -0.0020656174, -0.9742946, 0.016033689, 0.9998548, -0.0058270833, 0.9741647, -0.016934168, -0.22520933, 115.21661, -3.4845195, 80.00984)
+
+[node name="BaseJumpPad2" parent="level-1-track-3" instance=ExtResource("4_0aets")]
+transform = Transform3D(-0.22527534, -0.0020656174, -0.9742946, 0.016033689, 0.9998548, -0.0058270833, 0.9741647, -0.016934168, -0.22520933, 114.72806, -3.4538035, 81.88299)
+
+[node name="BaseJumpPad3" parent="level-1-track-3" instance=ExtResource("4_0aets")]
+transform = Transform3D(-0.22527534, -0.0020656174, -0.9742946, 0.016033689, 0.9998548, -0.0058270833, 0.9741647, -0.016934168, -0.22520933, 114.27219, -3.4221597, 83.80687)
+
+[node name="BaseJumpPad4" parent="level-1-track-3" instance=ExtResource("4_0aets")]
+transform = Transform3D(-0.22527534, -0.0020656174, -0.9742946, 0.016033689, 0.9998548, -0.0058270833, 0.9741647, -0.016934168, -0.22520933, 113.86246, -3.390327, 85.736435)
+
+[node name="level-1-track-5" parent="." instance=ExtResource("8_aoct0")]
+transform = Transform3D(-0.036643684, -0.059266545, 0.9975693, 0, 0.9982398, 0.059306372, -0.9993283, 0.0021732042, -0.036579184, 52.53059, -4.831579, -835.82214)
+
+[node name="BaseJumpPad" parent="level-1-track-5" instance=ExtResource("4_0aets")]
+transform = Transform3D(0.13182306, -0.04036807, -0.9904552, -0.0072535416, 0.9991044, -0.041686248, 0.9912495, 0.012679395, 0.13141282, 162.9303, -0.38735104, 3.8747787)
+_upVelocity = 20.0
+_forwardVelocity = 18.0
+
+[node name="BaseJumpPad2" parent="level-1-track-5" instance=ExtResource("4_0aets")]
+transform = Transform3D(0.13182306, -0.04036807, -0.9904552, -0.0072535416, 0.9991044, -0.041686248, 0.9912495, 0.012679395, 0.13141282, 163.13263, -0.4036045, 5.799965)
+_upVelocity = 20.0
+_forwardVelocity = 18.0
+
+[node name="BaseJumpPad3" parent="level-1-track-5" instance=ExtResource("4_0aets")]
+transform = Transform3D(0.13182306, -0.04036807, -0.9904552, -0.0072535416, 0.9991044, -0.041686248, 0.9912495, 0.012679395, 0.13141282, 163.38293, -0.41838837, 7.761345)
+_upVelocity = 20.0
+_forwardVelocity = 18.0
+
+[node name="BaseJumpPad4" parent="level-1-track-5" instance=ExtResource("4_0aets")]
+transform = Transform3D(0.13182306, -0.04036807, -0.9904552, -0.0072535416, 0.9991044, -0.041686248, 0.9912495, 0.012679395, 0.13141282, 163.67773, -0.43122292, 9.712013)
+_upVelocity = 20.0
+_forwardVelocity = 18.0
+
+[node name="level-1-track-6" parent="." instance=ExtResource("9_n4bx7")]
+transform = Transform3D(-0.23683819, 0, 0.9715491, 0, 1, 0, -0.9715491, 0, -0.23683819, -306.026, -15.179, -976.338)
+
+[node name="BaseSpeedPad9" parent="level-1-track-6" instance=ExtResource("7_ys3un")]
+transform = Transform3D(0.0059255064, -0.016805422, -0.9998449, 0.011782212, 0.9997902, -0.016734773, 0.9999161, -0.011681329, 0.006122574, 52.312744, 2.0894518, 351.5213)
+_boostMultiplier = 2.0
+_boostDuration = 8.0
+
+[node name="BaseSpeedPad10" parent="level-1-track-6" instance=ExtResource("7_ys3un")]
+transform = Transform3D(0.005925551, -0.016805457, -0.9998458, 0.011782214, 0.9997904, -0.016734783, 0.99991745, -0.011681344, 0.00612244, 52.28882, 2.110424, 353.35046)
+_boostMultiplier = 2.0
+_boostDuration = 8.0
+
+[node name="BaseSpeedPad11" parent="level-1-track-6" instance=ExtResource("7_ys3un")]
+transform = Transform3D(0.005926281, -0.016805457, -0.9998455, 0.011782188, 0.99979043, -0.016734777, 0.99991804, -0.011681344, 0.0061223954, 52.282104, 2.1347504, 355.44232)
+_boostMultiplier = 2.0
+_boostDuration = 8.0
+
+[node name="BaseSpeedPad12" parent="level-1-track-6" instance=ExtResource("7_ys3un")]
+transform = Transform3D(0.005925894, -0.016805459, -0.9998458, 0.011782179, 0.9997901, -0.01673478, 0.99991906, -0.011681357, 0.0061223805, 52.3114, 2.1592474, 357.49744)
+_boostMultiplier = 2.0
+_boostDuration = 8.0
+
+[node name="Coins" type="Node3D" parent="."]
+
+[node name="BronzeCoinPickup" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(0.99686915, 0, -0.07906805, 0, 1, 0, 0.07906805, 0, 0.99686915, 3.5540607, 1.1969137, -18.835127)
+
+[node name="BronzeCoinPickup2" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(0.99686915, 0, -0.07906805, 0, 1, 0, 0.07906805, 0, 0.99686915, 4.1668415, 1.2629437, -20.954523)
+
+[node name="BronzeCoinPickup3" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(0.99686915, 0, -0.07906805, 0, 1, 0, 0.07906805, 0, 0.99686915, 5.034642, 1.3244576, -23.060268)
+
+[node name="BronzeCoinPickup4" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(0.99686915, 0, -0.07906805, 0, 1, 0, 0.07906805, 0, 0.99686915, 5.690501, 1.5742354, -25.067122)
+VisualRootPath = NodePath("../BronzeCoinPickup3/VisualRoot")
+
+[node name="BronzeCoinPickup5" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(0.99686915, 0, -0.07906805, 0, 1, 0, 0.07906805, 0, 0.99686915, 6.6193075, 1.5742354, -27.157959)
+VisualRootPath = NodePath("../BronzeCoinPickup3/VisualRoot")
+
+[node name="BronzeCoinPickup6" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(0.99686915, 0, -0.07906805, 0, 1, 0, 0.07906805, 0, 0.99686915, 7.434682, 1.5742354, -29.081749)
+VisualRootPath = NodePath("../BronzeCoinPickup3/VisualRoot")
+
+[node name="BronzeCoinPickup7" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(0.99686915, 0, -0.07906805, 0, 1, 0, 0.07906805, 0, 0.99686915, 8.066612, 1.6969137, -31.00004)
+
+[node name="BronzeCoinPickup8" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(0.99686915, 0, -0.07906805, 0, 1, 0, 0.07906805, 0, 0.99686915, 8.5075035, 1.9469137, -33.08805)
+
+[node name="BronzeCoinPickup9" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(0.9984968, 0, -0.054810762, 0, 1, 0, 0.054810762, 0, 0.9984968, 8.063966, 0.55567837, -29.167765)
+
+[node name="SilverCoinPickup" parent="Coins" instance=ExtResource("13_jfi0m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.4887195, -2.3676972, -99.07234)
+
+[node name="SilverCoinPickup2" parent="Coins" instance=ExtResource("13_jfi0m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.792236, -2.5041764, -109.76961)
+
+[node name="SilverCoinPickup3" parent="Coins" instance=ExtResource("13_jfi0m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.153916, -2.3818145, -122.35844)
+
+[node name="BronzeCoinPickup10" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.420587, -1.5385091, -193.1545)
+
+[node name="BronzeCoinPickup11" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.140501, -1.5130435, -193.11943)
+
+[node name="BronzeCoinPickup12" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.9151645, -1.5892735, -193.09425)
+
+[node name="BronzeCoinPickup13" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.869147, -1.5982108, -193.09128)
+
+[node name="BronzeCoinPickup14" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.420587, -1.854865, -191.34439)
+
+[node name="BronzeCoinPickup15" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.140501, -1.8293993, -191.30933)
+
+[node name="BronzeCoinPickup16" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.9151645, -1.9056293, -191.28415)
+
+[node name="BronzeCoinPickup18" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.420587, -1.128247, -194.66605)
+VisualRootPath = NodePath("../BronzeCoinPickup/VisualRoot")
+
+[node name="BronzeCoinPickup19" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.140501, -1.1027814, -194.63098)
+VisualRootPath = NodePath("../BronzeCoinPickup2/VisualRoot")
+
+[node name="BronzeCoinPickup20" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.9151645, -1.1790113, -194.6058)
+VisualRootPath = NodePath("../BronzeCoinPickup3/VisualRoot")
+
+[node name="BronzeCoinPickup21" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.869147, -1.1879487, -194.60283)
+VisualRootPath = NodePath("../BronzeCoinPickup4/VisualRoot")
+
+[node name="BronzeCoinPickup22" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.421971, 1.7427583, -52.39497)
+VisualRootPath = NodePath("../BronzeCoinPickup/VisualRoot")
+
+[node name="BronzeCoinPickup23" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.155907, 1.4945021, -54.179)
+VisualRootPath = NodePath("../BronzeCoinPickup2/VisualRoot")
+
+[node name="BronzeCoinPickup24" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.6882586, 1.176363, -56.215473)
+VisualRootPath = NodePath("../BronzeCoinPickup3/VisualRoot")
+
+[node name="BronzeCoinPickup25" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.212887, 0.81939936, -58.29736)
+VisualRootPath = NodePath("../BronzeCoinPickup4/VisualRoot")
+
+[node name="BronzeCoinPickup26" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.476724, 0.38443863, -60.66352)
+VisualRootPath = NodePath("../BronzeCoinPickup5/VisualRoot")
+
+[node name="BronzeCoinPickup27" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.55206, -0.10409975, -63.35836)
+VisualRootPath = NodePath("../BronzeCoinPickup6/VisualRoot")
+
+[node name="BronzeCoinPickup28" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.7769165, -0.5618329, -66.37508)
+VisualRootPath = NodePath("../BronzeCoinPickup7/VisualRoot")
+
+[node name="BronzeCoinPickup29" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.222502, -0.8340485, -69.403564)
+VisualRootPath = NodePath("../BronzeCoinPickup8/VisualRoot")
+
+[node name="BronzeCoinPickup30" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.1366096, -0.96535563, -72.6996)
+VisualRootPath = NodePath("../BronzeCoinPickup9/VisualRoot")
+
+[node name="BronzeCoinPickup31" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.3575673, -1.0610411, -76.1488)
+VisualRootPath = NodePath("../BronzeCoinPickup10/VisualRoot")
+
+[node name="BronzeCoinPickup17" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.869147, -1.9145666, -191.28117)
+
+[node name="BronzeCoinPickup32" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(0.9723414, 0, 0.23356417, 0, 1, 0, -0.23356417, 0, 0.9723414, -0.35386062, -8.529341, -262.91553)
+VisualRootPath = NodePath("../BronzeCoinPickup/VisualRoot")
+
+[node name="BronzeCoinPickup33" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(0.9723414, 0, 0.23356417, 0, 1, 0, -0.23356417, 0, 0.9723414, 2.145464, -8.529341, -263.50916)
+VisualRootPath = NodePath("../BronzeCoinPickup2/VisualRoot")
+
+[node name="BronzeCoinPickup34" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(0.9723414, 0, 0.23356417, 0, 1, 0, -0.23356417, 0, 0.9723414, 4.645628, -8.529341, -264.01312)
+VisualRootPath = NodePath("../BronzeCoinPickup3/VisualRoot")
+
+[node name="BronzeCoinPickup35" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(0.99063855, 0, 0.13651094, 0, 1, 0, -0.13651094, 0, 0.99063855, -0.9864955, -8.529341, -266.11472)
+VisualRootPath = NodePath("../BronzeCoinPickup4/VisualRoot")
+
+[node name="BronzeCoinPickup36" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(0.99063855, 0, 0.13651094, 0, 1, 0, -0.13651094, 0, 0.99063855, 1.5591967, -8.529341, -266.4589)
+VisualRootPath = NodePath("../BronzeCoinPickup5/VisualRoot")
+
+[node name="BronzeCoinPickup37" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(0.99063855, 0, 0.13651094, 0, 1, 0, -0.13651094, 0, 0.99063855, 4.09688, -8.529341, -266.71378)
+VisualRootPath = NodePath("../BronzeCoinPickup6/VisualRoot")
+
+[node name="BronzeCoinPickup38" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(0.99884343, 0, 0.048082724, 0, 1, 0, -0.048082724, 0, 0.99884343, 1.5591967, -8.331575, -269.5613)
+VisualRootPath = NodePath("../BronzeCoinPickup7/VisualRoot")
+
+[node name="BronzeCoinPickup39" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(0.997721, 0, -0.0674755, 0, 1, 0, 0.0674755, 0, 0.997721, 2.0299113, -7.792008, -273.72577)
+VisualRootPath = NodePath("../BronzeCoinPickup8/VisualRoot")
+
+[node name="BronzeCoinPickup40" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(0.9904326, 0, -0.13799775, 0, 1, 0, 0.13799775, 0, 0.9904326, 3.1659966, -6.4723744, -278.20706)
+VisualRootPath = NodePath("../BronzeCoinPickup9/VisualRoot")
+
+[node name="BronzeCoinPickup41" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(0.9791804, 0, -0.2029924, 0, 1, 0, 0.2029924, 0, 0.9791804, 4.627152, -5.662737, -282.8997)
+VisualRootPath = NodePath("../BronzeCoinPickup10/VisualRoot")
+
+[node name="SilverCoinPickup4" parent="Coins" instance=ExtResource("13_jfi0m")]
+transform = Transform3D(0.85190064, 0, 0.52370346, 0, 1, 0, -0.52370346, 0, 0.85190064, -6.059081, -5.9660482, -411.38824)
+VisualRootPath = NodePath("../SilverCoinPickup/VisualRoot")
+
+[node name="SilverCoinPickup5" parent="Coins" instance=ExtResource("13_jfi0m")]
+transform = Transform3D(0.85190064, 0, 0.52370346, 0, 1, 0, -0.52370346, 0, 0.85190064, -4.189641, -5.946132, -412.4949)
+VisualRootPath = NodePath("../SilverCoinPickup2/VisualRoot")
+
+[node name="SilverCoinPickup6" parent="Coins" instance=ExtResource("13_jfi0m")]
+transform = Transform3D(0.85190064, 0, 0.52370346, 0, 1, 0, -0.52370346, 0, 0.85190064, -2.3558455, -5.977845, -413.73267)
+VisualRootPath = NodePath("../SilverCoinPickup3/VisualRoot")
+
+[node name="BronzeCoinPickup42" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(0.9552526, 0, -0.29579142, 0, 1, 0, 0.29579142, 0, 0.9552526, 6.3960104, -5.7504416, -287.79648)
+VisualRootPath = NodePath("../BronzeCoinPickup11/VisualRoot")
+
+[node name="BronzeCoinPickup43" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(0.91300523, 0, -0.40794814, 0, 1, 0, 0.40794814, 0, 0.91300523, 8.857263, -6.166523, -293.83286)
+VisualRootPath = NodePath("../BronzeCoinPickup12/VisualRoot")
+
+[node name="SilverCoinPickup7" parent="Coins" instance=ExtResource("13_jfi0m")]
+transform = Transform3D(0.85190064, 0, 0.52370346, 0, 1, 0, -0.52370346, 0, 0.85190064, -7.931791, -6.297329, -415.0475)
+VisualRootPath = NodePath("../SilverCoinPickup/VisualRoot")
+
+[node name="SilverCoinPickup8" parent="Coins" instance=ExtResource("13_jfi0m")]
+transform = Transform3D(0.85190064, 0, 0.52370346, 0, 1, 0, -0.52370346, 0, 0.85190064, -6.0623507, -6.277413, -416.15414)
+VisualRootPath = NodePath("../SilverCoinPickup2/VisualRoot")
+
+[node name="SilverCoinPickup9" parent="Coins" instance=ExtResource("13_jfi0m")]
+transform = Transform3D(0.85190064, 0, 0.52370346, 0, 1, 0, -0.52370346, 0, 0.85190064, -4.228555, -6.309126, -417.3919)
+VisualRootPath = NodePath("../SilverCoinPickup3/VisualRoot")
+
+[node name="SilverCoinPickup10" parent="Coins" instance=ExtResource("13_jfi0m")]
+transform = Transform3D(0.99651766, 0, -0.08338218, 0, 1, 0, 0.08338218, 0, 0.99651766, -14.686296, -8.749643, -472.4358)
+VisualRootPath = NodePath("../SilverCoinPickup/VisualRoot")
+
+[node name="SilverCoinPickup11" parent="Coins" instance=ExtResource("13_jfi0m")]
+transform = Transform3D(0.99651766, 0, -0.08338218, 0, 1, 0, 0.08338218, 0, 0.99651766, -9.043262, -8.749643, -471.96362)
+VisualRootPath = NodePath("../SilverCoinPickup2/VisualRoot")
+
+[node name="SilverCoinPickup12" parent="Coins" instance=ExtResource("13_jfi0m")]
+transform = Transform3D(0.99651766, 0, -0.08338218, 0, 1, 0, 0.08338218, 0, 0.99651766, -14.520882, -8.749643, -474.4127)
+VisualRootPath = NodePath("../SilverCoinPickup3/VisualRoot")
+
+[node name="SilverCoinPickup13" parent="Coins" instance=ExtResource("13_jfi0m")]
+transform = Transform3D(0.99651766, 0, -0.08338218, 0, 1, 0, 0.08338218, 0, 0.99651766, -8.877847, -8.749643, -473.94052)
+VisualRootPath = NodePath("../SilverCoinPickup4/VisualRoot")
+
+[node name="SilverCoinPickup14" parent="Coins" instance=ExtResource("13_jfi0m")]
+transform = Transform3D(0.99651766, 0, -0.08338218, 0, 1, 0, 0.08338218, 0, 0.99651766, -14.854328, -8.749643, -470.4276)
+VisualRootPath = NodePath("../SilverCoinPickup5/VisualRoot")
+
+[node name="SilverCoinPickup15" parent="Coins" instance=ExtResource("13_jfi0m")]
+transform = Transform3D(0.99651766, 0, -0.08338218, 0, 1, 0, 0.08338218, 0, 0.99651766, -9.211294, -8.749643, -469.9554)
+VisualRootPath = NodePath("../SilverCoinPickup6/VisualRoot")
+
+[node name="BronzeCoinPickup44" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(0.99651766, 0, -0.08338218, 0, 1, 0, 0.08338218, 0, 0.99651766, -11.945629, -8.696856, -472.2541)
+VisualRootPath = NodePath("../BronzeCoinPickup/VisualRoot")
+
+[node name="BronzeCoinPickup45" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(0.99651766, 0, -0.08338218, 0, 1, 0, 0.08338218, 0, 0.99651766, -12.123414, -8.696856, -470.12933)
+VisualRootPath = NodePath("../BronzeCoinPickup2/VisualRoot")
+
+[node name="BronzeCoinPickup46" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(0.99651766, 0, -0.08338218, 0, 1, 0, 0.08338218, 0, 0.99651766, -11.7802305, -8.696856, -474.23077)
+VisualRootPath = NodePath("../BronzeCoinPickup3/VisualRoot")
+
+[node name="BronzeCoinPickup47" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(0.99651766, 0, -0.08338218, 0, 1, 0, 0.08338218, 0, 0.99651766, -11.437428, -8.696856, -478.54056)
+VisualRootPath = NodePath("../BronzeCoinPickup4/VisualRoot")
+
+[node name="BronzeCoinPickup48" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(0.99651766, 0, -0.08338218, 0, 1, 0, 0.08338218, 0, 0.99651766, -11.615213, -8.696856, -476.4158)
+VisualRootPath = NodePath("../BronzeCoinPickup5/VisualRoot")
+
+[node name="BronzeCoinPickup49" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(0.99651766, 0, -0.08338218, 0, 1, 0, 0.08338218, 0, 0.99651766, -11.27203, -8.876928, -480.51724)
+VisualRootPath = NodePath("../BronzeCoinPickup6/VisualRoot")
+
+[node name="BronzeCoinPickup50" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(0.99651766, 0, -0.08338218, 0, 1, 0, 0.08338218, 0, 0.99651766, -10.976341, -9.1268425, -485.0623)
+VisualRootPath = NodePath("../BronzeCoinPickup7/VisualRoot")
+
+[node name="BronzeCoinPickup51" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(0.99651766, 0, -0.08338218, 0, 1, 0, 0.08338218, 0, 0.99651766, -11.154126, -8.877888, -482.92416)
+VisualRootPath = NodePath("../BronzeCoinPickup8/VisualRoot")
+
+[node name="BronzeCoinPickup52" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(0.99651766, 0, -0.08338218, 0, 1, 0, 0.08338218, 0, 0.99651766, -10.810943, -9.235188, -487.03897)
+VisualRootPath = NodePath("../BronzeCoinPickup9/VisualRoot")
+
+[node name="BronzeCoinPickup53" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(0.99651766, 0, -0.08338218, 0, 1, 0, 0.08338218, 0, 0.99651766, -10.497538, -9.471039, -490.94318)
+VisualRootPath = NodePath("../BronzeCoinPickup10/VisualRoot")
+
+[node name="BronzeCoinPickup54" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(0.99651766, 0, -0.08338218, 0, 1, 0, 0.08338218, 0, 0.99651766, -10.675323, -9.2652645, -488.81842)
+VisualRootPath = NodePath("../BronzeCoinPickup11/VisualRoot")
+
+[node name="BronzeCoinPickup55" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(0.8692707, 0, -0.4943364, 0, 1, 0, 0.4943364, 0, 0.8692707, -3.0471804, -12.365163, -579.6313)
+VisualRootPath = NodePath("../BronzeCoinPickup/VisualRoot")
+
+[node name="BronzeCoinPickup56" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(0.8692707, 0, -0.4943364, 0, 1, 0, 0.4943364, 0, 0.8692707, -2.042641, -12.389936, -579.0761)
+VisualRootPath = NodePath("../BronzeCoinPickup2/VisualRoot")
+
+[node name="BronzeCoinPickup57" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(0.8692707, 0, -0.4943364, 0, 1, 0, 0.4943364, 0, 0.8692707, -1.0002465, -12.406561, -578.48444)
+VisualRootPath = NodePath("../BronzeCoinPickup3/VisualRoot")
+
+[node name="BronzeCoinPickup58" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(0.92193073, 0, -0.38735467, 0, 1, 0, 0.38735467, 0, 0.92193073, 12.384489, -9.521653, -596.183)
+VisualRootPath = NodePath("../BronzeCoinPickup4/VisualRoot")
+
+[node name="BronzeCoinPickup59" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(0.92193073, 0, -0.38735467, 0, 1, 0, 0.38735467, 0, 0.92193073, 13.4479685, -9.546427, -595.75134)
+VisualRootPath = NodePath("../BronzeCoinPickup5/VisualRoot")
+
+[node name="BronzeCoinPickup60" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(0.92193073, 0, -0.38735467, 0, 1, 0, 0.38735467, 0, 0.92193073, 14.553379, -9.563051, -595.28796)
+VisualRootPath = NodePath("../BronzeCoinPickup6/VisualRoot")
+
+[node name="SilverCoinPickup16" parent="Coins" instance=ExtResource("13_jfi0m")]
+transform = Transform3D(0.99982566, 0, -0.018673949, 0, 1, 0, 0.018673949, 0, 0.99982566, 12.741794, -8.049157, -614.7971)
+VisualRootPath = NodePath("../SilverCoinPickup/VisualRoot")
+
+[node name="BronzeCoinPickup61" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.073065, -6.839579, -643.689)
+VisualRootPath = NodePath("../BronzeCoinPickup7/VisualRoot")
+
+[node name="BronzeCoinPickup62" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.349607, -6.7997317, -643.6897)
+VisualRootPath = NodePath("../BronzeCoinPickup8/VisualRoot")
+
+[node name="SilverCoinPickup17" parent="Coins" instance=ExtResource("13_jfi0m")]
+transform = Transform3D(0.96948385, 0, -0.24515511, 0, 1, 0, 0.24515511, 0, 0.96948385, 27.021667, -11.595855, -700.03577)
+VisualRootPath = NodePath("../SilverCoinPickup2/VisualRoot")
+
+[node name="BronzeCoinPickup63" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(0.9879654, 0, -0.15467592, 0, 1, 0, 0.15467592, 0, 0.9879654, 43.049, -9.934455, -732.1018)
+
+[node name="BronzeCoinPickup64" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(0.9879654, 0, -0.15467592, 0, 1, 0, 0.15467592, 0, 0.9879654, 41.820522, -9.899252, -732.29315)
+
+[node name="BronzeCoinPickup65" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(0.9879654, 0, -0.15467592, 0, 1, 0, 0.15467592, 0, 0.9879654, 39.819855, -8.389715, -744.851)
+
+[node name="BronzeCoinPickup66" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(0.9879654, 0, -0.15467592, 0, 1, 0, 0.15467592, 0, 0.9879654, 38.591377, -8.354512, -745.04236)
+
+[node name="BronzeCoinPickup67" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(0.9879654, 0, -0.15467592, 0, 1, 0, 0.15467592, 0, 0.9879654, 44.736683, -6.3826246, -762.1754)
+
+[node name="BronzeCoinPickup68" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(0.9879654, 0, -0.15467592, 0, 1, 0, 0.15467592, 0, 0.9879654, 43.508205, -6.3474216, -762.36676)
+
+[node name="BronzeCoinPickup69" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 48.16778, -5.389533, -773.8953)
+VisualRootPath = NodePath("../BronzeCoinPickup/VisualRoot")
+
+[node name="SilverCoinPickup18" parent="Coins" instance=ExtResource("13_jfi0m")]
+transform = Transform3D(0.9916194, 0, -0.12919366, 0, 1, 0, 0.12919366, 0, 0.9916194, 47.31747, -4.612722, -789.6038)
+VisualRootPath = NodePath("../SilverCoinPickup/VisualRoot")
+
+[node name="BronzeCoinPickup70" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(0.9982625, 0, 0.058923073, 0, 1, 0, -0.058923073, 0, 0.9982625, 48.734158, -3.4979415, -866.4021)
+VisualRootPath = NodePath("../BronzeCoinPickup2/VisualRoot")
+
+[node name="BronzeCoinPickup71" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(0.9981752, -0.013206225, 0.058923073, 0.01322921, 0.9999125, 0, -0.058917917, 0.0007795057, 0.9982625, 50.33763, -3.518143, -866.5047)
+VisualRootPath = NodePath("../BronzeCoinPickup3/VisualRoot")
+
+[node name="BronzeCoinPickup72" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(0.9982625, 0, 0.058923073, 0, 1, 0, -0.058923073, 0, 0.9982625, 51.895573, -3.5258543, -866.63965)
+VisualRootPath = NodePath("../BronzeCoinPickup4/VisualRoot")
+
+[node name="BronzeCoinPickup73" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(0.9982625, 0, 0.058923073, 0, 1, 0, -0.058923073, 0, 0.9982625, 53.459496, -3.529157, -866.76746)
+VisualRootPath = NodePath("../BronzeCoinPickup5/VisualRoot")
+
+[node name="BronzeCoinPickup74" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(0.9982625, 0, 0.058923073, 0, 1, 0, -0.058923073, 0, 0.9982625, 54.99948, -3.505159, -866.89215)
+VisualRootPath = NodePath("../BronzeCoinPickup6/VisualRoot")
+
+[node name="BronzeCoinPickup75" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(0.95223075, 0, 0.30537957, 0, 1, 0, -0.30537957, 0, 0.95223075, 44.385357, -3.123632, -885.7495)
+VisualRootPath = NodePath("../BronzeCoinPickup7/VisualRoot")
+
+[node name="BronzeCoinPickup76" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(0.95214736, -0.012597262, 0.30537957, 0.013229208, 0.9999124, -4.6366028e-10, -0.30535284, 0.00403993, 0.9522307, 45.91291, -3.1438334, -886.24774)
+VisualRootPath = NodePath("../BronzeCoinPickup8/VisualRoot")
+
+[node name="BronzeCoinPickup77" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(0.95223075, 0, 0.30537957, 0, 1, 0, -0.30537957, 0, 0.95223075, 47.38832, -3.1515448, -886.766)
+VisualRootPath = NodePath("../BronzeCoinPickup9/VisualRoot")
+
+[node name="BronzeCoinPickup78" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(0.95223075, 0, 0.30537957, 0, 1, 0, -0.30537957, 0, 0.95223075, 48.8713, -3.1548474, -887.27875)
+VisualRootPath = NodePath("../BronzeCoinPickup10/VisualRoot")
+
+[node name="BronzeCoinPickup79" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(0.95223075, 0, 0.30537957, 0, 1, 0, -0.30537957, 0, 0.95223075, 50.331863, -3.1308494, -887.7826)
+VisualRootPath = NodePath("../BronzeCoinPickup11/VisualRoot")
+
+[node name="BronzeCoinPickup80" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(0.9953677, -0.08889431, -0.036620248, 0.08883421, 0.9960412, -0.0032682698, 0.0367658, 2.3237273e-10, 0.999324, 40.37763, -3.261835, -907.71326)
+VisualRootPath = NodePath("../BronzeCoinPickup12/VisualRoot")
+
+[node name="BronzeCoinPickup81" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(0.9941045, -0.10205445, -0.036620222, 0.10200325, 0.9947787, -0.003268268, 0.036762536, -0.0004863827, 0.99932396, 41.979, -3.1391978, -907.6622)
+VisualRootPath = NodePath("../BronzeCoinPickup13/VisualRoot")
+
+[node name="BronzeCoinPickup82" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(0.9953677, -0.08889431, -0.036620248, 0.08883421, 0.9960412, -0.0032682698, 0.0367658, 2.3237273e-10, 0.999324, 43.537212, -3.0078738, -907.6476)
+VisualRootPath = NodePath("../BronzeCoinPickup14/VisualRoot")
+
+[node name="BronzeCoinPickup83" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(0.9953677, -0.08889431, -0.036620248, 0.08883421, 0.9960412, -0.0032682698, 0.0367658, 2.3237273e-10, 0.999324, 45.10026, -2.8716908, -907.6253)
+VisualRootPath = NodePath("../BronzeCoinPickup15/VisualRoot")
+
+[node name="BronzeCoinPickup84" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(0.9953677, -0.08889431, -0.036620248, 0.08883421, 0.9960412, -0.0032682698, 0.0367658, 2.3237273e-10, 0.999324, 46.636868, -2.710459, -907.60223)
+VisualRootPath = NodePath("../BronzeCoinPickup16/VisualRoot")
+
+[node name="BronzeCoinPickup85" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(0.91917205, -0.04222441, -0.39158612, 0.038846143, 0.99910814, -0.016549252, 0.39193568, 0, 0.91999257, 47.129345, -4.538246, -932.24884)
+VisualRootPath = NodePath("../BronzeCoinPickup17/VisualRoot")
+
+[node name="BronzeCoinPickup86" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(0.91853297, -0.05438064, -0.39158612, 0.052060157, 0.99850684, -0.016549252, 0.3919013, -0.005185, 0.9199926, 48.610188, -4.4958816, -931.62646)
+VisualRootPath = NodePath("../BronzeCoinPickup18/VisualRoot")
+
+[node name="BronzeCoinPickup87" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(0.91917205, -0.04222441, -0.39158612, 0.038846143, 0.99910814, -0.016549252, 0.39193568, 0, 0.91999257, 50.06416, -4.442152, -931.0532)
+VisualRootPath = NodePath("../BronzeCoinPickup19/VisualRoot")
+
+[node name="BronzeCoinPickup88" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(0.91917205, -0.04222441, -0.39158612, 0.038846143, 0.99910814, -0.016549252, 0.39193568, 0, 0.91999257, 51.5201, -4.3839264, -930.471)
+VisualRootPath = NodePath("../BronzeCoinPickup20/VisualRoot")
+
+[node name="BronzeCoinPickup89" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(0.91917205, -0.04222441, -0.39158612, 0.038846143, 0.99910814, -0.016549252, 0.39193568, 0, 0.91999257, 52.952106, -4.2993875, -929.8966)
+VisualRootPath = NodePath("../BronzeCoinPickup21/VisualRoot")
+
+[node name="BronzeCoinPickup90" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(0.9946984, -0.060440756, 0.08319968, 0.061863646, 0.99797744, -0.014629288, -0.08214717, 0.01969877, 0.9964256, 54.29634, -3.835343, -968.0581)
+VisualRootPath = NodePath("../BronzeCoinPickup22/VisualRoot")
+
+[node name="BronzeCoinPickup91" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(0.9938117, -0.07359457, 0.08319974, 0.075060695, 0.9970718, -0.014629288, -0.08187942, 0.02078379, 0.99642557, 55.895103, -3.755988, -968.1985)
+VisualRootPath = NodePath("../BronzeCoinPickup23/VisualRoot")
+
+[node name="BronzeCoinPickup92" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(0.9946984, -0.060440756, 0.08319968, 0.061863646, 0.99797744, -0.014629288, -0.08214717, 0.01969877, 0.9964256, 57.446926, -3.6663508, -968.36975)
+VisualRootPath = NodePath("../BronzeCoinPickup24/VisualRoot")
+
+[node name="BronzeCoinPickup93" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(0.9946984, -0.060440756, 0.08319968, 0.061863646, 0.99797744, -0.014629288, -0.08214717, 0.01969877, 0.9964256, 59.004574, -3.5720816, -968.534)
+VisualRootPath = NodePath("../BronzeCoinPickup25/VisualRoot")
+
+[node name="BronzeCoinPickup94" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(0.9946984, -0.060440756, 0.08319968, 0.061863646, 0.99797744, -0.014629288, -0.08214717, 0.01969877, 0.9964256, 60.536804, -3.45208, -968.69403)
+VisualRootPath = NodePath("../BronzeCoinPickup26/VisualRoot")
+
+[node name="BronzeCoinPickup95" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(0.97177196, 0, 0.23592244, 0, 1, 0, -0.23592244, 0, 0.97177196, -8.620973, -25.990587, -1245.0464)
+VisualRootPath = NodePath("../BronzeCoinPickup/VisualRoot")
+
+[node name="BronzeCoinPickup96" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(0.97177196, 0, 0.23592244, 0, 1, 0, -0.23592244, 0, 0.97177196, -7.32376, -25.990587, -1245.3778)
+VisualRootPath = NodePath("../BronzeCoinPickup2/VisualRoot")
+
+[node name="BronzeCoinPickup97" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(0.97177196, 0, 0.23592244, 0, 1, 0, -0.23592244, 0, 0.97177196, -6.111991, -25.990587, -1245.6964)
+VisualRootPath = NodePath("../BronzeCoinPickup3/VisualRoot")
+
+[node name="BronzeCoinPickup98" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(0.97177196, 0, 0.23592244, 0, 1, 0, -0.23592244, 0, 0.97177196, -4.7740364, -25.990587, -1245.9762)
+VisualRootPath = NodePath("../BronzeCoinPickup4/VisualRoot")
+
+[node name="BronzeCoinPickup99" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(0.97177196, 0, 0.23592244, 0, 1, 0, -0.23592244, 0, 0.97177196, -7.601078, -25.990587, -1247.4523)
+VisualRootPath = NodePath("../BronzeCoinPickup5/VisualRoot")
+
+[node name="BronzeCoinPickup100" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(0.97177196, 0, 0.23592244, 0, 1, 0, -0.23592244, 0, 0.97177196, -6.3038654, -25.990587, -1247.7837)
+VisualRootPath = NodePath("../BronzeCoinPickup6/VisualRoot")
+
+[node name="BronzeCoinPickup101" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(0.97177196, 0, 0.23592244, 0, 1, 0, -0.23592244, 0, 0.97177196, -5.0920963, -25.990587, -1248.1023)
+VisualRootPath = NodePath("../BronzeCoinPickup7/VisualRoot")
+
+[node name="BronzeCoinPickup102" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(0.97177196, 0, 0.23592244, 0, 1, 0, -0.23592244, 0, 0.97177196, -3.7541416, -25.990587, -1248.3821)
+VisualRootPath = NodePath("../BronzeCoinPickup8/VisualRoot")
+
+[node name="BronzeCoinPickup103" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(0.97177196, 0, 0.23592244, 0, 1, 0, -0.23592244, 0, 0.97177196, -8.911169, -25.990587, -1249.2325)
+VisualRootPath = NodePath("../BronzeCoinPickup9/VisualRoot")
+
+[node name="BronzeCoinPickup104" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(0.97177196, 0, 0.23592244, 0, 1, 0, -0.23592244, 0, 0.97177196, -7.613955, -25.990587, -1249.564)
+VisualRootPath = NodePath("../BronzeCoinPickup10/VisualRoot")
+
+[node name="BronzeCoinPickup105" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(0.97177196, 0, 0.23592244, 0, 1, 0, -0.23592244, 0, 0.97177196, -6.402186, -25.990587, -1249.8826)
+VisualRootPath = NodePath("../BronzeCoinPickup11/VisualRoot")
+
+[node name="BronzeCoinPickup106" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(0.97177196, 0, 0.23592244, 0, 1, 0, -0.23592244, 0, 0.97177196, -5.064231, -25.990587, -1250.1624)
+VisualRootPath = NodePath("../BronzeCoinPickup12/VisualRoot")
+
+[node name="BronzeCoinPickup107" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(0.97177196, 0, 0.23592244, 0, 1, 0, -0.23592244, 0, 0.97177196, -8.764996, -25.990587, -1251.3826)
+VisualRootPath = NodePath("../BronzeCoinPickup13/VisualRoot")
+
+[node name="BronzeCoinPickup108" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(0.97177196, 0, 0.23592244, 0, 1, 0, -0.23592244, 0, 0.97177196, -7.467781, -25.990587, -1251.714)
+VisualRootPath = NodePath("../BronzeCoinPickup14/VisualRoot")
+
+[node name="BronzeCoinPickup109" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(0.97177196, 0, 0.23592244, 0, 1, 0, -0.23592244, 0, 0.97177196, -6.256012, -25.990587, -1252.0326)
+VisualRootPath = NodePath("../BronzeCoinPickup15/VisualRoot")
+
+[node name="BronzeCoinPickup110" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(0.97177196, 0, 0.23592244, 0, 1, 0, -0.23592244, 0, 0.97177196, -4.918057, -25.990587, -1252.3124)
+VisualRootPath = NodePath("../BronzeCoinPickup16/VisualRoot")
+
+[node name="BronzeCoinPickup111" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(0.97177196, 0, 0.23592244, 0, 1, 0, -0.23592244, 0, 0.97177196, -10.731209, -25.990587, -1253.2368)
+VisualRootPath = NodePath("../BronzeCoinPickup17/VisualRoot")
+
+[node name="BronzeCoinPickup112" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(0.97177196, 0, 0.23592244, 0, 1, 0, -0.23592244, 0, 0.97177196, -9.433994, -25.990587, -1253.5682)
+VisualRootPath = NodePath("../BronzeCoinPickup18/VisualRoot")
+
+[node name="BronzeCoinPickup113" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(0.97177196, 0, 0.23592244, 0, 1, 0, -0.23592244, 0, 0.97177196, -8.222225, -25.990587, -1253.8868)
+VisualRootPath = NodePath("../BronzeCoinPickup19/VisualRoot")
+
+[node name="BronzeCoinPickup114" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(0.97177196, 0, 0.23592244, 0, 1, 0, -0.23592244, 0, 0.97177196, -6.8842697, -25.990587, -1254.1666)
+VisualRootPath = NodePath("../BronzeCoinPickup20/VisualRoot")
+
+[node name="SilverCoinPickup19" parent="Coins" instance=ExtResource("13_jfi0m")]
+transform = Transform3D(0.975477, 0, 0.22010157, 0, 1, 0, -0.22010157, 0, 0.975477, -10.090131, -26.06215, -1251.088)
+VisualRootPath = NodePath("../SilverCoinPickup/VisualRoot")
+
+[node name="SilverCoinPickup20" parent="Coins" instance=ExtResource("13_jfi0m")]
+transform = Transform3D(0.97347915, 0, 0.22877565, 0, 1, 0, -0.22877565, 0, 0.97347915, 20.959799, -14.602875, -1120.942)
+VisualRootPath = NodePath("../SilverCoinPickup/VisualRoot")
+
+[node name="SilverCoinPickup21" parent="Coins" instance=ExtResource("13_jfi0m")]
+transform = Transform3D(0.97347915, 0, 0.22877565, 0, 1, 0, -0.22877565, 0, 0.97347915, 19.73449, -18.463541, -1148.3528)
+VisualRootPath = NodePath("../SilverCoinPickup2/VisualRoot")
+
+[node name="SilverCoinPickup22" parent="Coins" instance=ExtResource("13_jfi0m")]
+transform = Transform3D(0.97347915, 0, 0.22877565, 0, 1, 0, -0.22877565, 0, 0.97347915, 6.660633, -15.8797, -1180.9495)
+VisualRootPath = NodePath("../SilverCoinPickup3/VisualRoot")
+
+[node name="BronzeCoinPickup115" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(0.96716136, 0, 0.2541631, 0, 1, 0, -0.2541631, 0, 0.96716136, 19.134117, -16.543114, -1132.5299)
+VisualRootPath = NodePath("../BronzeCoinPickup/VisualRoot")
+
+[node name="BronzeCoinPickup116" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(0.96716136, 0, 0.2541631, 0, 1, 0, -0.2541631, 0, 0.96716136, 20.34396, -16.517277, -1132.7985)
+VisualRootPath = NodePath("../BronzeCoinPickup2/VisualRoot")
+
+[node name="BronzeCoinPickup117" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(0.9692223, 0, 0.24618714, 0, 1, 0, -0.24618714, 0, 0.9692223, 13.534012, -18.124283, -1161.0209)
+VisualRootPath = NodePath("../BronzeCoinPickup3/VisualRoot")
+
+[node name="BronzeCoinPickup118" parent="Coins" instance=ExtResource("12_kmeag")]
+transform = Transform3D(0.9692223, 0, 0.24618714, 0, 1, 0, -0.24618714, 0, 0.9692223, 14.746025, -18.098446, -1161.2794)
+VisualRootPath = NodePath("../BronzeCoinPickup4/VisualRoot")
+
+[node name="Enemies" type="Node3D" parent="."]
+
+[node name="MovingEnemyBasic" parent="Enemies" instance=ExtResource("13_6p1x0")]
+transform = Transform3D(0.25721714, 0, 0.96635365, 0, 1, 0, -0.96635365, 0, 0.25721714, 5.4589734, -1.9142792, -94.49211)
+
+[node name="MovingEnemyBasic2" parent="Enemies" instance=ExtResource("13_6p1x0")]
+transform = Transform3D(-0.3384423, 0, -0.94098717, 0, 1, 0, 0.94098717, 0, -0.3384423, 7.5345445, -2.2187166, -104.15976)
+
+[node name="MovingEnemyBasic3" parent="Enemies" instance=ExtResource("13_6p1x0")]
+transform = Transform3D(0.08790334, 0, 0.99612904, 0, 1, 0, -0.99612904, 0, 0.08790334, 9.986946, -2.2723343, -116.780235)
+
+[node name="StaticEnemyBasic" parent="Enemies" instance=ExtResource("15_8jvyo")]
+transform = Transform3D(0.74973613, 0, -0.01989442, 0, 0.75, 0, 0.01989442, 0, 0.74973613, 4.508012, -7.1487765, -244.17964)
+
+[node name="StaticEnemyBasic2" parent="Enemies" instance=ExtResource("15_8jvyo")]
+transform = Transform3D(0.74973613, 0, -0.01989442, 0, 0.75, 0, 0.01989442, 0, 0.74973613, 7.3967423, -7.2045245, -244.16829)
+
+[node name="StaticEnemyBasic3" parent="Enemies" instance=ExtResource("15_8jvyo")]
+transform = Transform3D(0.74973613, 0, -0.01989442, 0, 0.75, 0, 0.01989442, 0, 0.74973613, 10.195347, -7.262847, -244.2459)
+
+[node name="StaticEnemyBasic4" parent="Enemies" instance=ExtResource("15_8jvyo")]
+transform = Transform3D(0.7491192, 0, 0.03633662, 0, 0.75, 0, -0.03633662, 0, 0.7491192, 4.2707973, -7.578631, -247.40887)
+
+[node name="StaticEnemyBasic5" parent="Enemies" instance=ExtResource("15_8jvyo")]
+transform = Transform3D(0.7491192, 0, 0.03633662, 0, 0.75, 0, -0.03633662, 0, 0.7491192, 7.1522584, -7.634379, -247.614)
+
+[node name="StaticEnemyBasic6" parent="Enemies" instance=ExtResource("15_8jvyo")]
+transform = Transform3D(0.7491192, 0, 0.03633662, 0, 0.75, 0, -0.03633662, 0, 0.7491192, 9.9371805, -7.6927013, -247.90108)
+
+[node name="StaticEnemyBasic7" parent="Enemies" instance=ExtResource("15_8jvyo")]
+transform = Transform3D(0.7413921, 0, 0.113303274, 0, 0.75000024, 0, -0.113303274, 0, 0.7413921, 3.8185606, -7.9947553, -250.40793)
+
+[node name="StaticEnemyBasic8" parent="Enemies" instance=ExtResource("15_8jvyo")]
+transform = Transform3D(0.7413921, 0, 0.113303274, 0, 0.75000024, 0, -0.113303274, 0, 0.7413921, 6.6635685, -8.050503, -250.90874)
+
+[node name="StaticEnemyBasic9" parent="Enemies" instance=ExtResource("15_8jvyo")]
+transform = Transform3D(0.7413921, 0, 0.113303274, 0, 0.75000024, 0, -0.113303274, 0, 0.7413921, 9.404108, -8.108826, -251.48116)
+
+[node name="MovingEnemyBasic4" parent="Enemies" instance=ExtResource("13_6p1x0")]
+transform = Transform3D(0.14444259, 0, -0.98951316, 0, 1, 0, 0.98951316, 0, 0.14444259, 10.270294, -5.7901, -314.68774)
+_sideDetectionPath = NodePath("../MovingEnemyBasic/SideDetection")
+_topDetectionPath = NodePath("../MovingEnemyBasic/TopDetection")
+
+[node name="MovingEnemyBasic5" parent="Enemies" instance=ExtResource("13_6p1x0")]
+transform = Transform3D(0.08326043, 0, -0.99652785, 0, 1, 0, 0.99652785, 0, 0.08326043, 13.385019, -5.8327065, -312.21167)
+_sideDetectionPath = NodePath("../MovingEnemyBasic2/SideDetection")
+_topDetectionPath = NodePath("../MovingEnemyBasic2/TopDetection")
+
+[node name="MovingEnemyBasic6" parent="Enemies" instance=ExtResource("13_6p1x0")]
+transform = Transform3D(0.11587337, 0, 0.993264, 0, 1, 0, -0.993264, 0, 0.11587337, 15.453991, -6.009579, -309.1853)
+_sideDetectionPath = NodePath("../MovingEnemyBasic3/SideDetection")
+_topDetectionPath = NodePath("../MovingEnemyBasic3/TopDetection")
+
+[node name="StaticEnemyBasic10" parent="Enemies" instance=ExtResource("15_8jvyo")]
+transform = Transform3D(0.7481039, 0, -0.053296667, 0, 0.75, 0, 0.053296667, 0, 0.7481039, -13.124504, -11.46703, -554.28107)
+_sideDetectionPath = NodePath("../StaticEnemyBasic/SideDetection")
+_topDetectionPath = NodePath("../StaticEnemyBasic/TopDetection")
+
+[node name="StaticEnemyBasic11" parent="Enemies" instance=ExtResource("15_8jvyo")]
+transform = Transform3D(0.7303453, 0, -0.17057489, 0, 0.7500001, 0, 0.17057489, 0, 0.7303453, -10.354619, -11.46703, -553.7284)
+_sideDetectionPath = NodePath("../StaticEnemyBasic2/SideDetection")
+_topDetectionPath = NodePath("../StaticEnemyBasic2/TopDetection")
+
+[node name="StaticEnemyBasic12" parent="Enemies" instance=ExtResource("15_8jvyo")]
+transform = Transform3D(0.7303453, 0, -0.17057489, 0, 0.7500001, 0, 0.17057489, 0, 0.7303453, -7.5108347, -11.46703, -553.093)
+_sideDetectionPath = NodePath("../StaticEnemyBasic3/SideDetection")
+_topDetectionPath = NodePath("../StaticEnemyBasic3/TopDetection")
+
+[node name="MovingEnemyBasic7" parent="Enemies" instance=ExtResource("13_6p1x0")]
+transform = Transform3D(0.2340902, 0, -0.9722149, 0, 1, 0, 0.9722149, 0, 0.2340902, 2.7144163, -5.7851944, -391.67966)
+_sideDetectionPath = NodePath("../MovingEnemyBasic/SideDetection")
+_topDetectionPath = NodePath("../MovingEnemyBasic/TopDetection")
+_detectFloorLeftPath = NodePath("../MovingEnemyBasic/DetectFloorLeft")
+_detectFloorRightPath = NodePath("../MovingEnemyBasic/DetectFloorRight")
+
+[node name="MovingEnemyBasic8" parent="Enemies" instance=ExtResource("13_6p1x0")]
+transform = Transform3D(-0.31750327, 0, 0.94825715, 0, 1, 0, -0.94825715, 0, -0.31750327, 6.047506, -5.5406866, -397.19128)
+_sideDetectionPath = NodePath("../MovingEnemyBasic2/SideDetection")
+_topDetectionPath = NodePath("../MovingEnemyBasic2/TopDetection")
+_detectFloorLeftPath = NodePath("../MovingEnemyBasic2/DetectFloorLeft")
+_detectFloorRightPath = NodePath("../MovingEnemyBasic2/DetectFloorRight")
+
+[node name="MovingEnemyBasic9" parent="Enemies" instance=ExtResource("13_6p1x0")]
+transform = Transform3D(0.51210284, 0, -0.85892415, 0, 1, 0, 0.85892415, 0, 0.51210284, 0.14221144, -5.4378705, -399.03952)
+_sideDetectionPath = NodePath("../MovingEnemyBasic3/SideDetection")
+_topDetectionPath = NodePath("../MovingEnemyBasic3/TopDetection")
+_detectFloorLeftPath = NodePath("../MovingEnemyBasic3/DetectFloorLeft")
+_detectFloorRightPath = NodePath("../MovingEnemyBasic3/DetectFloorRight")
+
+[node name="MovingEnemyBasic10" parent="Enemies" instance=ExtResource("13_6p1x0")]
+transform = Transform3D(-0.5319159, 0, 0.84679717, 0, 1, 0, -0.84679717, 0, -0.5319159, 1.5814296, -5.5361056, -406.80756)
+_sideDetectionPath = NodePath("../MovingEnemyBasic4/SideDetection")
+_topDetectionPath = NodePath("../MovingEnemyBasic4/TopDetection")
+_detectFloorLeftPath = NodePath("../MovingEnemyBasic4/DetectFloorLeft")
+_detectFloorRightPath = NodePath("../MovingEnemyBasic4/DetectFloorRight")
+
+[node name="MovingEnemyBasic11" parent="Enemies" instance=ExtResource("13_6p1x0")]
+transform = Transform3D(0.09935454, 0, -0.9950521, 0, 1, 0, 0.9950521, 0, 0.09935454, -16.359612, -6.314087, -442.73447)
+_sideDetectionPath = NodePath("../MovingEnemyBasic5/SideDetection")
+_topDetectionPath = NodePath("../MovingEnemyBasic5/TopDetection")
+_detectFloorLeftPath = NodePath("../MovingEnemyBasic5/DetectFloorLeft")
+_detectFloorRightPath = NodePath("../MovingEnemyBasic5/DetectFloorRight")
+
+[node name="MovingEnemyBasic12" parent="Enemies" instance=ExtResource("13_6p1x0")]
+transform = Transform3D(-0.005881677, 0, -0.9999827, 0, 1, 0, 0.9999827, 0, -0.005881677, -14.424645, -6.7298136, -447.732)
+_sideDetectionPath = NodePath("../MovingEnemyBasic6/SideDetection")
+_topDetectionPath = NodePath("../MovingEnemyBasic6/TopDetection")
+_detectFloorLeftPath = NodePath("../MovingEnemyBasic6/DetectFloorLeft")
+_detectFloorRightPath = NodePath("../MovingEnemyBasic6/DetectFloorRight")
+
+[node name="MovingEnemyBasic13" parent="Enemies" instance=ExtResource("13_6p1x0")]
+transform = Transform3D(0.05005254, 0, 0.9987466, 0, 1, 0, -0.9987466, 0, 0.05005254, -10.661982, -7.259873, -453.7162)
+
+[node name="MovingEnemyBasic14" parent="Enemies" instance=ExtResource("13_6p1x0")]
+transform = Transform3D(-0.04637418, 0, 0.99892414, 0, 1, 0, -0.99892414, 0, -0.04637418, -13.217456, -7.7768607, -460.07388)
+
+[node name="MovingEnemyBasic15" parent="Enemies" instance=ExtResource("13_6p1x0")]
+transform = Transform3D(0.45605755, 0, 0.8899503, 0, 1, 0, -0.8899503, 0, 0.45605755, 6.6641173, -11.2597, -585.05835)
+
+[node name="MovingEnemyBasic16" parent="Enemies" instance=ExtResource("13_6p1x0")]
+transform = Transform3D(0.4588822, 0, 0.8884971, 0, 1, 0, -0.8884971, 0, 0.4588822, 10.022873, -10.7762785, -588.3972)
+
+[node name="MovingEnemyBasic17" parent="Enemies" instance=ExtResource("13_6p1x0")]
+transform = Transform3D(0.08019893, 0, -0.9967789, 0, 1, 0, 0.9967789, 0, 0.08019893, 12.241245, -8.040458, -608.50696)
+
+[node name="MovingEnemyBasic18" parent="Enemies" instance=ExtResource("13_6p1x0")]
+transform = Transform3D(0.0008726874, 0, 0.99999964, 0, 1, 0, -0.99999964, 0, 0.0008726874, 17.929354, -6.9688354, -637.7699)
+
+[node name="MovingEnemyBasic19" parent="Enemies" instance=ExtResource("13_6p1x0")]
+transform = Transform3D(-0.19676758, 0, -0.98045015, 0, 1, 0, 0.98045015, 0, -0.19676758, 24.560194, -10.648241, -691.81226)
+
+[node name="StaticEnemyBasic13" parent="Enemies" instance=ExtResource("15_8jvyo")]
+transform = Transform3D(0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, 36.48904, -10.6970005, -727.6259)
+_sideDetectionPath = NodePath("../StaticEnemyBasic/SideDetection")
+_topDetectionPath = NodePath("../StaticEnemyBasic/TopDetection")
+
+[node name="StaticEnemyBasic14" parent="Enemies" instance=ExtResource("15_8jvyo")]
+transform = Transform3D(0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, 41.073734, -10.756972, -726.5226)
+_sideDetectionPath = NodePath("../StaticEnemyBasic2/SideDetection")
+_topDetectionPath = NodePath("../StaticEnemyBasic2/TopDetection")
+
+[node name="StaticEnemyBasic15" parent="Enemies" instance=ExtResource("15_8jvyo")]
+transform = Transform3D(0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, 43.551563, -5.1844244, -778.7085)
+_sideDetectionPath = NodePath("../StaticEnemyBasic3/SideDetection")
+_topDetectionPath = NodePath("../StaticEnemyBasic3/TopDetection")
+
+[node name="StaticEnemyBasic16" parent="Enemies" instance=ExtResource("15_8jvyo")]
+transform = Transform3D(0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, 46.072914, -5.0824137, -777.9859)
+_sideDetectionPath = NodePath("../StaticEnemyBasic4/SideDetection")
+_topDetectionPath = NodePath("../StaticEnemyBasic4/TopDetection")
+
+[node name="StaticEnemyBasic17" parent="Enemies" instance=ExtResource("15_8jvyo")]
+transform = Transform3D(0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, 48.329144, -4.9912047, -777.48987)
+_sideDetectionPath = NodePath("../StaticEnemyBasic5/SideDetection")
+_topDetectionPath = NodePath("../StaticEnemyBasic5/TopDetection")
+
+[node name="MovingEnemyBasic20" parent="Enemies" instance=ExtResource("13_6p1x0")]
+transform = Transform3D(0.19507316, 0, 0.98078865, 0, 1, 0, -0.98078865, 0, 0.19507316, 48.312607, -4.589268, -782.2747)
+
+[node name="MovingEnemyBasic21" parent="Enemies" instance=ExtResource("13_6p1x0")]
+transform = Transform3D(-0.19640818, 0, -0.9805222, 0, 1, 0, 0.9805222, 0, -0.19640818, 44.63721, -4.6443543, -787.23083)
+
+[node name="MovingEnemyBasic22" parent="Enemies" instance=ExtResource("13_6p1x0")]
+transform = Transform3D(-0.18744993, 0, -0.9822742, 0, 1, 0, 0.9822742, 0, -0.18744993, 39.65327, -7.464733, -753.5005)
+
+[node name="MovingEnemyBasic23" parent="Enemies" instance=ExtResource("13_6p1x0")]
+transform = Transform3D(0.3610713, 0, 0.9325382, 0, 1, 0, -0.9325382, 0, 0.3610713, 38.084698, -11.8451185, -717.1633)
+
+[node name="MovingEnemyBasic24" parent="Enemies" instance=ExtResource("13_6p1x0")]
+transform = Transform3D(0.3182148, 0, 0.9480186, 0, 1, 0, -0.9480186, 0, 0.3182148, 37.611824, -12.020648, -714.8473)
+
+[node name="MovingEnemyBasic25" parent="Enemies" instance=ExtResource("13_6p1x0")]
+transform = Transform3D(-0.17737679, 0, -0.984143, 0, 1, 0, 0.984143, 0, -0.17737679, 27.135164, -11.091998, -695.3476)
+
+[node name="arch-end-01" parent="." instance=ExtResource("16_tucxj")]
+transform = Transform3D(-0.21737677, 0, 0.97608787, 0, 1, 0, -0.97608787, 0, -0.21737677, -9.175016, -25.547752, -1258.316)
+
+[node name="arch-012" parent="." instance=ExtResource("17_rb4r8")]
+transform = Transform3D(0.25694722, 0, 0.96642554, 0, 1, 0, -0.96642554, 0, 0.25694722, 22.325138, -7.5886855, -676.7241)
+
+[node name="arch-start-02" parent="." instance=ExtResource("18_vqiix")]
+transform = Transform3D(0.24298868, 0, 0.9700292, 0, 1, 0, -0.9700292, 0, 0.24298868, 2.1379108, 0.75333166, -16.261772)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_t2a2k")

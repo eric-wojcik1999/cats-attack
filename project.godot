@@ -18,6 +18,8 @@ config/icon="res://icon.svg"
 [autoload]
 
 Global="*res://Global/Global.cs"
+SfxManager="*res://Global/SfxManager.cs"
+MusicManager="*res://Global/MusicManager.cs"
 
 [display]
 
