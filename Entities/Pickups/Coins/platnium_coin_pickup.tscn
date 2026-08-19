@@ -7,4 +7,10 @@
 [node name="PlatniumCoinPickup" instance=ExtResource("1_4uq7v")]
 Definition = ExtResource("2_2jwp7")
 
+[node name="VisualRoot" parent="." index="0"]
+visible = false
+
 [node name="PlatniumCoinMesh" parent="." index="1" instance=ExtResource("2_6mjq4")]
+
+[node name="CollisionShape3D" parent="." index="2"]
+visible = false

@@ -81,8 +81,8 @@ public partial class StaticEnemyBasic : CharacterBody3D, IPercyDroneTarget
 
 		_isDead = true;
 
-		GD.Print("Killed enemy!");
 		Global.Instance.AddCurrency(_currencyAmount);
+		Global.Instance.AddEnemyKill();
 		ExplodeSelf();
 		QueueFree();
 	}

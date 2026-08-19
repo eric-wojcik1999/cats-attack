@@ -19,15 +19,6 @@ public partial class CoinPickup : Area3D
 	{
 		BodyEntered += OnPlayerEntered;
 		_visualRoot = GetNodeOrNull<Node3D>(VisualRootPath);
-
-		// //  Initialise audio player
-        // _audioPlayer = GetNodeOrNull<AudioStreamPlayer3D>("PickupAudio");
-        // if (_audioPlayer == null)
-        // {
-        //     _audioPlayer = new AudioStreamPlayer3D();
-        //     _audioPlayer.Name = "PickupAudio";
-        //     AddChild(_audioPlayer);
-        // }
 	}
 
 	public override void _Process(double delta)
@@ -65,6 +56,7 @@ public partial class CoinPickup : Area3D
 		SetDeferred(Area3D.PropertyName.Monitoring, false);
 
 		bool addedCurrency = Global.Instance.AddCurrency(Definition.Amount);
+		Global.Instance.AddCoinCollected();
 
 		if (addedCurrency)
 		{

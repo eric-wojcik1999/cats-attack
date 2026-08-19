@@ -1,5 +1,6 @@
-[gd_scene load_steps=23 format=3 uid="uid://cebw5tg5lc6rs"]
+[gd_scene load_steps=25 format=3 uid="uid://cebw5tg5lc6rs"]
 
+[ext_resource type="Script" uid="uid://s7ifkgxnuxmq" path="res://Menus/LevelUpgradeScreen.cs" id="1_4yhqw"]
 [ext_resource type="Shader" uid="uid://d4fntb561ji3e" path="res://Menus/main_menu.gdshader" id="1_ot8ky"]
 [ext_resource type="Texture2D" uid="uid://dsrnitq8jvvet" path="res://textures/upgrade-1-normal.png" id="2_1l6ql"]
 [ext_resource type="Texture2D" uid="uid://1a7n0ublx4d2" path="res://textures/money-icon.png" id="2_tdbv0"]
@@ -10,6 +11,7 @@
 [ext_resource type="Texture2D" uid="uid://bq2donyrv7c1y" path="res://textures/upgrade-2-hover.png" id="7_4yhqw"]
 [ext_resource type="Texture2D" uid="uid://bwlcae3fg0tji" path="res://textures/upgrade-3-normal.png" id="8_4vvg4"]
 [ext_resource type="Texture2D" uid="uid://c0iwxm8i4pq3y" path="res://textures/upgrade-3-pressed.png" id="9_grcp8"]
+[ext_resource type="Texture2D" uid="uid://ch7tvlawvw7hf" path="res://textures/upgrade-3-hover.png" id="11_4vvg4"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_4pkva"]
 shader = ExtResource("1_ot8ky")
@@ -100,6 +102,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_4yhqw")
 
 [node name="TextureRect" type="ColorRect" parent="."]
 material = SubResource("ShaderMaterial_4pkva")
@@ -194,7 +197,7 @@ theme_override_constants/margin_bottom = 24
 layout_mode = 2
 theme_override_constants/separation = 70
 
-[node name="Upgrade 1" type="TextureButton" parent="MarginContainer/CenterContainer/PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer/UpgradeContainer/MarginContainer/HBoxContainer"]
+[node name="InnerCatHealthButton" type="TextureButton" parent="MarginContainer/CenterContainer/PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer/UpgradeContainer/MarginContainer/HBoxContainer"]
 custom_minimum_size = Vector2(400, 0)
 layout_mode = 2
 texture_normal = ExtResource("2_1l6ql")
@@ -203,7 +206,7 @@ texture_hover = ExtResource("4_qjhor")
 ignore_texture_size = true
 stretch_mode = 0
 
-[node name="Upgrade 2" type="TextureButton" parent="MarginContainer/CenterContainer/PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer/UpgradeContainer/MarginContainer/HBoxContainer"]
+[node name="BulletUpgradeButton" type="TextureButton" parent="MarginContainer/CenterContainer/PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer/UpgradeContainer/MarginContainer/HBoxContainer"]
 custom_minimum_size = Vector2(400, 0)
 layout_mode = 2
 texture_normal = ExtResource("5_6y6ge")
@@ -212,12 +215,12 @@ texture_hover = ExtResource("7_4yhqw")
 ignore_texture_size = true
 stretch_mode = 0
 
-[node name="Upgrade 3" type="TextureButton" parent="MarginContainer/CenterContainer/PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer/UpgradeContainer/MarginContainer/HBoxContainer"]
+[node name="ExtraLivesButton" type="TextureButton" parent="MarginContainer/CenterContainer/PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer/UpgradeContainer/MarginContainer/HBoxContainer"]
 custom_minimum_size = Vector2(400, 0)
 layout_mode = 2
 texture_normal = ExtResource("8_4vvg4")
-texture_pressed = ExtResource("7_4yhqw")
-texture_hover = ExtResource("9_grcp8")
+texture_pressed = ExtResource("9_grcp8")
+texture_hover = ExtResource("11_4vvg4")
 ignore_texture_size = true
 stretch_mode = 0
 
@@ -241,7 +244,7 @@ theme_override_constants/separation = 219
 layout_mode = 2
 theme_override_constants/separation = 22
 
-[node name="Upgrade Name" type="Label" parent="MarginContainer/CenterContainer/PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer/DescContainer/MarginContainer/HBoxContainer/VBoxContainerLabels"]
+[node name="UpgradeName" type="Label" parent="MarginContainer/CenterContainer/PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer/DescContainer/MarginContainer/HBoxContainer/VBoxContainerLabels"]
 layout_mode = 2
 theme_override_fonts/font = SubResource("SystemFont_1l6ql")
 theme_override_font_sizes/font_size = 32

@@ -1,6 +1,7 @@
-[gd_scene load_steps=11 format=3 uid="uid://bid2hnf3bep5j"]
+[gd_scene load_steps=12 format=3 uid="uid://bid2hnf3bep5j"]
 
 [ext_resource type="Shader" uid="uid://d4fntb561ji3e" path="res://Menus/main_menu.gdshader" id="1_15do6"]
+[ext_resource type="Script" uid="uid://dyty07na6wt3a" path="res://Menus/LevelEndScreen.cs" id="1_ssiuc"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ssiuc"]
 shader = ExtResource("1_15do6")
@@ -76,6 +77,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_ssiuc")
 
 [node name="TextureRect" type="ColorRect" parent="."]
 material = SubResource("ShaderMaterial_ssiuc")

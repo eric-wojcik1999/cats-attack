@@ -79,8 +79,8 @@ public partial class TotemEnemyBasic : CharacterBody3D, IPercyDroneTarget
 
 		if (_currentHealth <= 0) {
 			_isDead = true;
-			GD.Print("Killed enemy!");
 			Global.Instance.AddCurrency(_currencyAmount);
+			Global.Instance.AddEnemyKill();
 			ExplodeSelf();
 			QueueFree();
 		}

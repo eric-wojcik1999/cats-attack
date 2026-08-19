@@ -211,7 +211,8 @@ public partial class PlayerGround : CharacterBody3D
 	[Export(PropertyHint.Range, "0.0,30.0,0.5")]
 	private float _hardLandingMinimumFallSpeed = 7.0f;
 
-		
+	private int _extraLives = 0;
+
 	public override void _Ready() 
 	{
 		_currentTurnDegPerSec = _defaultTurnDegPerSec;
@@ -254,6 +255,13 @@ public partial class PlayerGround : CharacterBody3D
 		InitialiseGroundDustLanding();
 		InitialiseJumpPadSkidAudio();
 		AddToGroup("Player");
+
+		if (Global.Instance != null)
+		{
+			Global.Instance.ApplyPurchasedUpgrades(
+				this
+			);
+		}
 	}
     
 	public override void _PhysicsProcess(double delta)
@@ -714,6 +722,12 @@ public partial class PlayerGround : CharacterBody3D
 		{
 			GD.PushError("[PlayerGround] Percy drone has not been assigned");
 			return;
+		}
+
+		// Register Percy pickup for level-end stats.
+		if (Global.Instance != null)
+		{
+			Global.Instance.AddPercyCollected();
 		}
 
 		EmitSignal(SignalName.PercyPowerupCollected);
@@ -1226,5 +1240,34 @@ public partial class PlayerGround : CharacterBody3D
 				}
 			})
 		);
+	}
+
+	public void ApplyInnerCatHealthUpgrade()
+	{
+		_maxHealth *= 2;
+		_health = _maxHealth;
+
+		GD.Print($"[PlayerGround] Inner Cat Health applied. Max Health: {_maxHealth}");
+	}
+
+	public void ApplyBulletUpgrade()
+	{
+		GD.Print(
+			"[PlayerGround] Super Pooper Bullets upgrade active."
+		);
+
+		// TODO:
+		// Tell PlayerAir weapon/controller to:
+		//
+		// - increase projectile speed
+		// - increase damage
+		// - possibly increase firing speed
+	}
+
+	public void ApplyExtraLivesUpgrade()
+	{
+		_extraLives += 1;
+
+		GD.Print($"[PlayerGround] Extra lives: {_extraLives}");
 	}
 }

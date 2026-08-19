@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Cats Attack"
-run/main_scene="uid://csdvs0h5p6ume"
+run/main_scene="uid://unig27uxu80f"
 config/features=PackedStringArray("4.5", "C#", "Forward Plus")
 config/icon="res://icon.svg"
 
@@ -20,6 +20,7 @@ config/icon="res://icon.svg"
 Global="*res://Global/Global.cs"
 SfxManager="*res://Global/SfxManager.cs"
 MusicManager="*res://Global/MusicManager.cs"
+SceneManager="*res://Global/SceneManager.cs"
 
 [display]
 

@@ -303,6 +303,7 @@ public partial class MovingEnemyBasic : CharacterBody3D, IPercyDroneTarget
 		if (awardCurrency && Global.Instance != null)
 		{
 			Global.Instance.AddCurrency(_currencyAmount);
+			Global.Instance.AddEnemyKill();
 		}
 
 		ExplodeSelf();

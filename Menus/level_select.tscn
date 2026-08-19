@@ -1,5 +1,6 @@
-[gd_scene load_steps=9 format=3 uid="uid://bsdvsjqj3n0lk"]
+[gd_scene load_steps=10 format=3 uid="uid://bsdvsjqj3n0lk"]
 
+[ext_resource type="Script" uid="uid://c12ogaq7s4npf" path="res://Menus/LevelSelect.cs" id="1_cbjk5"]
 [ext_resource type="Shader" uid="uid://d4fntb561ji3e" path="res://Menus/main_menu.gdshader" id="1_ceq2k"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_cbjk5"]
@@ -65,6 +66,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_cbjk5")
 
 [node name="TextureRect" type="ColorRect" parent="."]
 material = SubResource("ShaderMaterial_cbjk5")

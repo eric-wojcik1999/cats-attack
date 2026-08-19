@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=3 uid="uid://6x0i8op3lofr"]
+[gd_scene load_steps=29 format=3 uid="uid://6x0i8op3lofr"]
 
 [ext_resource type="PackedScene" uid="uid://d4nm5bdaxqhsr" path="res://Entities/Players/PlayerGround/player-ground.tscn" id="1_3mtpf"]
 [ext_resource type="PackedScene" uid="uid://cehky8lel227e" path="res://UI/hud.tscn" id="1_b6mne"]
@@ -20,6 +20,7 @@
 [ext_resource type="PackedScene" uid="uid://cteowd8i5gaa6" path="res://Entities/Prefabs/Level Prefabs/arch-end-01.glb" id="16_tucxj"]
 [ext_resource type="PackedScene" uid="uid://cq0a5sj37iivr" path="res://Entities/Prefabs/Level Prefabs/arch_01.tscn" id="17_rb4r8"]
 [ext_resource type="PackedScene" uid="uid://dfwc4tqehrd17" path="res://Entities/Prefabs/Level Prefabs/arch_start_02.tscn" id="18_vqiix"]
+[ext_resource type="PackedScene" uid="uid://dxa2af6ejh0yd" path="res://Entities/Markers/LevelEndTrigger.tscn" id="21_baoot"]
 
 [sub_resource type="Curve3D" id="Curve3D_bq6a1"]
 _data = {
@@ -1010,3 +1011,6 @@ transform = Transform3D(0.24298868, 0, 0.9700292, 0, 1, 0, -0.9700292, 0, 0.2429
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_t2a2k")
+
+[node name="LevelEndTrigger" parent="." instance=ExtResource("21_baoot")]
+transform = Transform3D(0.9582777, 0, -0.2858389, 0, 1, 0, 0.2858389, 0, 0.9582777, 5.8717065, -3.5606632, -286.35455)
