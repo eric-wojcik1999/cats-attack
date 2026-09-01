@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://gjftvo11vvpu"]
+
+[ext_resource type="PackedScene" uid="uid://fxsk4fbugdhi" path="res://Entities/Prefabs/Level Prefabs/Level-3/level-03-track-03.glb" id="1_rbsip"]
+[ext_resource type="Material" uid="uid://dgg7jxq1dulu" path="res://Shaders/gold.tres" id="2_bw0w2"]
+
+[node name="level-03-track-03" instance=ExtResource("1_rbsip")]
+
+[node name="track-03_002-col" parent="." index="0"]
+surface_material_override/0 = ExtResource("2_bw0w2")
+surface_material_override/1 = ExtResource("2_bw0w2")
+
+[node name="StaticBody3D" parent="track-03_002-col" index="0"]
+collision_layer = 2
+collision_mask = 13

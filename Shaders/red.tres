@@ -1,0 +1,15 @@
+[gd_resource type="ShaderMaterial" load_steps=3 format=3 uid="uid://cmkt7s1lv7qu6"]
+
+[ext_resource type="Shader" uid="uid://cbjnlljxhee8x" path="res://Shaders/road_edge_mask-params.gdshader" id="1_0dtmi"]
+[ext_resource type="Texture2D" uid="uid://b68wnnpxjaknf" path="res://all-of-it_hexagon-texture-purple.jpg.jpg" id="2_in22u"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_0dtmi")
+shader_parameter/albedo_texture = ExtResource("2_in22u")
+shader_parameter/base_tint = Color(0.7254902, 1, 0.7647059, 1)
+shader_parameter/edge_color = Color(0, 0.105882354, 0.3372549, 1)
+shader_parameter/edge_strength = -10.0
+shader_parameter/edge_power = 0.2
+shader_parameter/roughness_value = 1.6
+shader_parameter/metallic_value = 4.3

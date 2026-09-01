@@ -8,8 +8,8 @@ public partial class LevelUpgradeScreen : Control
 	// =========================================================
 
 	private const int InnerCatHealthCost = 50;
-	private const int BulletUpgradeCost = 200;
-	private const int ExtraLivesCost = 250;
+	private const int BulletUpgradeCost = 40;
+	private const int ExtraLivesCost = 40;
 
 
 	// =========================================================
@@ -79,6 +79,11 @@ public partial class LevelUpgradeScreen : Control
 		_bulletUpgradeButton.Pressed += () => TryPurchaseUpgrade(Global.UpgradeSuperPooperBullets, BulletUpgradeCost);
 		_extraLivesButton.Pressed += () => TryPurchaseUpgrade(Global.UpgradeExtraLives, ExtraLivesCost);
 		_continueButton.Pressed += OnContinuePressed;
+		_continueButton.MouseEntered += OnContinueHovered;
+
+		_innerCatHealthButton.MouseEntered += OnInnerCatHealthHovered;
+		_bulletUpgradeButton.MouseEntered += OnBulletUpgradeHovered;
+		_extraLivesButton.MouseEntered += OnExtraLivesHovered;
 
 		// Update currency immediately.
 		UpdateCashDisplay();
@@ -143,8 +148,11 @@ public partial class LevelUpgradeScreen : Control
 
 		if (!purchased)
 		{
+			SfxManager.Instance?.PlayMenuSelect();
 			return;
 		}
+
+		SfxManager.Instance?.PlayUpgradePurchase();
 
 		RefreshUpgradeButtons();
 		UpdateCashDisplay();
@@ -205,6 +213,31 @@ public partial class LevelUpgradeScreen : Control
 	// =========================================================
 	private void OnContinuePressed()
 	{
+		SfxManager.Instance?.PlayMenuSelect();
 		_ = SceneManager.Instance.GoToSelectLevel();
 	}
+
+	private void OnInnerCatHealthHovered()
+	{
+		SfxManager.Instance?.PlayMenuHover();
+		ShowInnerCatHealth();
+	}
+
+	private void OnBulletUpgradeHovered()
+	{
+		SfxManager.Instance?.PlayMenuHover();
+		ShowBulletUpgrade();
+	}
+
+	private void OnExtraLivesHovered()
+	{
+		SfxManager.Instance?.PlayMenuHover();
+		ShowExtraLives();
+	}
+
+	private void OnContinueHovered()
+	{
+		SfxManager.Instance?.PlayMenuHover();
+	}
+
 }

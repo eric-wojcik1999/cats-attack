@@ -25,6 +25,11 @@ public partial class Hud : CanvasLayer
 	private float _percyDuration = 0f;
 	private float _percyTimeLeft = 0f;
 	private Tween _messageTween;
+	private CenterContainer _deathMessageContainer;
+	private Label _deathMessageLabel;
+	private Control _livesContainer;
+	private Label _livesValueLabel;
+	private int _messageVersion = 0;
 
 	public override void _Ready()
 	{
@@ -36,20 +41,27 @@ public partial class Hud : CanvasLayer
 		_percyProgressBar = GetNode<Godot.Range>(_percyProgressBarPath);
 		_percyPowerupIcon = GetNode<Control>(_percyPowerupIconPath);
 		_gameMessageContainer = GetNode<PanelContainer>(_gameMessageContainerPath);
+		// Use unique name paths for elements of UI you know will be...well..unique
+		_livesContainer = GetNode<Control>("%LivesContainer");
+		_livesValueLabel = GetNode<Label>("%LivesValue");
 
-		_gameMessageLabel.Text = "";
+		HideGameMessage();
 		_percyProgressBar.Visible = false;
 		_percyPowerupIcon.Visible = false;
-		_gameMessageContainer.Visible = false;
+
 
 		player.HealthChanged += OnHealthChanged;
 		player.Died += OnDied;
+		player.DeathResolved += OnDeathResolved;
 
 		_percyFlash = GetNode<ColorRect>(_percyFlashPath);
 		_percyFlash.Color = new Color(0.55f, 0.0f, 1.0f, 0.0f);
 
 		player.PercyPowerupCollected += OnPercyPowerupCollected;
 		player.PercyPowerupActivated += OnPercyPowerupActivated;
+
+		player.ExtraLivesChanged += OnExtraLivesChanged;
+		player.Respawned += OnPlayerRespawned;
 
 		if (Global.Instance != null)
 		{
@@ -60,7 +72,10 @@ public partial class Hud : CanvasLayer
 		{
 			GD.PushError("[Hud] Global.Instance is null. Is Global autoload configured?");
 		}
+		CreateDeathMessageUi();
 
+		_livesContainer.Visible = true;
+		UpdateLivesDisplay(player.ExtraLives);
 	}
 
 	public override void _Process(double delta)
@@ -82,7 +97,6 @@ public partial class Hud : CanvasLayer
 			_isPercyTimerActive = false;
 			_percyProgressBar.Visible = false;
 			_percyPowerupIcon.Visible = false;
-			_gameMessageContainer.Visible = false;
 		}
 	}
 
@@ -102,10 +116,24 @@ public partial class Hud : CanvasLayer
         _scoreValueLabel.Text = newValue.ToString();
     }
 
-	private void OnGameMessageRequested(string message)
+	private void OnDeathResolved(bool hasExtraLife)
 	{
-		_gameMessageContainer.Visible = true;
-		ShowGameMessage(message);
+		if (_deathMessageContainer == null || _deathMessageLabel == null)
+		{
+			return;
+		}
+
+
+		if (hasExtraLife)
+		{
+			_deathMessageLabel.Text = "YOU HAVE DIED...SIKE";
+		}
+		else
+		{
+			_deathMessageLabel.Text = "YOU HAVE DIED";
+		}
+
+		_deathMessageContainer.Visible = true;
 	}
 
     public override void _ExitTree()
@@ -119,6 +147,9 @@ public partial class Hud : CanvasLayer
 		player.HealthChanged -= OnHealthChanged;
 		player.Died -= OnDied;
 		player.PercyPowerupCollected -= OnPercyPowerupCollected;
+		player.DeathResolved -= OnDeathResolved;
+		player.ExtraLivesChanged -= OnExtraLivesChanged;
+		player.Respawned -= OnPlayerRespawned;
     }
 
 	private void OnPercyPowerupCollected()
@@ -152,10 +183,19 @@ public partial class Hud : CanvasLayer
 
 	private void ShowGameMessage(string message)
 	{
-		if (_gameMessageLabel == null)
+		if (_gameMessageLabel == null || _gameMessageContainer == null)
 		{
 			return;
 		}
+
+		if (string.IsNullOrWhiteSpace(message))
+		{
+			HideGameMessage();
+			return;
+		}
+
+		_messageVersion++;
+		int thisMessageVersion = _messageVersion;
 
 		if (_messageTween != null && _messageTween.IsValid())
 		{
@@ -164,15 +204,127 @@ public partial class Hud : CanvasLayer
 
 		_gameMessageLabel.Text = message;
 		_gameMessageLabel.Modulate = new Color(1f, 1f, 1f, 1f);
+		_gameMessageContainer.Visible = true;
+
 		_messageTween = CreateTween();
 		_messageTween.TweenInterval(2.0f);
 		_messageTween.TweenProperty(_gameMessageLabel, "modulate:a", 0.0f, 0.5f);
 		_messageTween.TweenCallback(Callable.From(() =>
 		{
+			// Don't let an old message tween hide a newer message.
+			if (thisMessageVersion != _messageVersion)
+			{
+				return;
+			}
+
+			HideGameMessage();
+		}));
+	}
+
+	private void CreateDeathMessageUi()
+	{
+		_deathMessageContainer = new CenterContainer();
+		_deathMessageContainer.Name = "DeathMessageContainer";
+		AddChild(_deathMessageContainer);
+
+		_deathMessageContainer.SetAnchorsAndOffsetsPreset(Control.LayoutPreset.FullRect);
+		_deathMessageContainer.MouseFilter = Control.MouseFilterEnum.Ignore;
+
+		PanelContainer deathPanel = new PanelContainer();
+		deathPanel.Name = "DeathPanel";
+		deathPanel.MouseFilter = Control.MouseFilterEnum.Ignore;
+
+		StyleBoxFlat panelStyle = new StyleBoxFlat();
+		panelStyle.BgColor = new Color(0.05f, 0.05f, 0.05f, 0.82f);
+		panelStyle.CornerRadiusTopLeft = 18;
+		panelStyle.CornerRadiusTopRight = 18;
+		panelStyle.CornerRadiusBottomLeft = 18;
+		panelStyle.CornerRadiusBottomRight = 18;
+		panelStyle.BorderWidthLeft = 2;
+		panelStyle.BorderWidthTop = 2;
+		panelStyle.BorderWidthRight = 2;
+		panelStyle.BorderWidthBottom = 2;
+		panelStyle.BorderColor = new Color(0.12f, 0.12f, 0.12f, 0.9f);
+
+		deathPanel.AddThemeStyleboxOverride("panel", panelStyle);
+		_deathMessageContainer.AddChild(deathPanel);
+
+		MarginContainer margin = new MarginContainer();
+		margin.Name = "DeathMargin";
+		margin.AddThemeConstantOverride("margin_left", 40);
+		margin.AddThemeConstantOverride("margin_right", 40);
+		margin.AddThemeConstantOverride("margin_top", 22);
+		margin.AddThemeConstantOverride("margin_bottom", 22);
+
+		deathPanel.AddChild(margin);
+
+		_deathMessageLabel = new Label();
+		_deathMessageLabel.Name = "DeathMessage";
+		_deathMessageLabel.HorizontalAlignment = HorizontalAlignment.Center;
+		_deathMessageLabel.VerticalAlignment = VerticalAlignment.Center;
+		_deathMessageLabel.AddThemeFontSizeOverride("font_size", 56);
+		_deathMessageLabel.AddThemeColorOverride("font_color", new Color(1.0f, 0.1f, 0.65f));
+		_deathMessageLabel.AddThemeColorOverride("font_outline_color", Colors.Black);
+		_deathMessageLabel.AddThemeConstantOverride("outline_size", 8);
+
+		margin.AddChild(_deathMessageLabel);
+
+		_deathMessageContainer.Visible = false;
+	}
+
+	private void OnPlayerRespawned()
+	{
+		if (_deathMessageContainer != null)
+		{
+			_deathMessageContainer.Visible = false;
+		}
+
+
+		if (_deathMessageLabel != null)
+		{
+			_deathMessageLabel.Text = "";
+		}
+	}
+
+	private void OnExtraLivesChanged(int remainingLives)
+	{
+		UpdateLivesDisplay(remainingLives);
+	}
+
+	private void UpdateLivesDisplay(int remainingLives)
+	{
+		if (_livesValueLabel == null)
+		{
+			return;
+		}
+
+		_livesValueLabel.Text = remainingLives.ToString();
+
+
+		// Lives UI should ALWAYS exist, even when the count is zero.
+		if (_livesContainer != null)
+		{
+			_livesContainer.Visible = true;
+		}
+	}
+
+	private void OnGameMessageRequested(string message)
+	{
+		ShowGameMessage(message);
+	}
+
+	private void HideGameMessage()
+	{
+		if (_gameMessageContainer != null)
+		{
+			_gameMessageContainer.Visible = false;
+		}
+
+		if (_gameMessageLabel != null)
+		{
 			_gameMessageLabel.Text = "";
 			_gameMessageLabel.Modulate = new Color(1f, 1f, 1f, 1f);
-			_gameMessageContainer.Visible = false;
-		}));
+		}
 	}
 
 	private void StartPercyProgressBar(float duration)
@@ -180,14 +332,12 @@ public partial class Hud : CanvasLayer
 		_percyDuration = duration;
 		_percyTimeLeft = duration;
 		_isPercyTimerActive = true;
+
 		_percyProgressBar.MinValue = 0;
 		_percyProgressBar.MaxValue = duration;
 		_percyProgressBar.Value = duration;
 
 		_percyProgressBar.Visible = true;
 		_percyPowerupIcon.Visible = true;
-		_gameMessageContainer.Visible = true;
-
-		GD.Print($"[HUD] Percy bar started. duration={duration}, min={_percyProgressBar.MinValue}, max={_percyProgressBar.MaxValue}, value={_percyProgressBar.Value}");
 	}
 }

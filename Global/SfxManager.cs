@@ -10,15 +10,29 @@ public partial class SfxManager : Node
 	[ExportGroup("Projectile")]
 	private AudioStream _projectileHitSound;
 	private float _projectileHitVolumeDb = -3.5f;
+
     [ExportGroup("Enemy")]
 	private AudioStream _enemyFireSound;
     private float _enemyFireVolumeDb = 6.0f;
+
 	[ExportGroup("Boost Pads")]
 	private AudioStream _jumpPadSound;
 	private AudioStream _speedBoostSound;
 	private float _jumpPadVolumeDb = -4.0f;
-
 	private float _speedBoostVolumeDb = -4.0f;
+
+	[ExportGroup("Menu")]
+	private AudioStream _menuHoverSound;
+	private AudioStream _menuSelectSound;
+	private AudioStream _upgradePurchaseSound;
+
+	private float _menuHoverVolumeDb = -2.0f;
+	private float _menuSelectVolumeDb = -2.0f;
+	private float _upgradePurchaseVolumeDb = -3.0f;
+
+	[ExportGroup("Hazards")]
+	private AudioStream _zapSound;
+	private float _zapVolumeDb = -3.0f;
 
 	// Volleyids are ULONG so they are long enough for two projectiles not to collide ids
 	private readonly HashSet<ulong> _playedProjectileVolleysIds = new();
@@ -49,6 +63,35 @@ public partial class SfxManager : Node
             GD.PushError("[SfxManager] Failed to load speed-boost sound.");
         }
  
+		_menuHoverSound = GD.Load<AudioStream>("res://Audio/Sfx/Menu/menu-hover.mp3");
+
+		if (_menuHoverSound == null)
+		{
+			GD.PushError("[SfxManager] Failed to load menu-hover sound.");
+		}
+
+
+		_menuSelectSound = GD.Load<AudioStream>("res://Audio/Sfx/Menu/menu-select.mp3");
+
+		if (_menuSelectSound == null)
+		{
+			GD.PushError("[SfxManager] Failed to load menu-select sound.");
+		}
+
+
+		_upgradePurchaseSound = GD.Load<AudioStream>("res://Audio/Sfx/Menu/upgrade-purchase.mp3");
+
+		if (_upgradePurchaseSound == null)
+		{
+			GD.PushError("[SfxManager] Failed to load upgrade-purchase sound.");
+		}
+
+		_zapSound = GD.Load<AudioStream>("res://Audio/Sfx/zap.mp3");
+
+		if (_zapSound == null)
+		{
+			GD.PushError("[SfxManager] Failed to load zap sound.");
+		}
 	}
 
 	public void PlayProjectileImpactOnce(ulong volleyId, Vector3 position)
@@ -125,5 +168,62 @@ public partial class SfxManager : Node
 		}
 
 		Play3DOneShot(_speedBoostSound, position, _speedBoostVolumeDb);
+	}
+
+	public void PlayMenuHover()
+	{
+		if (_menuHoverSound == null)
+		{
+			return;
+		}
+
+		PlayUiOneShot(_menuHoverSound, _menuHoverVolumeDb);
+	}
+
+
+	public void PlayMenuSelect()
+	{
+		if (_menuSelectSound == null)
+		{
+			return;
+		}
+
+		PlayUiOneShot(_menuSelectSound, _menuSelectVolumeDb);
+	}
+
+
+	public void PlayUpgradePurchase()
+	{
+		if (_upgradePurchaseSound == null)
+		{
+			return;
+		}
+
+		PlayUiOneShot(_upgradePurchaseSound, _upgradePurchaseVolumeDb);
+	}
+
+	private void PlayUiOneShot(AudioStream stream, float volumeDb)
+	{
+		AudioStreamPlayer player = new AudioStreamPlayer();
+		player.Stream = stream;
+		player.VolumeDb = volumeDb;
+		player.Bus = "Sfx";
+
+		// Add to SfxManager itself rather than CurrentScene.
+		// This is useful because clicking a menu button may immediately change scene. 
+		// Since SfxManager is an Autoload, the sound survives that transition.
+		AddChild(player);
+		player.Finished += player.QueueFree;
+		player.Play();
+	}
+
+	public void PlayZap(Vector3 position)
+	{
+		if (_zapSound == null)
+		{
+			return;
+		}
+
+		Play3DOneShot(_zapSound, position, _zapVolumeDb);
 	}
 }

@@ -10,6 +10,8 @@ public partial class SceneManager : CanvasLayer
     private const string MainMenuPath = "res://Menus/main_menu.tscn";
     private const string LevelSelectPath = "res://Menus/level_select.tscn";
     private const string Level1Path = "res://Levels/level-1.tscn";
+    private const string Level2Path = "res://Levels/level-1.tscn"; // Change this
+    private const string Level3Path = "res://Levels/level-1.tscn"; // Change this
     private const string LevelEndPath = "res://Menus/level-end-screen.tscn";
     private const string UpgradeScreenPath = "res://Menus/level_upgrade_screen.tscn";
 
@@ -104,9 +106,8 @@ public partial class SceneManager : CanvasLayer
         return level switch
         {
             1 => Level1Path,
-			// Future:
-			// 2 => "res://Levels/level-2.tscn",
-			// 3 => "res://Levels/level-3.tscn",
+			2 => Level2Path,
+			3 => Level3Path,
             _ => ""
         };
     }

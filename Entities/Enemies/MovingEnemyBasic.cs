@@ -109,9 +109,7 @@ public partial class MovingEnemyBasic : CharacterBody3D, IPercyDroneTarget
 
 		if (!AreFloorRaysValid())
 		{
-			GD.PushError("[MovingEnemyBasic] One or both floor detection rays are invalid. Enemy physics has been disabled."
-			);
-
+			GD.PushError("[MovingEnemyBasic] One or both floor detection rays are invalid. Enemy physics has been disabled.");
 			SetPhysicsProcess(false);
 			return;
 		}
@@ -476,4 +474,8 @@ public partial class MovingEnemyBasic : CharacterBody3D, IPercyDroneTarget
 		player.Play();
 	}
 
+	public void KillFromFall()
+	{
+		BeginDeath(awardCurrency: false);
+	}
 }

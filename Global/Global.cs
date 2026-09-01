@@ -294,15 +294,23 @@ public partial class Global : Node
 			player.ApplyInnerCatHealthUpgrade();
 		}
 
-		if (HasUpgrade(UpgradeSuperPooperBullets))
-		{
-			player.ApplyBulletUpgrade();
-		}
-
 		if (HasUpgrade(UpgradeExtraLives)
 		)
 		{
 			player.ApplyExtraLivesUpgrade();
+		}
+	}
+
+	public void ApplyPurchasedUpgrades(PlayerAir playerAir)
+	{
+		if (playerAir == null)
+		{
+			return;
+		}
+
+		if (HasUpgrade(UpgradeSuperPooperBullets))
+		{
+			playerAir.ApplyBulletUpgrade();
 		}
 	}
 

@@ -66,6 +66,17 @@ public partial class PlayerAir : CharacterBody3D
 	[Export] private AudioStreamPlayer _laserLoop;
 	private ulong _nextVolleyId = 1;
 
+	[ExportGroup("Super Pooper Bullets Upgrade")]
+	[Export(PropertyHint.Range, "0.1,1.0,0.05")]
+	private float _upgradedFireIntervalMultiplier = 0.60f;
+	[Export(PropertyHint.Range, "1.0,5.0,0.1")]
+	private float _upgradedBulletSpeedMultiplier = 1.5f;
+	[Export] private int _upgradedBulletDamage = 2;
+	[Export] private Color _upgradedBulletColor = new Color(0.10f, 0.55f, 1.0f, 0.55f);
+
+	private bool _bulletUpgradeActive = false;
+
+
 	public override void _Ready()
 	{
 		_muzzleMarkerLeft = GetNode<Node3D>(_muzzleMarkerLeftPath);
@@ -103,6 +114,11 @@ public partial class PlayerAir : CharacterBody3D
 
 		_propellerLoop.Play();
 		_laserLoop.Play();
+
+		if (Global.Instance != null)
+		{
+			Global.Instance.ApplyPurchasedUpgrades(this);
+		}
 	}
 
 	private void initialiseWallRays()
@@ -346,11 +362,38 @@ public partial class PlayerAir : CharacterBody3D
 		// Reset timer if ROF
 		_fireTimer = _rateOfFire;
 		ulong volleyId = _nextVolleyId++;
-		SpawnBullet(_muzzleMarkerLeft, volleyId);
-		SpawnBullet(_muzzleMarkerRight, volleyId);
+		// Normal left + right projectiles.
+		SpawnBullet(_muzzleMarkerLeft.GlobalPosition, GetMuzzleDirection(_muzzleMarkerLeft), volleyId);
+		SpawnBullet(_muzzleMarkerRight.GlobalPosition, GetMuzzleDirection(_muzzleMarkerRight), volleyId);
+
+		// Upgrade adds a third projectile exactly halfway between the two muzzle markers.
+		if (_bulletUpgradeActive)
+		{
+			Vector3 centrePosition = (_muzzleMarkerLeft.GlobalPosition + _muzzleMarkerRight.GlobalPosition) * 0.5f;
+			Vector3 leftDirection = GetMuzzleDirection(_muzzleMarkerLeft);
+			Vector3 rightDirection = GetMuzzleDirection(_muzzleMarkerRight);
+
+			// Average the directions too, in case the two muzzle markers are ever slightly angled apart.
+			Vector3 centreDirection = (leftDirection + rightDirection).Normalized();
+
+			// Fallback if the two directions somehow cancel out.
+			if (centreDirection.LengthSquared() < 0.0001f)
+			{
+				centreDirection = -GlobalTransform.Basis.Z;
+				centreDirection = centreDirection.Normalized();
+			}
+
+			SpawnBullet(centrePosition, centreDirection, volleyId);
+		}
 	}
 
-	private void SpawnBullet(Node3D muzzleMarker, ulong volleyId)
+	private Vector3 GetMuzzleDirection(Node3D muzzleMarker)
+	{
+		Vector3 direction = -muzzleMarker.GlobalTransform.Basis.Z;
+		return direction.Normalized();
+	}
+
+	private void SpawnBullet(Vector3 spawnPosition, Vector3 shootDirection, ulong volleyId)
 	{
         if (_bulletScene == null)
         {
@@ -358,19 +401,32 @@ public partial class PlayerAir : CharacterBody3D
             return;
         }
 
-		// Find Player's forward vector to be direction for bullets
-		Vector3 shootDirection = -muzzleMarker.GlobalTransform.Basis.Z;
-		shootDirection = shootDirection.Normalized();
+		// // Find Player's forward vector to be direction for bullets
+		// Vector3 shootDirection = -muzzleMarker.GlobalTransform.Basis.Z;
+		// shootDirection = shootDirection.Normalized();
 
-		PlayerAirBullet bulletNode = _bulletScene.Instantiate<PlayerAirBullet>();
+		// PlayerAirBullet bulletNode = _bulletScene.Instantiate<PlayerAirBullet>();
 		
-		// Add bullet to scene (use current scene root)
-    	GetTree().CurrentScene.AddChild(bulletNode);
+		// // Add bullet to scene (use current scene root)
+    	// GetTree().CurrentScene.AddChild(bulletNode);
 
-    	bulletNode.VolleyId = volleyId;
-		bulletNode.GlobalPosition = muzzleMarker.GlobalPosition;
+    	// bulletNode.VolleyId = volleyId;
+		// bulletNode.GlobalPosition = muzzleMarker.GlobalPosition;
+		// bulletNode.Direction = shootDirection;
+		// // Make the bullet visually face the direction it is moving.
+		// bulletNode.LookAt(bulletNode.GlobalPosition + shootDirection, Vector3.Up);
+		PlayerAirBullet bulletNode = _bulletScene.Instantiate<PlayerAirBullet>();
+
+		// Configure the bullet BEFORE adding it to the scene.
+		if (_bulletUpgradeActive)
+		{
+			bulletNode.ConfigureUpgrade(_upgradedBulletSpeedMultiplier, _upgradedBulletDamage, _upgradedBulletColor);
+		}
+
+		GetTree().CurrentScene.AddChild(bulletNode);
+		bulletNode.VolleyId = volleyId;
+		bulletNode.GlobalPosition = spawnPosition;
 		bulletNode.Direction = shootDirection;
-		// Make the bullet visually face the direction it is moving.
 		bulletNode.LookAt(bulletNode.GlobalPosition + shootDirection, Vector3.Up);
 	}
 
@@ -407,5 +463,25 @@ public partial class PlayerAir : CharacterBody3D
 		visualRotation.Z = Mathf.LerpAngle(visualRotation.Z, targetRoll, smoothing);
 
 		_playerVisualRoot.Rotation = visualRotation;
+	}
+
+	public void ApplyBulletUpgrade()
+	{
+		if (_bulletUpgradeActive)
+		{
+			return;
+		}
+
+		_bulletUpgradeActive = true;
+
+		// Lower interval = higher firing rate.
+		_rateOfFire *= _upgradedFireIntervalMultiplier;
+
+		GD.Print(
+			$"[PlayerAir] Super Pooper Bullets active. " +
+			$"Fire interval: {_rateOfFire:0.000}s, " +
+			$"Speed multiplier: {_upgradedBulletSpeedMultiplier}, " +
+			$"Damage: {_upgradedBulletDamage}"
+		);
 	}
 }

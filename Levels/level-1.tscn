@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=3 uid="uid://6x0i8op3lofr"]
+[gd_scene load_steps=31 format=3 uid="uid://6x0i8op3lofr"]
 
 [ext_resource type="PackedScene" uid="uid://d4nm5bdaxqhsr" path="res://Entities/Players/PlayerGround/player-ground.tscn" id="1_3mtpf"]
 [ext_resource type="PackedScene" uid="uid://cehky8lel227e" path="res://UI/hud.tscn" id="1_b6mne"]
@@ -21,6 +21,8 @@
 [ext_resource type="PackedScene" uid="uid://cq0a5sj37iivr" path="res://Entities/Prefabs/Level Prefabs/arch_01.tscn" id="17_rb4r8"]
 [ext_resource type="PackedScene" uid="uid://dfwc4tqehrd17" path="res://Entities/Prefabs/Level Prefabs/arch_start_02.tscn" id="18_vqiix"]
 [ext_resource type="PackedScene" uid="uid://dxa2af6ejh0yd" path="res://Entities/Markers/LevelEndTrigger.tscn" id="21_baoot"]
+[ext_resource type="PackedScene" uid="uid://b3gmav2rsjoqv" path="res://Entities/Markers/FallDeathVolume.tscn" id="22_5dy7p"]
+[ext_resource type="PackedScene" uid="uid://c386eydmmlvo5" path="res://Entities/Markers/CheckpointMarker.tscn" id="23_3kahp"]
 
 [sub_resource type="Curve3D" id="Curve3D_bq6a1"]
 _data = {
@@ -1013,4 +1015,14 @@ transform = Transform3D(0.24298868, 0, 0.9700292, 0, 1, 0, -0.9700292, 0, 0.2429
 environment = SubResource("Environment_t2a2k")
 
 [node name="LevelEndTrigger" parent="." instance=ExtResource("21_baoot")]
-transform = Transform3D(0.9582777, 0, -0.2858389, 0, 1, 0, 0.2858389, 0, 0.9582777, 5.8717065, -3.5606632, -286.35455)
+transform = Transform3D(2.3867097, 0, 0.33424088, 0, 2.41, 0, -0.33424088, 0, 2.3867097, -11.14904, -24.87389, -1266.3624)
+
+[node name="FallDeathVolume" parent="." instance=ExtResource("22_5dy7p")]
+transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, 9.992086, -50.56144, -578.7081)
+
+[node name="CheckpointMarker" parent="." instance=ExtResource("23_3kahp")]
+transform = Transform3D(0.9940278, 0, -0.10912711, 0, 1, 0, 0.10912711, 0, 0.9940278, 3.3144124, 4.8316636, -21.765635)
+
+[node name="CheckpointMarker2" parent="." instance=ExtResource("23_3kahp")]
+transform = Transform3D(0.9677839, 0, -0.25178224, 0, 1, 0, 0.25178224, 0, 0.9677839, 23.796835, 0, -683.88416)
+_checkpointId = 2

@@ -1,0 +1,28 @@
+[gd_scene load_steps=5 format=3 uid="uid://c386eydmmlvo5"]
+
+[ext_resource type="Script" uid="uid://duobl5hv5to4e" path="res://Entities/Markers/CheckpointMarker.cs" id="1_dq6yo"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_77ioe"]
+size = Vector3(35, 25, 5)
+
+[sub_resource type="BoxMesh" id="BoxMesh_77ioe"]
+size = Vector3(35, 25, 5)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dq6yo"]
+transparency = 1
+albedo_color = Color(1, 0.4392157, 1, 0.8745098)
+
+[node name="CheckpointMarker" type="Area3D" node_paths=PackedStringArray("_respawnMarker")]
+script = ExtResource("1_dq6yo")
+EditorOnlyTriggerArea = NodePath("MeshInstance3D")
+_respawnMarker = NodePath("RespawnMarker")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_77ioe")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_77ioe")
+surface_material_override/0 = SubResource("StandardMaterial3D_dq6yo")
+
+[node name="RespawnMarker" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 12.75, 0)

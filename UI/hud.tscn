@@ -1,10 +1,17 @@
-[gd_scene load_steps=8 format=3 uid="uid://cehky8lel227e"]
+[gd_scene load_steps=9 format=3 uid="uid://cehky8lel227e"]
 
 [ext_resource type="Script" uid="uid://vw7qtkwqr8jr" path="res://UI/Hud.cs" id="1_ne75i"]
 [ext_resource type="Texture2D" uid="uid://bflhbv8eaekbm" path="res://Entities/Pickups/PowerUps/percyicon.png" id="2_bytes"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_levl0"]
-bg_color = Color(0.174646, 0.174646, 0.174646, 0.45882353)
+bg_color = Color(0.1764706, 0.1764706, 0.1764706, 0.45882353)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_b1lf8"]
+bg_color = Color(0.1764706, 0.1764706, 0.1764706, 0.45882353)
 corner_radius_top_left = 15
 corner_radius_top_right = 15
 corner_radius_bottom_right = 15
@@ -41,52 +48,83 @@ script = ExtResource("1_ne75i")
 [node name="ScorePanel" type="Panel" parent="."]
 offset_left = 60.0
 offset_top = 60.0
-offset_right = 301.0
-offset_bottom = 120.0
+offset_right = 295.0
+offset_bottom = 127.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_levl0")
 
 [node name="ScoreName" type="Label" parent="ScorePanel"]
 layout_mode = 0
 offset_left = 17.0
-offset_top = 7.0
+offset_top = 12.0
 offset_right = 142.0
-offset_bottom = 51.0
+offset_bottom = 56.0
 theme_override_font_sizes/font_size = 31
 text = "SCORE: "
 
 [node name="ScoreValue" type="Label" parent="ScorePanel"]
 layout_mode = 0
 offset_left = 130.0
-offset_top = 7.0
+offset_top = 12.0
 offset_right = 234.0
-offset_bottom = 51.0
+offset_bottom = 56.0
 theme_override_font_sizes/font_size = 31
 text = "0"
 
 [node name="HealthPanel" type="Panel" parent="."]
 offset_left = 60.0
-offset_top = 137.0
-offset_right = 301.0
-offset_bottom = 197.0
+offset_top = 140.0
+offset_right = 295.0
+offset_bottom = 207.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_levl0")
 
 [node name="HealthName" type="Label" parent="HealthPanel"]
 layout_mode = 0
 offset_left = 17.0
-offset_top = 7.0
-offset_right = 142.0
-offset_bottom = 51.0
+offset_top = 12.0
+offset_right = 152.0
+offset_bottom = 56.0
 theme_override_font_sizes/font_size = 31
 text = "HEALTH: "
 
 [node name="HealthValue" type="Label" parent="HealthPanel"]
 layout_mode = 0
 offset_left = 152.0
-offset_top = 7.0
+offset_top = 12.0
 offset_right = 256.0
-offset_bottom = 51.0
-theme_override_font_sizes/font_size = 31
+offset_bottom = 56.0
+theme_override_font_sizes/font_size = 30
 text = "0"
+
+[node name="LivesContainer" type="CenterContainer" parent="."]
+unique_name_in_owner = true
+anchors_preset = -1
+anchor_right = 0.55
+offset_top = 60.0
+grow_horizontal = 0
+
+[node name="LivesPanel" type="PanelContainer" parent="LivesContainer"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_b1lf8")
+
+[node name="LivesHbox" type="HBoxContainer" parent="LivesContainer/LivesPanel"]
+layout_mode = 2
+
+[node name="CatIcon" type="Label" parent="LivesContainer/LivesPanel/LivesHbox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 48
+text = "🐱"
+
+[node name="LivesText" type="Label" parent="LivesContainer/LivesPanel/LivesHbox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "CAT LIVES: "
+
+[node name="LivesValue" type="Label" parent="LivesContainer/LivesPanel/LivesHbox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "<x>"
 
 [node name="PercyFlash" type="ColorRect" parent="."]
 anchors_preset = 15
