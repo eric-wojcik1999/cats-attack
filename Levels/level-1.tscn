@@ -866,99 +866,6 @@ transform = Transform3D(0.7413921, 0, 0.113303274, 0, 0.75000024, 0, -0.11330327
 [node name="StaticEnemyBasic9" parent="Enemies" instance=ExtResource("15_8jvyo")]
 transform = Transform3D(0.7413921, 0, 0.113303274, 0, 0.75000024, 0, -0.113303274, 0, 0.7413921, 9.404108, -8.108826, -251.48116)
 
-[node name="MovingEnemyBasic4" parent="Enemies" instance=ExtResource("13_6p1x0")]
-transform = Transform3D(0.14444259, 0, -0.98951316, 0, 1, 0, 0.98951316, 0, 0.14444259, 10.270294, -5.7901, -314.68774)
-_sideDetectionPath = NodePath("../MovingEnemyBasic/SideDetection")
-_topDetectionPath = NodePath("../MovingEnemyBasic/TopDetection")
-
-[node name="MovingEnemyBasic5" parent="Enemies" instance=ExtResource("13_6p1x0")]
-transform = Transform3D(0.08326043, 0, -0.99652785, 0, 1, 0, 0.99652785, 0, 0.08326043, 13.385019, -5.8327065, -312.21167)
-_sideDetectionPath = NodePath("../MovingEnemyBasic2/SideDetection")
-_topDetectionPath = NodePath("../MovingEnemyBasic2/TopDetection")
-
-[node name="MovingEnemyBasic6" parent="Enemies" instance=ExtResource("13_6p1x0")]
-transform = Transform3D(0.11587337, 0, 0.993264, 0, 1, 0, -0.993264, 0, 0.11587337, 15.453991, -6.009579, -309.1853)
-_sideDetectionPath = NodePath("../MovingEnemyBasic3/SideDetection")
-_topDetectionPath = NodePath("../MovingEnemyBasic3/TopDetection")
-
-[node name="StaticEnemyBasic10" parent="Enemies" instance=ExtResource("15_8jvyo")]
-transform = Transform3D(0.7481039, 0, -0.053296667, 0, 0.75, 0, 0.053296667, 0, 0.7481039, -13.124504, -11.46703, -554.28107)
-_sideDetectionPath = NodePath("../StaticEnemyBasic/SideDetection")
-_topDetectionPath = NodePath("../StaticEnemyBasic/TopDetection")
-
-[node name="StaticEnemyBasic11" parent="Enemies" instance=ExtResource("15_8jvyo")]
-transform = Transform3D(0.7303453, 0, -0.17057489, 0, 0.7500001, 0, 0.17057489, 0, 0.7303453, -10.354619, -11.46703, -553.7284)
-_sideDetectionPath = NodePath("../StaticEnemyBasic2/SideDetection")
-_topDetectionPath = NodePath("../StaticEnemyBasic2/TopDetection")
-
-[node name="StaticEnemyBasic12" parent="Enemies" instance=ExtResource("15_8jvyo")]
-transform = Transform3D(0.7303453, 0, -0.17057489, 0, 0.7500001, 0, 0.17057489, 0, 0.7303453, -7.5108347, -11.46703, -553.093)
-_sideDetectionPath = NodePath("../StaticEnemyBasic3/SideDetection")
-_topDetectionPath = NodePath("../StaticEnemyBasic3/TopDetection")
-
-[node name="MovingEnemyBasic7" parent="Enemies" instance=ExtResource("13_6p1x0")]
-transform = Transform3D(0.2340902, 0, -0.9722149, 0, 1, 0, 0.9722149, 0, 0.2340902, 2.7144163, -5.7851944, -391.67966)
-_sideDetectionPath = NodePath("../MovingEnemyBasic/SideDetection")
-_topDetectionPath = NodePath("../MovingEnemyBasic/TopDetection")
-_detectFloorLeftPath = NodePath("../MovingEnemyBasic/DetectFloorLeft")
-_detectFloorRightPath = NodePath("../MovingEnemyBasic/DetectFloorRight")
-
-[node name="MovingEnemyBasic8" parent="Enemies" instance=ExtResource("13_6p1x0")]
-transform = Transform3D(-0.31750327, 0, 0.94825715, 0, 1, 0, -0.94825715, 0, -0.31750327, 6.047506, -5.5406866, -397.19128)
-_sideDetectionPath = NodePath("../MovingEnemyBasic2/SideDetection")
-_topDetectionPath = NodePath("../MovingEnemyBasic2/TopDetection")
-_detectFloorLeftPath = NodePath("../MovingEnemyBasic2/DetectFloorLeft")
-_detectFloorRightPath = NodePath("../MovingEnemyBasic2/DetectFloorRight")
-
-[node name="MovingEnemyBasic9" parent="Enemies" instance=ExtResource("13_6p1x0")]
-transform = Transform3D(0.51210284, 0, -0.85892415, 0, 1, 0, 0.85892415, 0, 0.51210284, 0.14221144, -5.4378705, -399.03952)
-_sideDetectionPath = NodePath("../MovingEnemyBasic3/SideDetection")
-_topDetectionPath = NodePath("../MovingEnemyBasic3/TopDetection")
-_detectFloorLeftPath = NodePath("../MovingEnemyBasic3/DetectFloorLeft")
-_detectFloorRightPath = NodePath("../MovingEnemyBasic3/DetectFloorRight")
-
-[node name="MovingEnemyBasic10" parent="Enemies" instance=ExtResource("13_6p1x0")]
-transform = Transform3D(-0.5319159, 0, 0.84679717, 0, 1, 0, -0.84679717, 0, -0.5319159, 1.5814296, -5.5361056, -406.80756)
-_sideDetectionPath = NodePath("../MovingEnemyBasic4/SideDetection")
-_topDetectionPath = NodePath("../MovingEnemyBasic4/TopDetection")
-_detectFloorLeftPath = NodePath("../MovingEnemyBasic4/DetectFloorLeft")
-_detectFloorRightPath = NodePath("../MovingEnemyBasic4/DetectFloorRight")
-
-[node name="MovingEnemyBasic11" parent="Enemies" instance=ExtResource("13_6p1x0")]
-transform = Transform3D(0.09935454, 0, -0.9950521, 0, 1, 0, 0.9950521, 0, 0.09935454, -16.359612, -6.314087, -442.73447)
-_sideDetectionPath = NodePath("../MovingEnemyBasic5/SideDetection")
-_topDetectionPath = NodePath("../MovingEnemyBasic5/TopDetection")
-_detectFloorLeftPath = NodePath("../MovingEnemyBasic5/DetectFloorLeft")
-_detectFloorRightPath = NodePath("../MovingEnemyBasic5/DetectFloorRight")
-
-[node name="MovingEnemyBasic12" parent="Enemies" instance=ExtResource("13_6p1x0")]
-transform = Transform3D(-0.005881677, 0, -0.9999827, 0, 1, 0, 0.9999827, 0, -0.005881677, -14.424645, -6.7298136, -447.732)
-_sideDetectionPath = NodePath("../MovingEnemyBasic6/SideDetection")
-_topDetectionPath = NodePath("../MovingEnemyBasic6/TopDetection")
-_detectFloorLeftPath = NodePath("../MovingEnemyBasic6/DetectFloorLeft")
-_detectFloorRightPath = NodePath("../MovingEnemyBasic6/DetectFloorRight")
-
-[node name="MovingEnemyBasic13" parent="Enemies" instance=ExtResource("13_6p1x0")]
-transform = Transform3D(0.05005254, 0, 0.9987466, 0, 1, 0, -0.9987466, 0, 0.05005254, -10.661982, -7.259873, -453.7162)
-
-[node name="MovingEnemyBasic14" parent="Enemies" instance=ExtResource("13_6p1x0")]
-transform = Transform3D(-0.04637418, 0, 0.99892414, 0, 1, 0, -0.99892414, 0, -0.04637418, -13.217456, -7.7768607, -460.07388)
-
-[node name="MovingEnemyBasic15" parent="Enemies" instance=ExtResource("13_6p1x0")]
-transform = Transform3D(0.45605755, 0, 0.8899503, 0, 1, 0, -0.8899503, 0, 0.45605755, 6.6641173, -11.2597, -585.05835)
-
-[node name="MovingEnemyBasic16" parent="Enemies" instance=ExtResource("13_6p1x0")]
-transform = Transform3D(0.4588822, 0, 0.8884971, 0, 1, 0, -0.8884971, 0, 0.4588822, 10.022873, -10.7762785, -588.3972)
-
-[node name="MovingEnemyBasic17" parent="Enemies" instance=ExtResource("13_6p1x0")]
-transform = Transform3D(0.08019893, 0, -0.9967789, 0, 1, 0, 0.9967789, 0, 0.08019893, 12.241245, -8.040458, -608.50696)
-
-[node name="MovingEnemyBasic18" parent="Enemies" instance=ExtResource("13_6p1x0")]
-transform = Transform3D(0.0008726874, 0, 0.99999964, 0, 1, 0, -0.99999964, 0, 0.0008726874, 17.929354, -6.9688354, -637.7699)
-
-[node name="MovingEnemyBasic19" parent="Enemies" instance=ExtResource("13_6p1x0")]
-transform = Transform3D(-0.19676758, 0, -0.98045015, 0, 1, 0, 0.98045015, 0, -0.19676758, 24.560194, -10.648241, -691.81226)
-
 [node name="StaticEnemyBasic13" parent="Enemies" instance=ExtResource("15_8jvyo")]
 transform = Transform3D(0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, 36.48904, -10.6970005, -727.6259)
 _sideDetectionPath = NodePath("../StaticEnemyBasic/SideDetection")
@@ -984,23 +891,63 @@ transform = Transform3D(0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, 48.329144, -4.991204
 _sideDetectionPath = NodePath("../StaticEnemyBasic5/SideDetection")
 _topDetectionPath = NodePath("../StaticEnemyBasic5/TopDetection")
 
-[node name="MovingEnemyBasic20" parent="Enemies" instance=ExtResource("13_6p1x0")]
-transform = Transform3D(0.19507316, 0, 0.98078865, 0, 1, 0, -0.98078865, 0, 0.19507316, 48.312607, -4.589268, -782.2747)
+[node name="MovingEnemyBasic4" parent="Enemies" instance=ExtResource("13_6p1x0")]
+transform = Transform3D(-0.10851992, 0, 0.99409425, 0, 1, 0, -0.99409425, 0, -0.10851992, 8.702243, -6.0113497, -386.0413)
+_sideDetectionPath = NodePath("../MovingEnemyBasic/SideDetection")
+_topDetectionPath = NodePath("../MovingEnemyBasic/TopDetection")
+_detectFloorLeftPath = NodePath("../MovingEnemyBasic/DetectFloorLeft")
+_detectFloorRightPath = NodePath("../MovingEnemyBasic/DetectFloorRight")
 
-[node name="MovingEnemyBasic21" parent="Enemies" instance=ExtResource("13_6p1x0")]
-transform = Transform3D(-0.19640818, 0, -0.9805222, 0, 1, 0, 0.9805222, 0, -0.19640818, 44.63721, -4.6443543, -787.23083)
+[node name="MovingEnemyBasic5" parent="Enemies" instance=ExtResource("13_6p1x0")]
+transform = Transform3D(-0.2461195, 0, 0.96923953, 0, 1, 0, -0.96923953, 0, -0.2461195, 4.1359825, -5.628235, -395.10635)
+_sideDetectionPath = NodePath("../MovingEnemyBasic2/SideDetection")
+_topDetectionPath = NodePath("../MovingEnemyBasic2/TopDetection")
+_detectFloorLeftPath = NodePath("../MovingEnemyBasic2/DetectFloorLeft")
+_detectFloorRightPath = NodePath("../MovingEnemyBasic2/DetectFloorRight")
 
-[node name="MovingEnemyBasic22" parent="Enemies" instance=ExtResource("13_6p1x0")]
-transform = Transform3D(-0.18744993, 0, -0.9822742, 0, 1, 0, 0.9822742, 0, -0.18744993, 39.65327, -7.464733, -753.5005)
+[node name="MovingEnemyBasic6" parent="Enemies" instance=ExtResource("13_6p1x0")]
+transform = Transform3D(0.49470043, 0, -0.86906356, 0, 1, 0, 0.86906356, 0, 0.49470043, -2.1348486, -5.507628, -405.97266)
+_sideDetectionPath = NodePath("../MovingEnemyBasic3/SideDetection")
+_topDetectionPath = NodePath("../MovingEnemyBasic3/TopDetection")
+_detectFloorLeftPath = NodePath("../MovingEnemyBasic3/DetectFloorLeft")
+_detectFloorRightPath = NodePath("../MovingEnemyBasic3/DetectFloorRight")
 
-[node name="MovingEnemyBasic23" parent="Enemies" instance=ExtResource("13_6p1x0")]
-transform = Transform3D(0.3610713, 0, 0.9325382, 0, 1, 0, -0.9325382, 0, 0.3610713, 38.084698, -11.8451185, -717.1633)
+[node name="MovingEnemyBasic7" parent="Enemies" instance=ExtResource("13_6p1x0")]
+transform = Transform3D(-0.3987331, 0, 0.917067, 0, 1, 0, -0.917067, 0, -0.3987331, -8.532792, -6.770709, -426.02383)
 
-[node name="MovingEnemyBasic24" parent="Enemies" instance=ExtResource("13_6p1x0")]
-transform = Transform3D(0.3182148, 0, 0.9480186, 0, 1, 0, -0.9480186, 0, 0.3182148, 37.611824, -12.020648, -714.8473)
+[node name="MovingEnemyBasic8" parent="Enemies" instance=ExtResource("13_6p1x0")]
+transform = Transform3D(0.2523058, 0, -0.96764755, 0, 1, 0, 0.96764755, 0, 0.2523058, -15.496087, -6.0487175, -433.2362)
 
-[node name="MovingEnemyBasic25" parent="Enemies" instance=ExtResource("13_6p1x0")]
-transform = Transform3D(-0.17737679, 0, -0.984143, 0, 1, 0, 0.984143, 0, -0.17737679, 27.135164, -11.091998, -695.3476)
+[node name="MovingEnemyBasic9" parent="Enemies" instance=ExtResource("13_6p1x0")]
+transform = Transform3D(0.037759937, 0, 0.99928683, 0, 1, 0, -0.99928683, 0, 0.037759937, -11.625301, -6.310512, -443.2036)
+
+[node name="StaticEnemyBasic10" parent="Enemies" instance=ExtResource("15_8jvyo")]
+transform = Transform3D(0.61698043, 0, -0.4264214, 0, 0.75, 0, 0.4264214, 0, 0.61698043, -3.5542428, -12.418452, -577.0617)
+_sideDetectionPath = NodePath("../StaticEnemyBasic/SideDetection")
+_topDetectionPath = NodePath("../StaticEnemyBasic/TopDetection")
+
+[node name="StaticEnemyBasic11" parent="Enemies" instance=ExtResource("15_8jvyo")]
+transform = Transform3D(0.6325647, 0, -0.40294155, 0, 0.75, 0, 0.40294155, 0, 0.6325647, 12.485161, -9.713667, -593.91455)
+_sideDetectionPath = NodePath("../StaticEnemyBasic2/SideDetection")
+_topDetectionPath = NodePath("../StaticEnemyBasic2/TopDetection")
+
+[node name="MovingEnemyBasic10" parent="Enemies" instance=ExtResource("13_6p1x0")]
+transform = Transform3D(-0.5231978, 0, -0.8522113, 0, 1, 0, 0.8522113, 0, -0.5231978, 2.1573496, -11.422187, -585.0442)
+
+[node name="MovingEnemyBasic11" parent="Enemies" instance=ExtResource("13_6p1x0")]
+transform = Transform3D(0.23393744, 0, 0.97225165, 0, 1, 0, -0.97225165, 0, 0.23393744, 17.167284, -8.135635, -608.2355)
+
+[node name="MovingEnemyBasic12" parent="Enemies" instance=ExtResource("13_6p1x0")]
+transform = Transform3D(-0.081120946, 0, -0.9967043, 0, 1, 0, 0.9967043, 0, -0.081120946, 39.01133, -9.189714, -738.9713)
+
+[node name="MovingEnemyBasic13" parent="Enemies" instance=ExtResource("13_6p1x0")]
+transform = Transform3D(0.11027212, 0, 0.99390143, 0, 1, 0, -0.99390143, 0, 0.11027212, 44.486916, -7.5505285, -750.494)
+
+[node name="MovingEnemyBasic14" parent="Enemies" instance=ExtResource("13_6p1x0")]
+transform = Transform3D(0.16346376, 0, 0.9865493, 0, 1, 0, -0.9865493, 0, 0.16346376, 43.6088, -6.830869, -756.60156)
+
+[node name="MovingEnemyBasic15" parent="Enemies" instance=ExtResource("13_6p1x0")]
+transform = Transform3D(0.090284936, 0, 0.99591595, 0, 1, 0, -0.99591595, 0, 0.090284936, 43.116688, -5.863563, -768.1107)
 
 [node name="arch-end-01" parent="." instance=ExtResource("16_tucxj")]
 transform = Transform3D(-0.21737677, 0, 0.97608787, 0, 1, 0, -0.97608787, 0, -0.21737677, -9.175016, -25.547752, -1258.316)

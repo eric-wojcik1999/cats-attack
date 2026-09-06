@@ -1,7 +1,17 @@
-[gd_scene load_steps=6 format=3 uid="uid://c10pt2qia8poh"]
+[gd_scene load_steps=8 format=3 uid="uid://c10pt2qia8poh"]
 
 [ext_resource type="Script" uid="uid://byj67e1gnmiqe" path="res://Entities/Pickups/PowerUps/PercyPowerup.cs" id="1_edjjy"]
 [ext_resource type="AudioStream" uid="uid://ls4bbqkpskqn" path="res://Audio/Sfx/Pickups/percy-drone-pickup.mp3" id="2_kdqya"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_kdqya"]
+radius = 0.75
+height = 1.5
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_upll7"]
+transparency = 1
+albedo_color = Color(0.938887, 0.67791367, 0.6175598, 0.6509804)
+metallic = 1.0
+roughness = 0.35
 
 [sub_resource type="SphereMesh" id="SphereMesh_hmbcr"]
 radius = 0.6
@@ -29,9 +39,21 @@ collision_layer = 4
 script = ExtResource("1_edjjy")
 PickupSfx = ExtResource("2_kdqya")
 
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("SphereMesh_kdqya")
+surface_material_override/0 = SubResource("StandardMaterial3D_upll7")
+
 [node name="PercyPowerupTempMesh" type="MeshInstance3D" parent="."]
 mesh = SubResource("SphereMesh_hmbcr")
 surface_material_override/0 = SubResource("StandardMaterial3D_edjjy")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="PercyPowerupTempMesh"]
+light_color = Color(1, 0.5777808, 0.8261372, 1)
+light_energy = 3.815
+light_indirect_energy = 2.531
+light_size = 0.435
+shadow_enabled = true
+omni_range = 8.572
 
 [node name="PercyPowerupCollisionTemp" type="CollisionShape3D" parent="."]
 shape = SubResource("SphereShape3D_hmbcr")

@@ -7,9 +7,9 @@ public partial class LevelUpgradeScreen : Control
 	// COSTS
 	// =========================================================
 
-	private const int InnerCatHealthCost = 50;
-	private const int BulletUpgradeCost = 40;
-	private const int ExtraLivesCost = 40;
+	private const int InnerCatHealthCost = 400;
+	private const int BulletUpgradeCost = 450;
+	private const int ExtraLivesCost = 400;
 
 
 	// =========================================================

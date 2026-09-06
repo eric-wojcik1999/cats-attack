@@ -1,0 +1,134 @@
+[gd_scene load_steps=20 format=3 uid="uid://crghoflk6hqko"]
+
+[ext_resource type="Script" uid="uid://cxyjmputw301p" path="res://Levels/Level1.cs" id="1_qluvn"]
+[ext_resource type="AudioStream" uid="uid://82jlbmkp87k7" path="res://Audio/Music/level-theme.mp3" id="2_bnpg8"]
+[ext_resource type="PackedScene" uid="uid://cehky8lel227e" path="res://UI/hud.tscn" id="3_65vtb"]
+[ext_resource type="PackedScene" uid="uid://d4nm5bdaxqhsr" path="res://Entities/Players/PlayerGround/player-ground.tscn" id="4_ul41i"]
+[ext_resource type="PackedScene" uid="uid://ck3n3piykfu2o" path="res://Entities/Players/PlayerAir/player_air.tscn" id="5_keuqb"]
+[ext_resource type="PackedScene" uid="uid://b7246ppcpv3hx" path="res://Entities/Prefabs/Level Prefabs/Level-3/level_03_track_01.tscn" id="14_583ro"]
+[ext_resource type="PackedScene" uid="uid://cteowd8i5gaa6" path="res://Entities/Prefabs/Level Prefabs/arch-end-01.glb" id="18_datuc"]
+[ext_resource type="PackedScene" uid="uid://cq0a5sj37iivr" path="res://Entities/Prefabs/Level Prefabs/arch_01.tscn" id="19_h8quy"]
+[ext_resource type="PackedScene" uid="uid://dfwc4tqehrd17" path="res://Entities/Prefabs/Level Prefabs/arch_start_02.tscn" id="20_voq12"]
+[ext_resource type="PackedScene" uid="uid://dxa2af6ejh0yd" path="res://Entities/Markers/LevelEndTrigger.tscn" id="21_0l2jd"]
+[ext_resource type="PackedScene" uid="uid://b3gmav2rsjoqv" path="res://Entities/Markers/FallDeathVolume.tscn" id="22_cflxf"]
+[ext_resource type="PackedScene" uid="uid://c386eydmmlvo5" path="res://Entities/Markers/CheckpointMarker.tscn" id="23_sudm8"]
+
+[sub_resource type="Curve3D" id="Curve3D_bq6a1"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6.69, 0, 0.725, 0, 0, 0, 0, 0, 0, 18.145, 0.545, 2.91, 0, 0, 0, 0, 0, 0, 30.815, 1.805, 8.45, 0, 0, 0, 0, 0, 0, 45, 2.05, 9.62, 0, 0, 0, 0, 0, 0, 60, 0, 6.515, 0, 0, 0, 0, 0, 0, 65, -1.140452, 4.98, 0, 0, 0, 0, 0, 0, 70, -1.5114683, 4.27, 0, 0, 0, 0, 0, 0, 75, -1.5371668, 4.4, 0, 0, 0, 0, 0, 0, 80, -1.5503564, 4.95, 0, 0, 0, 0, 0, 0, 120, -1.905, 10.02, 0, 0, 0, 0, 0, 0, 130, -1.75, 9.655, 0, 0, 0, 0, 0, 0, 140, -1.75, 7.73, 0, 0, 0, 0, 0, 0, 150, -2, 5.06, 0, 0, 0, 0, 0, 0, 160, -3.75, 4.03, 0, 0, 0, 0, 0, 0, 180, 0, 4.095, 0, 0, 0, 0, 0, 0, 200, 0, 4.71, 0, 0, 0, 0, 0, 0, 241.11, -5.044, 7.831, 0, 0, 0, 0, 0, 0, 255.215, -7.2080035, 5.605, 0, 0, 0, 0, 0, 0, 263.17, -7.2080035, 3.155, 0, 0, 0, 0, 0, 0, 270, -7.2080035, 3.33, 0, 0, 0, 0, 0, 0, 290, -4.6479936, 9.57, 0, 0, 0, 0, 0, 0, 300, -4.9702573, 13.43, 0, 0, 0, 0, 0, 0, 321.82742, -4.680188, 14.000001, 0, 0, 0, 0, 0, 0, 400, -3.44, 4.035, 0, 0, 0, 0, 0, 0, 420, -3.005, -7.72, 0, 0, 0, 0, 0, 0, 440, -4, -13.705, 0, 0, 0, 0, 0, 0, 500, -8.08, -9.525, 0, 0, 0, 0, 0, 0, 540, -8.985, -11.235, 0, 0, 0, 0, 0, 0, 560.235, -10.88, -7.91, 0, 0, 0, 0, 0, 0, 580, -9, 3.105, 0, 0, 0, 0, 0, 0, 620, -6.855, 15.94, 0, 0, 0, 0, 0, 0, 650, -6.735, 17.135, 0, 0, 0, 0, 0, 0, 690, -8.175, 26.885, 0, 0, 0, 0, 0, 0, 720, -10.005, 36.175, 0, 0, 0, 0, 0, 0, 760, -5.225, 43.665, 0, 0, 0, 0, 0, 0, 820, -3, 50, 0, 0, 0, 0, 0, 0, 870, -3.335, 50.955, 0, 0, 0, 0, 0, 0, 890, -2.825, 44.14, 0, 0, 0, 0, 0, 0, 910, -2.53, 41.9, 0, 0, 0, 0, 0, 0, 930, -3.465, 50.2, 0, 0, 0, 0, 0, 0, 950, -3, 56.005, 0, 0, 0, 0, 0, 0, 970, -3, 57.19, 0, 0, 0, 0, 0, 0, 1030, -4.525, 46.41, 0, 0, 0, 0, 0, 0, 1070, -10, 36.245, 0, 0, 0, 0, 0, 0, 1100, -9.125, 28.555, 0, 0, 0, 0, 0, 0, 1200, -12.375, 4.37, 0, 0, 0, 0, 0, 0, 1320, -15.995, -25.36),
+"tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+}
+point_count = 48
+
+[sub_resource type="Gradient" id="Gradient_vqiix"]
+colors = PackedColorArray(1, 0.29803923, 0, 1, 0.2901961, 0.12941177, 0.30588236, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_t2a2k"]
+noise_type = 3
+frequency = 0.006
+fractal_octaves = 10
+fractal_lacunarity = 2.75
+fractal_gain = 0.35
+domain_warp_enabled = true
+domain_warp_amplitude = 23.03
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_dmhm2"]
+noise = SubResource("FastNoiseLite_t2a2k")
+color_ramp = SubResource("Gradient_vqiix")
+seamless = true
+seamless_blend_skirt = 0.7
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_baoot"]
+panorama = SubResource("NoiseTexture2D_dmhm2")
+
+[sub_resource type="Sky" id="Sky_vqiix"]
+sky_material = SubResource("PanoramaSkyMaterial_baoot")
+
+[sub_resource type="Environment" id="Environment_t2a2k"]
+background_mode = 2
+sky = SubResource("Sky_vqiix")
+glow_intensity = 1.0
+glow_bloom = 0.02
+glow_blend_mode = 0
+fog_mode = 1
+fog_light_color = Color(0.87341946, 1.3476611e-05, 0.5844462, 1)
+fog_light_energy = 1.05
+fog_density = 1.0
+fog_sky_affect = 0.364
+fog_height_density = 1.0
+fog_depth_begin = -90.5
+fog_depth_end = 0.0
+volumetric_fog_enabled = true
+volumetric_fog_density = 0.02
+volumetric_fog_albedo = Color(0.79607844, 0.40784314, 0, 1)
+volumetric_fog_emission_energy = 0.0
+volumetric_fog_length = 50.0
+volumetric_fog_sky_affect = 0.4
+
+[node name="Level1" type="Node3D"]
+script = ExtResource("1_qluvn")
+_levelMusic = ExtResource("2_bnpg8")
+
+[node name="HUD" parent="." node_paths=PackedStringArray("player") instance=ExtResource("3_65vtb")]
+player = NodePath("../PlayerGround")
+
+[node name="PlayerGround" parent="." instance=ExtResource("4_ul41i")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+_baseMovementSpeed = 5.5
+_autoForwardSpeed = 12.0
+_baseJumpVelocity = 6.0
+_lateralDeceleration = 4.0
+_health = 12
+_jumpPadAirSteeringStrength = 1.65
+_pathGuideNodePath = NodePath("../TrackGuidePath")
+_pathLookAheadDistance = 16.0
+_pathTurnDegPerSec = 80.0
+_maximumnLeanDegrees = 6.0
+_leanSpeed = 5.0
+
+[node name="PlayerAir" parent="." node_paths=PackedStringArray("_playerGround") instance=ExtResource("5_keuqb")]
+transform = Transform3D(1, 0, 0, 0, 0.9659258, 0.2588191, 0, -0.2588191, 0.9659258, 2, 3.5, 1.5)
+_playerGround = NodePath("../PlayerGround")
+_maxExtraHeight = 4.0
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.5883883, -0.7303799, 0.3469069, -0.24236242, 0.25000006, 0.9374222, -0.7714011, -0.6356455, -0.029919524, -6.7305164, 12.75, 10.433086)
+light_energy = 1.552
+shadow_enabled = true
+
+[node name="TrackGuidePath" type="Path3D" parent="."]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, 0, 0)
+curve = SubResource("Curve3D_bq6a1")
+debug_custom_color = Color(1, 1, 1, 1)
+
+[node name="Coins" type="Node3D" parent="."]
+
+[node name="Enemies" type="Node3D" parent="."]
+
+[node name="arch-end-01" parent="." instance=ExtResource("18_datuc")]
+transform = Transform3D(-0.21737677, 0, 0.97608787, 0, 1, 0, -0.97608787, 0, -0.21737677, -9.175016, -25.547752, -1258.316)
+
+[node name="arch-012" parent="." instance=ExtResource("19_h8quy")]
+transform = Transform3D(0.25694722, 0, 0.96642554, 0, 1, 0, -0.96642554, 0, 0.25694722, 22.325138, -7.5886855, -676.7241)
+
+[node name="arch-start-02" parent="." instance=ExtResource("20_voq12")]
+transform = Transform3D(-0.11849058, 0, 0.99295515, 0, 1, 0, -0.99295515, 0, -0.11849058, 0.21162605, 0.75333166, -16.261772)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_t2a2k")
+
+[node name="LevelEndTrigger" parent="." instance=ExtResource("21_0l2jd")]
+transform = Transform3D(2.3867097, 0, 0.33424088, 0, 2.41, 0, -0.33424088, 0, 2.3867097, -11.14904, -24.87389, -1266.3624)
+
+[node name="FallDeathVolume" parent="." instance=ExtResource("22_cflxf")]
+transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, 9.992086, -50.56144, -578.7081)
+
+[node name="CheckpointMarker" parent="." instance=ExtResource("23_sudm8")]
+transform = Transform3D(0.9966447, 0, 0.081851564, 0, 1, 0, -0.081851564, 0, 0.9966447, 0.24820352, 4.8316636, -19.07199)
+
+[node name="CheckpointMarker2" parent="." instance=ExtResource("23_sudm8")]
+transform = Transform3D(0.9677839, 0, -0.25178224, 0, 1, 0, 0.25178224, 0, 0.9677839, 23.796835, 0, -683.88416)
+_checkpointId = 2
+
+[node name="level-03-track-01" parent="." instance=ExtResource("14_583ro")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 2.708932, -1.0303545, -0.35930634)
