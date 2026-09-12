@@ -119,9 +119,6 @@ public partial class PlayerAir : CharacterBody3D
 		{
 			Global.Instance.ApplyPurchasedUpgrades(this);
 		}
-
-		// REMOVE
-		ApplyBulletUpgrade();
 	}
 
 	private void initialiseWallRays()
