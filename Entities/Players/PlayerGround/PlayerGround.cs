@@ -1238,7 +1238,7 @@ public partial class PlayerGround : CharacterBody3D
 
 	public void ApplyInnerCatHealthUpgrade()
 	{
-		_maxHealth *= 2;
+		_maxHealth = 16;
 		_health = _maxHealth;
 		EmitSignal(SignalName.HealthChanged, _health);
 		GD.Print($"[PlayerGround] Inner Cat Health applied. Max Health: {_maxHealth}");
@@ -1264,6 +1264,7 @@ public partial class PlayerGround : CharacterBody3D
 
 		_ = DieAsync();
 	}
+
 	private async Task DieAsync()
 	{
 		if (_hasDied)

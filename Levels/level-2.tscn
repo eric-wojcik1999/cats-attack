@@ -1,6 +1,6 @@
 [gd_scene load_steps=49 format=3 uid="uid://co86dq5pmb263"]
 
-[ext_resource type="Script" uid="uid://cxyjmputw301p" path="res://Levels/Level1.cs" id="1_vlfsw"]
+[ext_resource type="Script" uid="uid://cmu3xm0vg25cj" path="res://Levels/Level.cs" id="1_0mgnp"]
 [ext_resource type="AudioStream" uid="uid://82jlbmkp87k7" path="res://Audio/Music/level-theme.mp3" id="2_txclj"]
 [ext_resource type="PackedScene" uid="uid://cehky8lel227e" path="res://UI/hud.tscn" id="3_q0sf1"]
 [ext_resource type="PackedScene" uid="uid://d4nm5bdaxqhsr" path="res://Entities/Players/PlayerGround/player-ground.tscn" id="4_nldhe"]
@@ -97,7 +97,7 @@ volumetric_fog_sky_affect = 0.4
 size = Vector3(1.5, 1.94, 1.5)
 
 [node name="Level1" type="Node3D"]
-script = ExtResource("1_vlfsw")
+script = ExtResource("1_0mgnp")
 _levelMusic = ExtResource("2_txclj")
 
 [node name="HUD" parent="." node_paths=PackedStringArray("player") instance=ExtResource("3_q0sf1")]
@@ -107,10 +107,10 @@ player = NodePath("../PlayerGround")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 _baseMovementSpeed = 5.5
 _autoForwardSpeed = 12.0
-_baseJumpVelocity = 8.0
+_baseJumpVelocity = 6.0
 _lateralDeceleration = 4.0
-_health = 12
-_maxHealth = 12
+_cameraLag = 0.1
+_knockbackTime = 0.5
 _jumpPadAirSteeringStrength = 1.65
 _pathGuideNodePath = NodePath("../TrackGuidePath")
 _pathLookAheadDistance = 14.0
@@ -677,10 +677,10 @@ transform = Transform3D(0.33895692, 0, 1.4612008, 0, 1.4999999, 0, -1.4612008, 0
 transform = Transform3D(0.7387305, 0, -0.12952706, 0, 0.75, 0, 0.12952706, 0, 0.7387305, -32.013344, -6.257287, -586.32666)
 
 [node name="beam2" parent="." instance=ExtResource("19_rk04x")]
-transform = Transform3D(0.6028042, 0, -0.7978891, 0, 1, 0, 0.7978891, 0, 0.6028042, -24.807762, -1.5169873, -676.9329)
+transform = Transform3D(0.6028042, 0, -0.7978891, 0, 1, 0, 0.7978891, 0, 0.6028042, -24.807762, -0.54431057, -676.9329)
 
 [node name="beam3" parent="." instance=ExtResource("19_rk04x")]
-transform = Transform3D(0.50154084, 0, -0.8651338, 0, 1, 0, 0.8651338, 0, 0.50154084, -13.375877, -1.682307, -659.9124)
+transform = Transform3D(0.50154084, 0, -0.8651338, 0, 1, 0, 0.8651338, 0, 0.50154084, -13.375877, -0.70963025, -659.9124)
 
 [node name="barrier45" parent="." instance=ExtResource("18_ome41")]
 transform = Transform3D(0.94139445, 0, -1.1678085, 0, 1.5, 0, 1.1678085, 0, 0.94139445, -36.618156, -0.76171553, -676.93555)

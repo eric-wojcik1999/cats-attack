@@ -1,7 +1,10 @@
-[gd_resource type="AudioBusLayout" load_steps=2 format=3 uid="uid://cxu43c7a8habw"]
+[gd_resource type="AudioBusLayout" load_steps=3 format=3 uid="uid://cxu43c7a8habw"]
 
 [sub_resource type="AudioEffectLimiter" id="AudioEffectLimiter_j3pel"]
 resource_name = "Limiter"
+
+[sub_resource type="AudioEffectReverb" id="AudioEffectReverb_j3pel"]
+resource_name = "Reverb"
 
 [resource]
 bus/0/effect/0/effect = SubResource("AudioEffectLimiter_j3pel")
@@ -28,5 +31,7 @@ bus/4/name = &"EnemySfx"
 bus/4/solo = false
 bus/4/mute = false
 bus/4/bypass_fx = false
-bus/4/volume_db = 0.0
+bus/4/volume_db = -2.3791618
 bus/4/send = &"Master"
+bus/4/effect/0/effect = SubResource("AudioEffectReverb_j3pel")
+bus/4/effect/0/enabled = true

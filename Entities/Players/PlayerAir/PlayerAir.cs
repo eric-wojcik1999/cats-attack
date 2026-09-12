@@ -119,6 +119,9 @@ public partial class PlayerAir : CharacterBody3D
 		{
 			Global.Instance.ApplyPurchasedUpgrades(this);
 		}
+
+		// REMOVE
+		ApplyBulletUpgrade();
 	}
 
 	private void initialiseWallRays()
@@ -401,20 +404,6 @@ public partial class PlayerAir : CharacterBody3D
             return;
         }
 
-		// // Find Player's forward vector to be direction for bullets
-		// Vector3 shootDirection = -muzzleMarker.GlobalTransform.Basis.Z;
-		// shootDirection = shootDirection.Normalized();
-
-		// PlayerAirBullet bulletNode = _bulletScene.Instantiate<PlayerAirBullet>();
-		
-		// // Add bullet to scene (use current scene root)
-    	// GetTree().CurrentScene.AddChild(bulletNode);
-
-    	// bulletNode.VolleyId = volleyId;
-		// bulletNode.GlobalPosition = muzzleMarker.GlobalPosition;
-		// bulletNode.Direction = shootDirection;
-		// // Make the bullet visually face the direction it is moving.
-		// bulletNode.LookAt(bulletNode.GlobalPosition + shootDirection, Vector3.Up);
 		PlayerAirBullet bulletNode = _bulletScene.Instantiate<PlayerAirBullet>();
 
 		// Configure the bullet BEFORE adding it to the scene.

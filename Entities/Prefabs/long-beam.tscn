@@ -345,8 +345,9 @@ shader_parameter/fresnel_power = 2.2
 shader_parameter/fresnel_strength = 1.1
 shader_parameter/flip_uv = false
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_lep7l"]
-size = Vector3(2.5600586, 2.8935547, 14.0896)
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_xwyeg"]
+radius = 0.64160156
+height = 12.436768
 
 [node name="beam" instance=ExtResource("1_bxqek")]
 
@@ -395,5 +396,5 @@ collision_layer = 2
 script = ExtResource("3_xwyeg")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="DamageArea" index="0"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.4052286, 0.90145206, 8.0059185)
-shape = SubResource("BoxShape3D_lep7l")
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, -3.4052286, 0.901452, 7.322935)
+shape = SubResource("CapsuleShape3D_xwyeg")
