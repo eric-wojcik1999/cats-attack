@@ -1,0 +1,24 @@
+[gd_scene load_steps=5 format=3 uid="uid://dxa2af6ejh0yd"]
+
+[ext_resource type="Script" uid="uid://dcbhsfpvjtxll" path="res://Entities/Markers/LevelEndTrigger.cs" id="1_sdq6i"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_p02tk"]
+size = Vector3(15, 10, 3)
+
+[sub_resource type="BoxMesh" id="BoxMesh_p02tk"]
+size = Vector3(15, 10, 3)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_p02tk"]
+transparency = 1
+albedo_color = Color(1, 0.65882355, 0.5647059, 0.5411765)
+
+[node name="LevelEndTrigger" type="Area3D"]
+script = ExtResource("1_sdq6i")
+EditorOnlyTriggerArea = NodePath("MeshInstance3D")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_p02tk")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_p02tk")
+surface_material_override/0 = SubResource("StandardMaterial3D_p02tk")

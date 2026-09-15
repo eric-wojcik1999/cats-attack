@@ -6,7 +6,7 @@ public partial class DirectionMarker : Area3D
 	[Export] public bool oneShot = false;
 	// Per-marker limit: how fast the player rotates (deg/sec) after colliding with marker
 	// Examples: 180 (slow), 360 (normal), 720 (very fast)
-	[Export(PropertyHint.Range, "30,1080,1")]
+	[Export(PropertyHint.Range, "5,1080,1")]
 	public float _turnDegPerSecOverride = 360f;
     // These nodes are editor-only visuals that should be hidden during gameplay.
     [Export] public NodePath EditorOnlyVectorPath;

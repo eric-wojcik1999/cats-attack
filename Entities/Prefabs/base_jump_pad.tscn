@@ -1,0 +1,34 @@
+[gd_scene load_steps=7 format=3 uid="uid://be40nk4u707xw"]
+
+[ext_resource type="Script" uid="uid://dbeq6rv32fsyj" path="res://Entities/Prefabs/BaseJumpPad.cs" id="1_k8bje"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_xf5wk"]
+size = Vector3(1.5, 0.015, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_k8bje"]
+albedo_color = Color(0.8834309, 0.5247861, 0, 1)
+
+[sub_resource type="PrismMesh" id="PrismMesh_xf5wk"]
+size = Vector3(0.5, 0.5, 0.005)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_xf5wk"]
+albedo_color = Color(1, 0, 1, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_452qo"]
+size = Vector3(1.75, 0.5, 1.25)
+
+[node name="BaseJumpPad" type="Area3D"]
+script = ExtResource("1_k8bje")
+
+[node name="JumpPadTempMesh" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_xf5wk")
+skeleton = NodePath("")
+surface_material_override/0 = SubResource("StandardMaterial3D_k8bje")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="JumpPadTempMesh"]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0.0053988695, 0)
+mesh = SubResource("PrismMesh_xf5wk")
+surface_material_override/0 = SubResource("StandardMaterial3D_xf5wk")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_452qo")

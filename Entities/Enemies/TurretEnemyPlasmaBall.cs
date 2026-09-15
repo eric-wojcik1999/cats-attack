@@ -12,6 +12,8 @@ public partial class TurretEnemyPlasmaBall : Area3D
 	private float _lifeTimer;
 	private float _growTimer;
 	private float _test = 0.1f;
+	private bool _hasImpacted = false;
+
 
 	public override void _Ready()
 	{
@@ -42,10 +44,19 @@ public partial class TurretEnemyPlasmaBall : Area3D
 
 	private void OnBodyEntered(Node3D body)
 	{
+		if (_hasImpacted)
+		{
+			return;
+		}
+
+		_hasImpacted = true;
+		
 		if (body is PlayerGround player)
 		{
 			player.TakeDamage(_turretDamage);
 		}
+
+    	SfxManager.Instance?.PlayProjectileImpact(GlobalPosition);
 
 		QueueFree();
 	}

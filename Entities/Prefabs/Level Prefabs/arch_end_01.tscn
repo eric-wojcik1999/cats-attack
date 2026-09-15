@@ -1,0 +1,5 @@
+[gd_scene load_steps=2 format=3 uid="uid://dij22kbcxc1yj"]
+
+[ext_resource type="PackedScene" uid="uid://cteowd8i5gaa6" path="res://Entities/Prefabs/Level Prefabs/arch-end-01.glb" id="1_bgfp0"]
+
+[node name="arch-end-01" instance=ExtResource("1_bgfp0")]

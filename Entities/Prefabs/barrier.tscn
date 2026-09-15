@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://bl6jtx3pjr6mc"]
+
+[ext_resource type="PackedScene" uid="uid://cq4jxi73xegi8" path="res://Entities/Prefabs/barrier.glb" id="1_wyp70"]
+
+[node name="barrier2" instance=ExtResource("1_wyp70")]
+
+[node name="StaticBody3D" parent="barrier-col" index="0"]
+collision_layer = 2
+collision_mask = 13

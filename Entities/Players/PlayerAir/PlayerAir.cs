@@ -30,23 +30,61 @@ public partial class PlayerAir : CharacterBody3D
 	private readonly List<RayCast3D> _wallRays = new();
 
 	[ExportGroup("Shooting")]
-	[Export] public NodePath _muzzleMarkerPath;
+	[Export] public NodePath _muzzleMarkerLeftPath;
+	[Export] public NodePath _muzzleMarkerRightPath;
 	[Export] public PackedScene _bulletScene;
 	[Export] public float _rateOfFire = 0.1f;
 	private float _fireTimer = 0f;
-	private Node3D _muzzleMarker;
+	private Node3D _muzzleMarkerLeft;
+	private Node3D _muzzleMarkerRight;
+
+	[ExportGroup("Pitch Aim")]
+	[Export] private float _pitchMouseSensitivity = 0.0025f;
+	[Export] private float _minPitchDeg = -35f;
+	[Export] private float _maxPitchDeg = 45f;
+	[Export] private bool _invertMouseY = false;
+	[Export] private float _pitchSmoothSpeed = 18f;
+	private float _targetPitch = 0f;
+	private float _currentPitch = 0f;
+
+	[ExportGroup("Visual Lean")]
+	[Export] private Node3D _playerVisualRoot;
+	[Export(PropertyHint.Range, "0.0, 45.0, 0.5")]
+	private float _maximumLeanDegrees = 15.0f;
+	[Export(PropertyHint.Range, "1.0, 30.0, 0.5")]
+	private float _leanSpeed = 10.0f;
+	[Export(PropertyHint.Range, "0.1, 50.0, 0.1")]
+	private float _fullLeanLateralSpeed = 8.0f;
+	[Export(PropertyHint.Range, "1.0, 1.0, 0.05")]
+	private float _leanDeadZone = 0.05f;
+	private bool _invertLeanDirection = false;
+	private float _visualBaseRoll;
+	private float _previousLateralOffset;
+
+	[ExportGroup("Sfx")]
+	[Export] private AudioStreamPlayer _propellerLoop;
+	[Export] private AudioStreamPlayer _laserLoop;
+	private ulong _nextVolleyId = 1;
+
+	[ExportGroup("Super Pooper Bullets Upgrade")]
+	[Export(PropertyHint.Range, "0.1,1.0,0.05")]
+	private float _upgradedFireIntervalMultiplier = 0.60f;
+	[Export(PropertyHint.Range, "1.0,5.0,0.1")]
+	private float _upgradedBulletSpeedMultiplier = 1.5f;
+	[Export] private int _upgradedBulletDamage = 2;
+	[Export] private Color _upgradedBulletColor = new Color(0.10f, 0.55f, 1.0f, 0.55f);
+
+	private bool _bulletUpgradeActive = false;
+
 
 	public override void _Ready()
 	{
-		_muzzleMarker = GetNode<Node3D>(_muzzleMarkerPath);
+		_muzzleMarkerLeft = GetNode<Node3D>(_muzzleMarkerLeftPath);
+		_muzzleMarkerRight = GetNode<Node3D>(_muzzleMarkerRightPath);
 
-		if (_muzzleMarker == null )
+		if (_muzzleMarkerLeft == null || _muzzleMarkerRight == null)
 		{
-			GD.Print("[PlayerAir] Muzzle marker not found");
-		}
-		else
-		{
-			GD.Print("[PlayerAir] Muzzle marker initialised");
+			GD.PushWarning("[PlayerAir] Muzzle marker not found");
 		}
 
 		if (_playerGround != null)
@@ -57,11 +95,30 @@ public partial class PlayerAir : CharacterBody3D
 		}
 		else 
 		{
-			GD.Print("[Player Air] Player Ground not found");
+			GD.Print("[Player Air] Player Air not found");
 		}
+
+		if (!GodotObject.IsInstanceValid(_playerVisualRoot))
+		{
+			GD.PushWarning("[PlayerAir] Player AIr visual root has not been assigned.");
+		}
+		else 
+		{
+			_visualBaseRoll = _playerVisualRoot.Rotation.Z;
+		}
+
+		_previousLateralOffset = _currentLateralOffset;
 
 		initialiseWallRays();
 		_baseOffsetYFromAnchor = GlobalPosition.Y - _playerGround.AirAnchorPosition.Y;
+
+		_propellerLoop.Play();
+		_laserLoop.Play();
+
+		if (Global.Instance != null)
+		{
+			Global.Instance.ApplyPurchasedUpgrades(this);
+		}
 	}
 
 	private void initialiseWallRays()
@@ -91,6 +148,22 @@ public partial class PlayerAir : CharacterBody3D
 		}
 	}
 
+	public override void _Input(InputEvent @event)
+	{
+		if (@event is InputEventMouseMotion mouseMotion)
+		{
+			float direction = _invertMouseY ? 1f : -1f;
+
+			_targetPitch += mouseMotion.Relative.Y * _pitchMouseSensitivity * direction;
+
+			float minPitch = Mathf.DegToRad(_minPitchDeg);
+			float maxPitch = Mathf.DegToRad(_maxPitchDeg);
+
+			_targetPitch = Mathf.Clamp(_targetPitch, minPitch, maxPitch);
+		}
+
+	}
+
 	public override void _PhysicsProcess(double delta)
 	{
 		if (_playerGround != null)
@@ -99,14 +172,26 @@ public partial class PlayerAir : CharacterBody3D
 
 			UpdateTargetLateralFromMouseScreenX();
 
-			// ───── Calculate independant lateral movement ─────
-			float lateralBlend = 1f - Mathf.Exp(-_lateralSmoothSpeed * dt);
-			_currentLateralOffset = Mathf.Lerp(_currentLateralOffset, _targetLateralOffset, lateralBlend);
+			// // ───── Calculate independant lateral movement ─────
+			// float lateralBlend = 1f - Mathf.Exp(-_lateralSmoothSpeed * dt);
+			// _currentLateralOffset = Mathf.Lerp(_currentLateralOffset, _targetLateralOffset, lateralBlend);
 
-			// // ───── Auto-forward movement, shadowing Player Ground + auto vertical adjustment ─────
-			// Vector3 targetPos = GetTargetFollowPosition();
-			// float posBlend = 1f - Mathf.Exp(-_positionSmoothSpeed * dt);
-			// GlobalPosition = GlobalPosition.Lerp(targetPos, posBlend);
+			// ───── Calculate independant lateral movement ─────
+			float lateralOffsetBeforeMovement = _currentLateralOffset;
+			float lateralBlend = 1f - Mathf.Exp(-_lateralSmoothSpeed * dt);
+			_currentLateralOffset =  Mathf.Lerp(_currentLateralOffset, _targetLateralOffset, lateralBlend);
+
+			// Calculate how fast player moves sideways in air
+			float lateralMovementSpeed = 0.0f;
+
+			if (dt > 0.0001f)
+			{
+				lateralMovementSpeed = (_currentLateralOffset - lateralOffsetBeforeMovement) / dt;
+			}
+
+			UpdateVisualLean(lateralMovementSpeed, dt);
+
+			_previousLateralOffset = _currentLateralOffset;
 
 			// Compute X/Z follow target
 			Vector3 targetPos = GetTargetFollowPosition();
@@ -129,6 +214,12 @@ public partial class PlayerAir : CharacterBody3D
 			float yawStep = Mathf.Clamp(_yawFollowSpeed * dt, 0f, 1f);
 			// Moves current yaw towards the target yaw
 			rotation.Y +=  diff * yawStep;
+			// Calculate pitch
+			float pitchStep = Mathf.Clamp(_pitchSmoothSpeed * dt, 0f, 1f);
+			_currentPitch = Mathf.Lerp(_currentPitch, _targetPitch, pitchStep);
+			rotation.X = _currentPitch;
+			rotation.Z = 0f;
+
 			GlobalRotation = rotation;
 
 			// Fire bullets
@@ -136,7 +227,7 @@ public partial class PlayerAir : CharacterBody3D
 		}
 		else 
 		{
-			GD.Print("[Player Air] Player Ground not found");
+			GD.Print("[Player Air] Player Air not found");
 		}
 	}
 
@@ -270,10 +361,39 @@ public partial class PlayerAir : CharacterBody3D
 
 		// Reset timer if ROF
 		_fireTimer = _rateOfFire;
-		SpawnBullet();
+		ulong volleyId = _nextVolleyId++;
+		// Normal left + right projectiles.
+		SpawnBullet(_muzzleMarkerLeft.GlobalPosition, GetMuzzleDirection(_muzzleMarkerLeft), volleyId);
+		SpawnBullet(_muzzleMarkerRight.GlobalPosition, GetMuzzleDirection(_muzzleMarkerRight), volleyId);
+
+		// Upgrade adds a third projectile exactly halfway between the two muzzle markers.
+		if (_bulletUpgradeActive)
+		{
+			Vector3 centrePosition = (_muzzleMarkerLeft.GlobalPosition + _muzzleMarkerRight.GlobalPosition) * 0.5f;
+			Vector3 leftDirection = GetMuzzleDirection(_muzzleMarkerLeft);
+			Vector3 rightDirection = GetMuzzleDirection(_muzzleMarkerRight);
+
+			// Average the directions too, in case the two muzzle markers are ever slightly angled apart.
+			Vector3 centreDirection = (leftDirection + rightDirection).Normalized();
+
+			// Fallback if the two directions somehow cancel out.
+			if (centreDirection.LengthSquared() < 0.0001f)
+			{
+				centreDirection = -GlobalTransform.Basis.Z;
+				centreDirection = centreDirection.Normalized();
+			}
+
+			SpawnBullet(centrePosition, centreDirection, volleyId);
+		}
 	}
 
-	private void SpawnBullet()
+	private Vector3 GetMuzzleDirection(Node3D muzzleMarker)
+	{
+		Vector3 direction = -muzzleMarker.GlobalTransform.Basis.Z;
+		return direction.Normalized();
+	}
+
+	private void SpawnBullet(Vector3 spawnPosition, Vector3 shootDirection, ulong volleyId)
 	{
         if (_bulletScene == null)
         {
@@ -281,17 +401,73 @@ public partial class PlayerAir : CharacterBody3D
             return;
         }
 
-		// Find Player's forward vector to be direction for bullets
-		Vector3 shootDirection = -_muzzleMarker.GlobalTransform.Basis.Z;
-		shootDirection = shootDirection.Normalized();
-
 		PlayerAirBullet bulletNode = _bulletScene.Instantiate<PlayerAirBullet>();
-		
-		// Add bullet to scene (use current scene root)
-    	GetTree().CurrentScene.AddChild(bulletNode);
 
-		bulletNode.GlobalPosition = _muzzleMarker.GlobalPosition;
-		bulletNode.GlobalRotation = _muzzleMarker.GlobalRotation;
+		// Configure the bullet BEFORE adding it to the scene.
+		if (_bulletUpgradeActive)
+		{
+			bulletNode.ConfigureUpgrade(_upgradedBulletSpeedMultiplier, _upgradedBulletDamage, _upgradedBulletColor);
+		}
+
+		GetTree().CurrentScene.AddChild(bulletNode);
+		bulletNode.VolleyId = volleyId;
+		bulletNode.GlobalPosition = spawnPosition;
 		bulletNode.Direction = shootDirection;
+		bulletNode.LookAt(bulletNode.GlobalPosition + shootDirection, Vector3.Up);
+	}
+
+	private void UpdateVisualLean(float lateralMovementSpeed, float delta)
+	{
+		if (!GodotObject.IsInstanceValid(_playerVisualRoot))
+		{
+			return;
+		}
+
+		float safeFullLeanSpeed = Mathf.Max(_fullLeanLateralSpeed, 0.01f);
+
+		// convert movement speed to between a value of -1 and 1
+		float normalisedLean = Mathf.Clamp(lateralMovementSpeed / safeFullLeanSpeed, -1.0f, 1.0f);
+
+		if (Mathf.Abs(normalisedLean) < _leanDeadZone)
+		{
+			normalisedLean = 0.0f;
+		}
+
+		if (_invertLeanDirection)
+		{
+			normalisedLean = -normalisedLean;
+		}
+
+		float targetLeanRadians = Mathf.DegToRad(_maximumLeanDegrees  * normalisedLean);
+
+		float targetRoll = _visualBaseRoll + targetLeanRadians;
+
+		float smoothing = 1.0f - Mathf.Exp(-_leanSpeed * delta);
+
+		Vector3 visualRotation = _playerVisualRoot.Rotation;
+
+		visualRotation.Z = Mathf.LerpAngle(visualRotation.Z, targetRoll, smoothing);
+
+		_playerVisualRoot.Rotation = visualRotation;
+	}
+
+	public void ApplyBulletUpgrade()
+	{
+		if (_bulletUpgradeActive)
+		{
+			return;
+		}
+
+		_bulletUpgradeActive = true;
+
+		// Lower interval = higher firing rate.
+		_rateOfFire *= _upgradedFireIntervalMultiplier;
+
+		GD.Print(
+			$"[PlayerAir] Super Pooper Bullets active. " +
+			$"Fire interval: {_rateOfFire:0.000}s, " +
+			$"Speed multiplier: {_upgradedBulletSpeedMultiplier}, " +
+			$"Damage: {_upgradedBulletDamage}"
+		);
 	}
 }

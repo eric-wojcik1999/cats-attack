@@ -1,0 +1,16 @@
+[gd_scene load_steps=4 format=3 uid="uid://cydhc76fnrhed"]
+
+[ext_resource type="PackedScene" uid="uid://cv4tbjwju1am2" path="res://Entities/Prefabs/Level Prefabs/test-level-mesh-2a.glb" id="1_144n8"]
+[ext_resource type="Texture2D" uid="uid://q32yt3o0pw0t" path="res://Entities/Prefabs/Level Prefabs/test7.png" id="2_rnopb"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_naess"]
+albedo_texture = ExtResource("2_rnopb")
+
+[node name="test-level-mesh-2a" instance=ExtResource("1_144n8")]
+
+[node name="tracktest2" parent="." index="0"]
+surface_material_override/0 = SubResource("StandardMaterial3D_naess")
+
+[node name="StaticBody3D" parent="tracktest2-col" index="0"]
+collision_layer = 2
+collision_mask = 13

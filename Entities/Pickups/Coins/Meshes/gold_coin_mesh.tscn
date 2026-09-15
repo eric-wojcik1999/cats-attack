@@ -1,0 +1,38 @@
+[gd_scene load_steps=7 format=3 uid="uid://cp8n11yjtr4la"]
+
+[sub_resource type="Gradient" id="Gradient_eb3py"]
+colors = PackedColorArray(7.2196127e-07, 0.4493385, 4.813075e-07, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_fljyo"]
+gradient = SubResource("Gradient_eb3py")
+fill_from = Vector2(0, 0.022792023)
+
+[sub_resource type="Gradient" id="Gradient_fljyo"]
+offsets = PackedFloat32Array(0, 0.9968355)
+colors = PackedColorArray(0, 0, 0, 1, 0.46358633, 0.46358728, 0.46358395, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_v20l2"]
+gradient = SubResource("Gradient_fljyo")
+fill_from = Vector2(0.20512821, 1)
+fill_to = Vector2(1, 0.24501425)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_eb3py"]
+albedo_color = Color(0.3707233, 0.99945414, 0.39974162, 1)
+metallic = 1.0
+metallic_specular = 1.0
+metallic_texture = SubResource("GradientTexture2D_fljyo")
+roughness = 0.0
+emission_enabled = true
+emission = Color(0.43137255, 0.85882354, 0.43137255, 1)
+emission_energy_multiplier = 0.08
+normal_texture = SubResource("GradientTexture2D_v20l2")
+
+[sub_resource type="PrismMesh" id="PrismMesh_fljyo"]
+size = Vector3(1, 1, 0.4)
+
+[node name="GoldCoinMesh" type="Node3D"]
+
+[node name="CoinPickupMeshTemp" type="MeshInstance3D" parent="."]
+transform = Transform3D(-1, 8.742278e-08, 0, -8.742278e-08, -1, 0, 0, 0, 1, 0, 0, 0)
+material_override = SubResource("StandardMaterial3D_eb3py")
+mesh = SubResource("PrismMesh_fljyo")

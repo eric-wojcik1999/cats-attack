@@ -1,0 +1,28 @@
+[gd_scene load_steps=5 format=3 uid="uid://i55xucr7h46x"]
+
+[sub_resource type="Gradient" id="Gradient_a1dpw"]
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_nph8q"]
+gradient = SubResource("Gradient_a1dpw")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_a1dpw"]
+albedo_color = Color(0.24611382, 1.4470006, 1.3164794, 1)
+metallic = 1.0
+metallic_specular = 1.0
+metallic_texture = SubResource("GradientTexture2D_nph8q")
+roughness = 0.0
+emission_enabled = true
+emission = Color(0.53561175, 0.7855705, 0.90734094, 1)
+emission_energy_multiplier = 0.03
+refraction_enabled = true
+detail_enabled = true
+
+[sub_resource type="PrismMesh" id="PrismMesh_nph8q"]
+size = Vector3(1, 1, 0.4)
+
+[node name="SilverCoinMesh" type="Node3D"]
+
+[node name="CoinPickupMeshTemp" type="MeshInstance3D" parent="."]
+transform = Transform3D(-1, 8.742278e-08, 0, -8.742278e-08, -1, 0, 0, 0, 1, 0, 0, 0)
+material_override = SubResource("StandardMaterial3D_a1dpw")
+mesh = SubResource("PrismMesh_nph8q")

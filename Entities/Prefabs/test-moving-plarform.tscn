@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://cfocmj7wn5dpu"]
+
+[ext_resource type="PackedScene" uid="uid://byn07yin48ns0" path="res://Entities/Prefabs/base_moving_platform.tscn" id="1_5h0yr"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_5h0yr"]
+size = Vector3(6, 0.35, 4)
+
+[node name="BaseMovingPlatform" instance=ExtResource("1_5h0yr")]
+EditorPreview = 0.1
+
+[node name="Visual" parent="Body" index="0"]
+mesh = SubResource("BoxMesh_5h0yr")
+
+[node name="CollisionShape3D" parent="Body" index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.125, 0, -0.125)

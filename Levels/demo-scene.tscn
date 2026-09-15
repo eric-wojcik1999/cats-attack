@@ -1,26 +1,46 @@
-[gd_scene load_steps=10 format=3 uid="uid://csdvs0h5p6ume"]
+[gd_scene load_steps=18 format=3 uid="uid://csdvs0h5p6ume"]
 
 [ext_resource type="PackedScene" uid="uid://d4nm5bdaxqhsr" path="res://Entities/Players/PlayerGround/player-ground.tscn" id="1_j5bgn"]
 [ext_resource type="PackedScene" uid="uid://b8qoyreqkcblf" path="res://Entities/Markers/direction_marker.tscn" id="2_73khv"]
+[ext_resource type="PackedScene" uid="uid://cfocmj7wn5dpu" path="res://Entities/Prefabs/test-moving-plarform.tscn" id="3_25u40"]
 [ext_resource type="PackedScene" uid="uid://cguppm588mcqk" path="res://Entities/Pickups/Coins/coin_pickup.tscn" id="3_cl86r"]
 [ext_resource type="PackedScene" uid="uid://bwfrqtd62aqnc" path="res://Entities/Enemies/static_enemy_basic.tscn" id="3_otfp5"]
+[ext_resource type="PackedScene" uid="uid://dj1rimkdwvnh" path="res://Entities/Pickups/Coins/bronze_coin_pickup.tscn" id="4_0scdy"]
 [ext_resource type="PackedScene" uid="uid://cehky8lel227e" path="res://UI/hud.tscn" id="4_cjwjn"]
+[ext_resource type="PackedScene" uid="uid://dshgihbg5ompd" path="res://Entities/Pickups/Coins/silver_coin_pickup.tscn" id="4_lmm5v"]
 [ext_resource type="PackedScene" uid="uid://djcdbqorg2qc" path="res://Entities/Enemies/moving_enemy_basic.tscn" id="5_1e8n7"]
+[ext_resource type="PackedScene" uid="uid://d01wskgwk2c21" path="res://Entities/Pickups/Coins/gold_coin_pickup.tscn" id="5_84xti"]
+[ext_resource type="PackedScene" uid="uid://6w3peblj34d2" path="res://Entities/Pickups/Coins/platnium_coin_pickup.tscn" id="6_25u40"]
 [ext_resource type="PackedScene" uid="uid://ck3n3piykfu2o" path="res://Entities/Players/PlayerAir/player_air.tscn" id="6_uap1t"]
 [ext_resource type="PackedScene" uid="uid://dvpytmgu5naqg" path="res://Entities/Enemies/totem_enemy_basic.tscn" id="7_72b4k"]
 [ext_resource type="PackedScene" uid="uid://dpkjb22ajxbvd" path="res://Entities/Enemies/turret-enemy-basic.tscn" id="9_etmm2"]
+[ext_resource type="PackedScene" uid="uid://c10pt2qia8poh" path="res://Entities/Pickups/PowerUps/percy_powerup.tscn" id="10_ywcwc"]
+[ext_resource type="PackedScene" uid="uid://be40nk4u707xw" path="res://Entities/Prefabs/base_jump_pad.tscn" id="16_ert4p"]
+[ext_resource type="PackedScene" uid="uid://sdcmin4u5cbp" path="res://Entities/Prefabs/base_speed_pad.tscn" id="17_e4quk"]
 
 [node name="DemoScene" type="Node3D"]
 
-[node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(0.34202015, -0.24321035, 0.90767336, 0, 0.9659258, 0.25881904, -0.9396926, -0.08852133, 0.3303661, 4.43, 2.41, 3.35)
-
 [node name="TestFloor" type="CSGBox3D" parent="."]
-transform = Transform3D(2.9802322e-08, 0, -1, 0, 1, 0, 1, 0, 2.9802322e-08, -0.48051643, -0.125, -12.0669155)
+transform = Transform3D(2.9802322e-08, 0, -1, 0, 1, 0, 1, 0, 2.9802322e-08, -0.48051617, -0.125, -3.1919155)
 use_collision = true
 collision_layer = 2
 collision_mask = 13
-size = Vector3(32, 0.25, 6.5)
+size = Vector3(49.75, 0.25, 6.5)
+
+[node name="TestFloor11" type="CSGBox3D" parent="."]
+transform = Transform3D(2.9802322e-08, 0, -1, 0, 1, 0, 1, 0, 2.9802322e-08, -0.48051482, -0.125, 219.55807)
+use_collision = true
+collision_layer = 2
+collision_mask = 13
+size = Vector3(139.75, 0.25, 6.5)
+
+[node name="TestFloor10" type="CSGBox3D" parent="."]
+transform = Transform3D(-4.3669782e-08, -1.9066637e-09, -1, -0.043619383, 0.9990482, 0, 0.9990482, 0.043619383, -4.371139e-08, -0.48051855, -2.7724433, 99.89168)
+use_collision = true
+collision_layer = 2
+collision_mask = 13
+size = Vector3(104, 0.25, 6.5)
+metadata/_edit_group_ = true
 
 [node name="TestFloor5" type="CSGBox3D" parent="."]
 transform = Transform3D(-1.0000001, 0, -2.9802322e-08, 0, 1, 0, 2.9802322e-08, 0, -1.0000001, -9.230518, -11.625, -72.56691)
@@ -105,9 +125,12 @@ light_energy = 1.552
 shadow_enabled = true
 
 [node name="PlayerGround" parent="." instance=ExtResource("1_j5bgn")]
-transform = Transform3D(0.9999883, 0, 0, 0, 0.99999076, 0, 0, 0, 0.9999899, 0, 1, 0)
-_baseJumpVelocity = 6.0
+transform = Transform3D(0.9999883, 0, 0, 0, 0.99999076, 0, 0, 0, 0.9999899, 0, 1, 285.75)
+_baseMovementSpeed = 3.5
+_autoForwardSpeed = 8.0
+_baseJumpVelocity = 6.5
 _lateralDeceleration = 6.0
+_jumpPadAirSteeringStrength = 3.0
 
 [node name="DirectionMarkers" type="Node3D" parent="."]
 
@@ -147,55 +170,72 @@ _turnDegPerSecOverride = 30.0
 transform = Transform3D(1.9750003, 0, 2.3841858e-07, 0, 1.9749998, 0, -2.3841858e-07, 0, 1.9750003, -47.31176, -10.75, -131.2927)
 _turnDegPerSecOverride = 30.0
 
+[node name="BaseMovingPlatform" parent="DirectionMarkers" instance=ExtResource("3_25u40")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 0.25, -31.5)
+TravelTimeSeconds = 0.75
+WaitAtStartSeconds = 0.5
+
 [node name="Coins" type="Node3D" parent="."]
 
-[node name="CoinPickup" parent="Coins" instance=ExtResource("3_cl86r")]
+[node name="BronzeCoinPickup3" parent="Coins" instance=ExtResource("4_0scdy")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.25, 1, -11)
+VisualRootPath = NodePath("../BronzeCoinPickup/VisualRoot")
 
-[node name="CoinPickup2" parent="Coins" instance=ExtResource("3_cl86r")]
+[node name="BronzeCoinPickup2" parent="Coins" instance=ExtResource("4_0scdy")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.25, 1, -8.25)
+VisualRootPath = NodePath("../BronzeCoinPickup/VisualRoot")
 
-[node name="CoinPickup3" parent="Coins" instance=ExtResource("3_cl86r")]
+[node name="BronzeCoinPickup" parent="Coins" instance=ExtResource("4_0scdy")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.25, 1, -5.25)
 
-[node name="CoinPickup4" parent="Coins" instance=ExtResource("3_cl86r")]
+[node name="SilverCoinPickup" parent="Coins" instance=ExtResource("4_lmm5v")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.25, 1, -14)
 
-[node name="CoinPickup5" parent="Coins" instance=ExtResource("3_cl86r")]
+[node name="GoldCoinPickup" parent="Coins" instance=ExtResource("5_84xti")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.25, 1, -17)
 
-[node name="CoinPickup6" parent="Coins" instance=ExtResource("3_cl86r")]
+[node name="PlatniumCoinPickup6" parent="Coins" instance=ExtResource("6_25u40")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -45.5, -15.5, -199.25)
+VisualRootPath = NodePath("../PlatniumCoinPickup/VisualRoot")
 
-[node name="CoinPickup7" parent="Coins" instance=ExtResource("3_cl86r")]
+[node name="PlatniumCoinPickup5" parent="Coins" instance=ExtResource("6_25u40")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -45.5, -15.5, -195)
+VisualRootPath = NodePath("../PlatniumCoinPickup/VisualRoot")
 
-[node name="CoinPickup8" parent="Coins" instance=ExtResource("3_cl86r")]
+[node name="PlatniumCoinPickup4" parent="Coins" instance=ExtResource("6_25u40")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -45.5, -15.5, -191.25)
+VisualRootPath = NodePath("../PlatniumCoinPickup/VisualRoot")
 
-[node name="CoinPickup9" parent="Coins" instance=ExtResource("3_cl86r")]
+[node name="PlatniumCoinPickup3" parent="Coins" instance=ExtResource("6_25u40")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -45.5, -15.5, -186.75)
+VisualRootPath = NodePath("../PlatniumCoinPickup/VisualRoot")
 
-[node name="CoinPickup10" parent="Coins" instance=ExtResource("3_cl86r")]
+[node name="PlatniumCoinPickup2" parent="Coins" instance=ExtResource("6_25u40")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -45.5, -15.5, -181.75)
+VisualRootPath = NodePath("../PlatniumCoinPickup/VisualRoot")
 
-[node name="CoinPickup11" parent="Coins" instance=ExtResource("3_cl86r")]
+[node name="PlatniumCoinPickup" parent="Coins" instance=ExtResource("6_25u40")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -45.5, -15.5, -176.25)
 
-[node name="CoinPickup12" parent="Coins" instance=ExtResource("3_cl86r")]
+[node name="GoldCoinPickup5" parent="Coins" instance=ExtResource("5_84xti")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -45.5, -15.5, -171.5)
+VisualRootPath = NodePath("../GoldCoinPickup/VisualRoot")
 
-[node name="CoinPickup13" parent="Coins" instance=ExtResource("3_cl86r")]
+[node name="GoldCoinPickup4" parent="Coins" instance=ExtResource("5_84xti")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -45.5, -15.5, -167.25)
+VisualRootPath = NodePath("../GoldCoinPickup/VisualRoot")
 
-[node name="CoinPickup14" parent="Coins" instance=ExtResource("3_cl86r")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -45.5, -15.5, -163.5)
-
-[node name="CoinPickup15" parent="Coins" instance=ExtResource("3_cl86r")]
+[node name="GoldCoinPickup2" parent="Coins" instance=ExtResource("5_84xti")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -45.5, -15.5, -159)
+VisualRootPath = NodePath("../GoldCoinPickup/VisualRoot")
 
-[node name="CoinPickup16" parent="Coins" instance=ExtResource("3_cl86r")]
+[node name="SilverCoinPickup3" parent="Coins" instance=ExtResource("4_lmm5v")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -45.5, -15.5, -154)
+VisualRootPath = NodePath("../SilverCoinPickup/VisualRoot")
+
+[node name="SilverCoinPickup2" parent="Coins" instance=ExtResource("4_lmm5v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -45.5, -15.5, -148.5)
+VisualRootPath = NodePath("../SilverCoinPickup/VisualRoot")
 
 [node name="CoinPickup17" parent="Coins" instance=ExtResource("3_cl86r")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -45.5, -15.5, -148.5)
@@ -206,10 +246,10 @@ player = NodePath("../PlayerGround")
 [node name="Enemies" type="Node3D" parent="."]
 
 [node name="MovingEnemyBasic" parent="Enemies" instance=ExtResource("5_1e8n7")]
-transform = Transform3D(-0.49999997, 0, -0.8660253, 0, 0.9999999, 0, 0.8660253, 0, -0.50000006, 9, -4.5, -43.25)
+transform = Transform3D(-0.49999997, 0, -0.8660253, 0, 0.9999999, 0, 0.8660253, 0, -0.50000006, 9, -5.75, -43.25)
 
 [node name="MovingEnemyBasic2" parent="Enemies" instance=ExtResource("5_1e8n7")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -12.25, -10.25, -72.75)
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -12.25, -11, -72.75)
 
 [node name="TotemEnemyBasic" parent="Enemies" instance=ExtResource("7_72b4k")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -48.75, -18.25, -120.75)
@@ -268,8 +308,92 @@ collision_layer = 2
 collision_mask = 13
 size = Vector3(2, 5.25, 1)
 
+[node name="Wall7" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.75, 3.625, 151.375)
+use_collision = true
+collision_layer = 2
+collision_mask = 13
+size = Vector3(2, 8.25, 2.25)
+
+[node name="Wall8" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.75, 3.625, 163.875)
+use_collision = true
+collision_layer = 2
+collision_mask = 13
+size = Vector3(2, 8.25, 2.25)
+
+[node name="Wall9" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.75, 3.625, 174.625)
+use_collision = true
+collision_layer = 2
+collision_mask = 13
+size = Vector3(2, 8.25, 2.25)
+
+[node name="Wall10" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.75, 3.625, 187.125)
+use_collision = true
+collision_layer = 2
+collision_mask = 13
+size = Vector3(2, 8.25, 2.25)
+
+[node name="Wall11" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.75, 3.625, 199.375)
+use_collision = true
+collision_layer = 2
+collision_mask = 13
+size = Vector3(2, 8.25, 2.25)
+
+[node name="Wall12" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.75, 3.625, 211.875)
+use_collision = true
+collision_layer = 2
+collision_mask = 13
+size = Vector3(2, 8.25, 2.25)
+
+[node name="Wall13" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.75, 3.625, 222.625)
+use_collision = true
+collision_layer = 2
+collision_mask = 13
+size = Vector3(2, 8.25, 2.25)
+
+[node name="Wall14" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.75, 3.625, 235.125)
+use_collision = true
+collision_layer = 2
+collision_mask = 13
+size = Vector3(2, 8.25, 2.25)
+
+[node name="Wall15" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.75, 3.625, 246.875)
+use_collision = true
+collision_layer = 2
+collision_mask = 13
+size = Vector3(2, 8.25, 2.25)
+
+[node name="Wall16" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.75, 3.625, 259.375)
+use_collision = true
+collision_layer = 2
+collision_mask = 13
+size = Vector3(2, 8.25, 2.25)
+
+[node name="Wall17" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.75, 3.625, 270.125)
+use_collision = true
+collision_layer = 2
+collision_mask = 13
+size = Vector3(2, 8.25, 2.25)
+
+[node name="Wall18" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.75, 3.625, 282.625)
+use_collision = true
+collision_layer = 2
+collision_mask = 13
+size = Vector3(2, 8.25, 2.25)
+
 [node name="PlayerAir" parent="." node_paths=PackedStringArray("_playerGround") instance=ExtResource("6_uap1t")]
-transform = Transform3D(1, 0, 0, 0, 0.9659258, 0.2588191, 0, -0.2588191, 0.9659258, 1.5, 4.25, 1.5)
+transform = Transform3D(1, 0, 0, 0, 0.9659258, 0.2588191, 0, -0.2588191, 0.9659258, 1.5, 4.25, 287.25)
 _playerGround = NodePath("../PlayerGround")
 _maxExtraHeight = 4.0
 
@@ -335,3 +459,90 @@ transform = Transform3D(-2.1650634, 0, 1.2499999, 0, 2.5, 0, -1.2499999, 0, -2.1
 
 [node name="TurretEnemyBasic6" parent="." instance=ExtResource("9_etmm2")]
 transform = Transform3D(-2.5, 0, 2.1855695e-07, 0, 2.5, 0, -2.1855695e-07, 0, -2.5, -1.25, 0.25, -25.5)
+
+[node name="PercyPowerUp" parent="." instance=ExtResource("10_ywcwc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.25, -4.75, -37.5)
+
+[node name="MovingEnemyBasic7" parent="." instance=ExtResource("5_1e8n7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19, -11, -73)
+
+[node name="MovingEnemyBasic8" parent="." instance=ExtResource("5_1e8n7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.25, -11, -72.5)
+
+[node name="BaseJumpPad" parent="." instance=ExtResource("16_ert4p")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, -0.25, 49)
+
+[node name="BaseJumpPad2" parent="." instance=ExtResource("16_ert4p")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, -0.25, 49)
+
+[node name="BaseJumpPad3" parent="." instance=ExtResource("16_ert4p")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, -0.25, 49)
+
+[node name="BaseSpeedPad" parent="." instance=ExtResource("17_e4quk")]
+transform = Transform3D(1, 0, 0, 0, 1.0000001, 0, 0, 0, 1.0000001, -2.251091, 0.084442616, 265.75)
+_boostMultiplier = 3.0
+_boostDuration = 4.0
+
+[node name="BaseSpeedPad2" parent="." instance=ExtResource("17_e4quk")]
+transform = Transform3D(1, 0, 0, 0, 1.0000001, 0, 0, 0, 1.0000001, -0.501091, 0.084442616, 265.75)
+_boostMultiplier = 3.0
+_boostDuration = 4.0
+
+[node name="BaseSpeedPad3" parent="." instance=ExtResource("17_e4quk")]
+transform = Transform3D(1, 0, 0, 0, 1.0000001, 0, 0, 0, 1.0000001, 1.248909, 0.084442616, 265.75)
+_boostMultiplier = 3.0
+_boostDuration = 4.0
+
+[node name="BaseSpeedPad4" parent="." instance=ExtResource("17_e4quk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.25, 0, 156.25)
+
+[node name="BaseSpeedPad5" parent="." instance=ExtResource("17_e4quk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.25, 0, 156.25)
+
+[node name="BaseSpeedPad6" parent="." instance=ExtResource("17_e4quk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.75, 0, 156.25)
+
+[node name="BaseSpeedPad7" parent="." instance=ExtResource("17_e4quk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, -0.75, 58.25)
+
+[node name="BaseSpeedPad8" parent="." instance=ExtResource("17_e4quk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, -0.75, 58.25)
+
+[node name="BaseSpeedPad9" parent="." instance=ExtResource("17_e4quk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, -0.75, 58.25)
+
+[node name="BaseJumpPad4" parent="." instance=ExtResource("16_ert4p")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, -3, 109.5)
+
+[node name="BaseJumpPad5" parent="." instance=ExtResource("16_ert4p")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, -3, 109.5)
+
+[node name="BaseJumpPad6" parent="." instance=ExtResource("16_ert4p")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, -3, 109.5)
+
+[node name="PercyPowerUp2" parent="." instance=ExtResource("10_ywcwc")]
+transform = Transform3D(1.3, 0, 0, 0, 1.3, 0, 0, 0, 1.3, -0.5, 0.75, 1.5)
+
+[node name="MovingEnemyBasic9" parent="." instance=ExtResource("5_1e8n7")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -2.5, -1.5, 88.5)
+
+[node name="StaticEnemyBasic9" parent="." instance=ExtResource("3_otfp5")]
+transform = Transform3D(0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, 1, 0.5, 226.5)
+
+[node name="StaticEnemyBasic10" parent="." instance=ExtResource("3_otfp5")]
+transform = Transform3D(0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, -2.25, 0.5, 224)
+
+[node name="StaticEnemyBasic11" parent="." instance=ExtResource("3_otfp5")]
+transform = Transform3D(0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, 0.75, 0.5, 223.5)
+
+[node name="TurretEnemyBasic7" parent="." instance=ExtResource("9_etmm2")]
+transform = Transform3D(2.4148142, 0, 0.6470485, 0, 2.5, 0, -0.6470485, 0, 2.4148142, -1.25, 1.25, 248.5)
+
+[node name="TotemEnemyBasic" parent="." instance=ExtResource("7_72b4k")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, 0.5, 206.25)
+
+[node name="TotemEnemyBasic2" parent="." instance=ExtResource("7_72b4k")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0.75, 268.5)
+
+[node name="PercyPowerUp3" parent="." instance=ExtResource("10_ywcwc")]
+transform = Transform3D(1.3, 0, 0, 0, 1.3, 0, 0, 0, 1.3, 0, 0.75, 271.75)

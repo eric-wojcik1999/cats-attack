@@ -1,0 +1,24 @@
+[gd_scene load_steps=5 format=3 uid="uid://b3gmav2rsjoqv"]
+
+[ext_resource type="Script" uid="uid://bl58s2pqgkvi8" path="res://Entities/Markers/FallDeathVolume.cs" id="1_ohna0"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_tv0rd"]
+size = Vector3(150, 0.5, 600)
+
+[sub_resource type="BoxMesh" id="BoxMesh_tv0rd"]
+size = Vector3(150, 0.5, 600)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ohna0"]
+transparency = 1
+albedo_color = Color(1, 0, 0.5647059, 0.5411765)
+
+[node name="FallDeathVolume" type="Area3D"]
+script = ExtResource("1_ohna0")
+EditorOnlyTriggerArea = NodePath("MeshInstance3D")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_tv0rd")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_tv0rd")
+surface_material_override/0 = SubResource("StandardMaterial3D_ohna0")
