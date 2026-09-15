@@ -10,6 +10,8 @@ public partial class SceneManager : CanvasLayer
     private const string MainMenuPath = "res://Menus/main_menu.tscn";
     private const string LevelSelectPath = "res://Menus/level_select.tscn";
     private const string Level1Path = "res://Levels/level-1.tscn";
+    private const string Level2Path = "res://Levels/level-2.tscn";
+    private const string Level3Path = "res://Levels/level-3.tscn";
     private const string LevelEndPath = "res://Menus/level-end-screen.tscn";
     private const string UpgradeScreenPath = "res://Menus/level_upgrade_screen.tscn";
 
@@ -104,9 +106,8 @@ public partial class SceneManager : CanvasLayer
         return level switch
         {
             1 => Level1Path,
-			// Future:
-			// 2 => "res://Levels/level-2.tscn",
-			// 3 => "res://Levels/level-3.tscn",
+			2 => Level2Path,
+			3 => Level3Path,
             _ => ""
         };
     }
@@ -163,6 +164,60 @@ public partial class SceneManager : CanvasLayer
         Tween tween = CreateTween();
         tween.TweenProperty(_fadeRect, "color:a", 0.0f, 0.35f);
         await ToSignal(tween, Tween.SignalName.Finished);
+    }
+
+    public async Task RestartCurrentLevel(string scenePath)
+    {
+        if (_transitioning)
+        {
+            return;
+        }
+
+        if (string.IsNullOrWhiteSpace(scenePath))
+        {
+            GD.PushError("[SceneManager] Cannot restart level: scene path is empty.");
+
+            return;
+        }
+
+        _transitioning = true;
+
+        GD.Print($"[SceneManager] Restarting level: {scenePath}");
+
+        await FadeToBlack();
+
+        // Small pause makes the restart feel deliberate rather than like a visual pop.
+        await ToSignal(GetTree().CreateTimer(0.25f), SceneTreeTimer.SignalName.Timeout);
+
+        // Reset remporary level state 
+        if (Global.Instance != null)
+        {
+            int currentLevel =
+                Global.Instance.CurrentLevel;
+
+
+            Global.Instance.BeginLevel(
+                currentLevel
+            );
+        }
+
+        // Reload current level
+        Error result = GetTree().ChangeSceneToFile(scenePath);
+
+        if (result != Error.Ok)
+        {
+            GD.PushError($"[SceneManager] Failed to restart scene: {scenePath}");
+            await FadeFromBlack();
+            _transitioning = false;
+
+            return;
+        }
+
+        // Allow the replacement level scene to initialise.
+        await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
+
+        await FadeFromBlack();
+        _transitioning = false;
     }
 
 }

@@ -1,0 +1,25 @@
+[gd_scene load_steps=5 format=3 uid="uid://b7246ppcpv3hx"]
+
+[ext_resource type="PackedScene" uid="uid://cyfxanh56fk6a" path="res://Entities/Prefabs/Level Prefabs/Level-3/level-03-track-01.glb" id="1_rlbp4"]
+[ext_resource type="Shader" uid="uid://cbjnlljxhee8x" path="res://Shaders/road_edge_mask-params.gdshader" id="2_oengj"]
+[ext_resource type="Texture2D" uid="uid://b5ltobosojp4v" path="res://textures/hexagon-texture-gold.jpg" id="3_um1sm"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_626e4"]
+render_priority = 0
+shader = ExtResource("2_oengj")
+shader_parameter/albedo_texture = ExtResource("3_um1sm")
+shader_parameter/base_tint = Color(1.0249712, 1.0249712, 0, 1)
+shader_parameter/edge_color = Color(0.1764706, 0.8039216, 0.5647059, 1)
+shader_parameter/edge_strength = -10.0
+shader_parameter/edge_power = 12.0
+shader_parameter/roughness_value = 0.55
+shader_parameter/metallic_value = 1.5
+
+[node name="level-03-track-01" instance=ExtResource("1_rlbp4")]
+
+[node name="track-01_002" parent="." index="0"]
+surface_material_override/0 = SubResource("ShaderMaterial_626e4")
+
+[node name="StaticBody3D" parent="track-01_002-col" index="0"]
+collision_layer = 2
+collision_mask = 13

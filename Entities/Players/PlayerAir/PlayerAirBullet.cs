@@ -10,11 +10,18 @@ public partial class PlayerAirBullet : Area3D
 	private float _lifeTimer;
 	public ulong VolleyId { get; set; }
 	private bool _hasImpacted = false;
+	[Export] private NodePath _bulletMeshPath = "TempBulletMesh";
+	private Color? _upgradeColor = null;
 
 	public override void _Ready()
 	{
 		_lifeTimer = _lifeTime;
 		BodyEntered += OnBodyEntered;
+
+		if (_upgradeColor.HasValue)
+		{
+			ApplyUpgradeVisual(_upgradeColor.Value);
+		}
 	}
 
 	public override void _Process(double delta)
@@ -78,5 +85,41 @@ public partial class PlayerAirBullet : Area3D
 		}
 
 		QueueFree();
+	}
+
+	public void ConfigureUpgrade(float speedMultiplier, int damage, Color color)
+	{
+		_speed *= Mathf.Max(speedMultiplier, 1.0f);
+		_bulletDamage = Mathf.Max(damage, 1);
+		_upgradeColor = color;
+	}
+
+	private void ApplyUpgradeVisual(Color color)
+	{
+		MeshInstance3D mesh = GetNodeOrNull<MeshInstance3D>(_bulletMeshPath);
+
+		if (mesh == null)
+		{
+			GD.PushWarning("[PlayerAirBullet] Bullet mesh was not found.");
+			return;
+		}
+
+		Material existingMaterial = mesh.GetActiveMaterial(0);
+		StandardMaterial3D material;
+
+		if (existingMaterial is StandardMaterial3D existingStandardMaterial)
+		{
+			// Important:
+			// duplicate it so we do NOT recolour the material resource shared by every ordinary bullet.
+			material = existingStandardMaterial.Duplicate() as StandardMaterial3D;
+		}
+		else
+		{
+			material = new StandardMaterial3D();
+		}
+
+		material.AlbedoColor = color;
+		material.Transparency = BaseMaterial3D.TransparencyEnum.Alpha;
+		mesh.SetSurfaceOverrideMaterial(0, material);
 	}
 }

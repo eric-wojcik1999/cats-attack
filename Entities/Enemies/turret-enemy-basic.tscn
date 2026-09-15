@@ -223,6 +223,7 @@ _plasmaBallScene = ExtResource("2_ho62n")
 _lineOfSightMask = 3
 _explosionScene = ExtResource("3_s7pyi")
 _deathSfx = ExtResource("4_f0o5f")
+_deathSfxVolumeDb = 8.0
 
 [node name="TurretCollision" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.47993937, 0)

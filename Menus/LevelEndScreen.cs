@@ -32,6 +32,7 @@ public partial class LevelEndScreen : Control
 				"MarginContainer/CenterContainer/PanelContainer/VBoxContainer/HBoxContainer/VBoxContainer/ContinueButton"
 			);
 		_continueButton.Pressed += OnContinuePressed;
+		_continueButton.MouseEntered += OnContinueHovered;
 
 		UpdateStats();
 	}
@@ -47,12 +48,17 @@ public partial class LevelEndScreen : Control
 		_totalValue.Text = finalScore.ToString();
 	}
 
+	private void OnContinueHovered()
+	{
+		SfxManager.Instance?.PlayMenuHover();
+	}
+
 	private void OnContinuePressed()
 	{
+		SfxManager.Instance?.PlayMenuSelect();
 		Global.Instance.CommitCurrentLevelReward();
 
 		int nextLevel = Global.Instance.CurrentLevel + 1;
-		Global.Instance.UnlockLevel(nextLevel);
 
 		if (nextLevel <= 3)
 		{

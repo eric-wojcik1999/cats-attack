@@ -56,15 +56,13 @@ public partial class LevelEndTrigger : Area3D
 		SetDeferred(Area3D.PropertyName.Monitoring, false);
 		Node levelNode = GetTree().CurrentScene;
 
-		if (levelNode is Level1 level)
+		if (levelNode is Level level)
 		{
 			level.CompleteLevel();
 		}
 		else
 		{
-			GD.PushError(
-				"[LevelEndTrigger] Current scene does not implement expected level completion."
-			);
+			GD.PushError("[LevelEndTrigger] Current scene does not implement expected level completion.");
 		}
 	}
 }

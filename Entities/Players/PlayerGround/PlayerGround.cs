@@ -6,8 +6,11 @@ public partial class PlayerGround : CharacterBody3D
 {
 	[Signal] public delegate void HealthChangedEventHandler(int amount);
 	[Signal] public delegate void DiedEventHandler();
+	[Signal] public delegate void DeathResolvedEventHandler(bool hasExtraLife);
 	[Signal] public delegate void PercyPowerupCollectedEventHandler();
 	[Signal] public delegate void PercyPowerupActivatedEventHandler(float duration);
+	[Signal] public delegate void ExtraLivesChangedEventHandler(int remainingLives);
+	[Signal] public delegate void RespawnedEventHandler();
 	[Export] private float _baseMovementSpeed = 5.0f;
 	[Export] private float _autoForwardSpeed = 6.0f;
 	[Export] private float _baseJumpVelocity = 4.5f;
@@ -31,15 +34,12 @@ public partial class PlayerGround : CharacterBody3D
 	[Export] public NodePath _droneSpawnRightPath = "PercyDroneSpawnRight";
 	[Export] public NodePath _droneDespawnPath = "PercyDroneDespawn";
 	[Export] private float _percyPowerupDuration = 15f;
-
 	private bool _hasDied = false;
-	
 	[Export] private Node3D _playerAirPositionMarker;
 	[Export] public PackedScene _percyDroneScene;
 	private Node3D _spawnLeft;
 	private Node3D _spawnRight;
 	private Node3D _despawnMarker;
-
 	// Getters 
 	public int Health => _health;
 	public int MaxHealth => _maxHealth;
@@ -211,7 +211,17 @@ public partial class PlayerGround : CharacterBody3D
 	[Export(PropertyHint.Range, "0.0,30.0,0.5")]
 	private float _hardLandingMinimumFallSpeed = 7.0f;
 
+	// Extra lives
 	private int _extraLives = 0;
+	public int ExtraLives => _extraLives;
+
+	// CHECKPOINT / RESPAWN
+	private int _currentCheckpointId = 0;
+	private Transform3D _currentRespawnTransform;
+	private bool _hasCheckpointTransform = false;
+	[ExportGroup("Respawn")]
+	[Export(PropertyHint.Range, "0.0,5.0,0.1")]
+	private float _respawnDelay = 2.0f;
 
 	public override void _Ready() 
 	{
@@ -258,10 +268,13 @@ public partial class PlayerGround : CharacterBody3D
 
 		if (Global.Instance != null)
 		{
-			Global.Instance.ApplyPurchasedUpgrades(
-				this
-			);
+			Global.Instance.ApplyPurchasedUpgrades(this);
 		}
+
+		// Starting position is always the fallback checkpoint.
+		_currentCheckpointId = 0;
+		_currentRespawnTransform = GlobalTransform;
+		_hasCheckpointTransform = true;
 	}
     
 	public override void _PhysicsProcess(double delta)
@@ -592,15 +605,7 @@ public partial class PlayerGround : CharacterBody3D
 		}
 		else 
 		{
-			// if (isInvulnerable == true || health <= 0 ) -> then don't do the rest
-
 			_ = ApplyHealthDeltaAsync(-amount);
-
-			// // i-frame stuff -> for the future
-			// if (_health >= 0)
-			// {
-			// 	_ = StartIframesAsync();
-			// }
 		}
 	}
 	private async Task ApplyHealthDeltaAsync(int delta)
@@ -620,18 +625,7 @@ public partial class PlayerGround : CharacterBody3D
 		// Handling death
 		if (_health == 0 && prevHealth > 0)
 		{
-			PlayDetachedSfx(_deathSfx, _deathSfxVolumeDb);
-			_hasDied = true;
-			EmitSignal(SignalName.Died);
-
-			if (IsInstanceValid(_playerVisualRoot))
-			{
-				_playerVisualRoot.Visible = false;
-			}
-
-			await ToSignal(GetTree().CreateTimer(3), SceneTreeTimer.SignalName.Timeout);
-			GD.Print("[PlayerGround] reload level!");
-			// TO DO: Reload level which would be stored in Global
+			await DieAsync();
 		}
 	}
 
@@ -1244,30 +1238,161 @@ public partial class PlayerGround : CharacterBody3D
 
 	public void ApplyInnerCatHealthUpgrade()
 	{
-		_maxHealth *= 2;
+		_maxHealth = 16;
 		_health = _maxHealth;
-
+		EmitSignal(SignalName.HealthChanged, _health);
 		GD.Print($"[PlayerGround] Inner Cat Health applied. Max Health: {_maxHealth}");
-	}
-
-	public void ApplyBulletUpgrade()
-	{
-		GD.Print(
-			"[PlayerGround] Super Pooper Bullets upgrade active."
-		);
-
-		// TODO:
-		// Tell PlayerAir weapon/controller to:
-		//
-		// - increase projectile speed
-		// - increase damage
-		// - possibly increase firing speed
 	}
 
 	public void ApplyExtraLivesUpgrade()
 	{
 		_extraLives += 1;
 
+		EmitSignal(SignalName.ExtraLivesChanged, _extraLives);
+
 		GD.Print($"[PlayerGround] Extra lives: {_extraLives}");
+	}
+
+	public void KillFromFall()
+	{
+		if (_hasDied)
+		{
+			return;
+		}
+
+		GD.Print("[PlayerGround] Player fell out of the level.");
+
+		_ = DieAsync();
+	}
+
+	private async Task DieAsync()
+	{
+		if (_hasDied)
+		{
+			return;
+		}
+
+		_hasDied = true;
+
+		// Falling should also visually make health 0.
+		_health = 0;
+		EmitSignal(SignalName.HealthChanged, _health);
+		PlayDetachedSfx(_deathSfx, _deathSfxVolumeDb);
+		EmitSignal( SignalName.Died);
+
+		// Extra Life check
+		bool hasExtraLife = _extraLives > 0;
+
+		if (hasExtraLife)
+		{
+			_extraLives--;
+			EmitSignal(SignalName.ExtraLivesChanged, _extraLives);
+			GD.Print($"[PlayerGround] Extra life consumed. Remaining: {_extraLives}");
+		}
+
+		// Tell the HUD what kind of death this is.
+		EmitSignal(SignalName.DeathResolved, hasExtraLife);
+
+		// Hide player
+		if (IsInstanceValid(_playerVisualRoot))
+		{
+			_playerVisualRoot.Visible = false;
+		}
+
+		Velocity = Vector3.Zero;
+
+		// What happens if have extra an life
+		if (hasExtraLife)
+		{
+			await ToSignal(GetTree().CreateTimer(_respawnDelay), SceneTreeTimer.SignalName.Timeout);
+			RespawnAtCheckpoint();
+			return;
+		}
+
+		// Real death
+		await ToSignal(GetTree().CreateTimer(3.0), SceneTreeTimer.SignalName.Timeout);
+
+		// Return to level select.
+		if (SceneManager.Instance != null)
+		{
+			await SceneManager.Instance.GoToMainMenu();
+		}
+	}
+
+	public void RegisterCheckpoint(int checkpointId, Transform3D respawnTransform)
+	{
+		// Don't allow walking backwards through an older checkpoint
+		if (_hasCheckpointTransform && checkpointId <= _currentCheckpointId)
+		{
+			return;
+		}
+
+		_currentCheckpointId = checkpointId;
+		_currentRespawnTransform = respawnTransform;
+		_hasCheckpointTransform = true;
+
+		GD.Print($"[PlayerGround] Registered checkpoint {_currentCheckpointId}");
+	}
+
+	private void RespawnAtCheckpoint()
+	{
+		if (!_hasCheckpointTransform)
+		{
+			GD.PushError("[PlayerGround] Cannot respawn: no checkpoint transform registered.");
+			return;
+		}
+
+		GD.Print($"[PlayerGround] Respawning at checkpoint {_currentCheckpointId}");
+
+		// Position and rotation
+		GlobalTransform = _currentRespawnTransform;
+
+		// Reset movement
+		Velocity = Vector3.Zero;
+		_knockbackTimer = 0f;
+		_knockbackHorizontal = Vector3.Zero;
+
+		// Reset jump-pad state.
+		_externalLaunchTimer = 0f;
+		_jumpPadBlendBackTimer = 0f;
+		_jumpPadTriggerLockoutTimer = 0f;
+		_jumpPadArcActive = false;
+		_jumpPadBouncesRemaining = 0;
+		_jumpPadSkidTimer = 0f;
+		_jumpPadSkidVelocity = Vector3.Zero;
+		FloorSnapLength = _defaultFloorSnapLength;
+
+		// Reset speed boost state.
+		_speedBoostTimer = 0f;
+		_speedBoostElapsedTimer = 0f;
+		_speedBoostTotalDuration = 0f;
+		_speedBoostTargetMultiplier = 1f;
+		_currentSpeedBoostMultiplier = 1f;
+		_speedBoostTriggerLockoutTimer = 0f;
+
+		// Reset path steering
+		_desiredForward = ForwardDir;
+		_hasDesiredForward = false;
+		_currentTurnDegPerSec = _defaultTurnDegPerSec;
+
+		// Restore health
+		_health = _maxHealth;
+		EmitSignal(SignalName.HealthChanged, _health);
+
+		// Restore visuals
+		if (GodotObject.IsInstanceValid(_playerVisualRoot))
+		{
+			_playerVisualRoot.Visible = true;
+		}
+
+		// Reset floor transition bookkeeping.
+		_floorStateInitialised = false;
+		_wasOnFloor = false;
+
+		// Player can move again.
+		_hasDied = false;
+
+		// Tell HUD / other systems that respawn is complete.
+		EmitSignal(SignalName.Respawned);
 	}
 }

@@ -20,10 +20,14 @@ public partial class LevelSelect : Control
 		_backButton.Pressed += OnBackPressed;
 		UpdateLevelButtons();
 
+		_level1Button.MouseEntered += () => OnLevelButtonHovered(_level1Button);
+		_level2Button.MouseEntered += () => OnLevelButtonHovered(_level2Button);
+		_level3Button.MouseEntered += () => OnLevelButtonHovered(_level3Button);
+		_backButton.MouseEntered += OnMenuButtonHovered;
+
 		// Does nothing if menu music is already playing.
 		_ = MusicManager.Instance.EnsureMenuMusic();
 	}
-
 
 	private void UpdateLevelButtons()
 	{
@@ -31,7 +35,6 @@ public partial class LevelSelect : Control
 		SetLevelButtonState(_level2Button, 2);
 		SetLevelButtonState(_level3Button, 3);
 	}
-
 
 	private void SetLevelButtonState(Button button, int level)
 	{
@@ -49,7 +52,6 @@ public partial class LevelSelect : Control
 		}
 	}
 
-
 	private void StartLevel(int level)
 	{
 		if (!Global.Instance.IsLevelUnlocked(level))
@@ -57,12 +59,31 @@ public partial class LevelSelect : Control
 			return;
 		}
 
+		SfxManager.Instance?.PlayMenuSelect();
 		_ = SceneManager.Instance.StartLevel(level);
 	}
 
 
 	private void OnBackPressed()
 	{
+		SfxManager.Instance?.PlayMenuSelect();
 		_ = SceneManager.Instance.GoToMainMenu();
 	}
+
+	private void OnLevelButtonHovered(Button button)
+	{
+		// Don't play hover feedback for something that cannot actually be selected.
+		if (button.Disabled)
+		{
+			return;
+		}
+
+		SfxManager.Instance?.PlayMenuHover();
+	}
+
+	private void OnMenuButtonHovered()
+	{
+		SfxManager.Instance?.PlayMenuHover();
+	}
+
 }
